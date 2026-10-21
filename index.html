@@ -69,6 +69,27 @@
     .menu-btn{border-color:#c8d1c9;color:#173f35}
     @media(max-width:700px){.nav{background:#f7f5ef;border-color:#d9dfd7;box-shadow:0 16px 24px rgba(23,63,53,.08)}}
     @media(min-width:1100px){.hero{padding-top:86px;padding-bottom:76px}.section{padding-top:76px;padding-bottom:76px}}
+    /* Keyboard, touch and narrow-screen finishing details */
+    :focus-visible{outline:3px solid #9a7436;outline-offset:4px;border-radius:4px}
+    .nav a,.btn,.contact-links a,.quicklinks a{min-height:44px}
+    .menu-btn{min-height:44px;padding:10px 14px;font:inherit;font-size:.85rem;font-weight:650;background:#fff;border:1px solid #c8d1c9;border-radius:8px;cursor:pointer}
+    .project p,.skill-card p,.writing-card p{line-height:1.72}
+    .lead{max-width:66ch;line-height:1.8}
+    @media(max-width:700px){
+      .nav a{min-height:44px;display:flex;align-items:center}
+      .nav .nav-cta{justify-content:center}
+      .actions{display:flex;flex-wrap:wrap;gap:10px}
+      .actions .btn{flex:1 1 145px;justify-content:center}
+      .process{gap:12px}
+      .process>*{min-width:0}
+      .project{overflow-wrap:anywhere}
+    }
+    @media(max-width:380px){
+      .wrap{width:calc(100% - 28px)}
+      h1{font-size:clamp(2.35rem,11.5vw,3.1rem)}
+      .actions .btn{flex-basis:100%}
+      .process{grid-template-columns:1fr}
+    }
 
   </style>
 </head>
@@ -77,7 +98,7 @@
   <header class="topbar">
     <div class="wrap navrow">
       <a class="brand" href="#home" aria-label="Naom Kenagwa home">NAOM KENAGWA<span>.</span></a>
-      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="siteNav">Menu ☰</button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="siteNav">Menu ☰</button>
       <nav class="nav" id="siteNav" aria-label="Main navigation">
         <a href="#about">About</a><a href="#expertise">Expertise</a><a href="#projects">Projects</a><a href="#writing">Writing</a><a href="#approach">Approach</a><a href="#learning">Learning</a><a href="#profiles">Profiles</a><a href="#contact" class="nav-cta">Contact ↗</a>
       </nav>
