@@ -165,7 +165,31 @@
     @media(max-width:380px){.wrap{width:calc(100% - 28px)}h1{font-size:clamp(2.35rem,11.5vw,3.1rem)}.actions .btn{flex-basis:100%}}
     @media(prefers-reduced-motion:reduce){.skill-card,.writing-card,.project{transition:none}.skill-card:hover,.writing-card:hover,.project:hover{transform:none}}
 
-  </style>
+  
+    /* Final editorial system: restrained forest green, warm ivory and readable contrast */
+    :root{--bg:#f7f6f0;--panel:#fffefa;--panel2:#edf1eb;--text:#202b25;--muted:#4b5a51;--soft:#66746b;--line:#d8dfd7;--accent:#1d4b3a;--accent2:#b99a5a;--ink:#fffefa;--max:1180px;--radius:16px}
+    html{scroll-padding-top:84px}body{background:var(--bg);color:var(--text)}
+    .topbar{background:rgba(247,246,240,.97);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+    .brand span,.nav a:hover,.nav a:focus-visible,.text-link,.mono,.eyebrow,.footer .backtop{color:var(--accent)}
+    .nav a{color:var(--muted)}.nav .nav-cta{border-color:#a9b8ad;color:var(--accent);background:#fffefa}
+    .hero{background:#f7f6f0}.hero:after{display:none}.hero-aside{background:#fffefa;border-color:var(--line);box-shadow:0 14px 36px rgba(29,75,58,.07)}
+    .initials{background:var(--accent)}h1 em{color:var(--accent)}.availability{border-color:var(--line);color:var(--muted)}
+    .dot{background:#387b58;box-shadow:0 0 0 4px rgba(56,123,88,.12)}
+    .quicklinks{border-color:var(--line)}.quicklinks a{border-color:var(--line)}
+    .section{border-top-color:var(--line)}.principle,.skill-card,.writing-card,.project{background:var(--panel);border-color:var(--line);box-shadow:0 3px 12px rgba(32,43,37,.025)}
+    .project-top{background:var(--panel2);border-color:var(--line)}.project-mark{color:var(--accent)}.project-kind{color:var(--soft)}
+    .tag{border-color:#d6ded5;color:#3e5145}.btn-primary{background:var(--accent);color:#fffefa}.btn-secondary{border-color:#a9b8ad;color:var(--accent);background:transparent}
+    .contact-panel{background:var(--panel2);border-color:var(--line)}.contact-links a{border-color:var(--line)}
+    .footer{border-color:var(--line)}.footer p,.footer-links a{color:var(--muted)}.menu-btn{border-color:#c8d1c9;color:var(--accent);background:#fffefa}
+    .hero-note{margin:18px 0 0;color:var(--soft);font-size:.8rem;max-width:62ch}
+    .support-list{display:grid;gap:0;margin:22px 0 12px;border-top:1px solid var(--line)}.support-list>div{display:flex;gap:13px;padding:14px 0;border-bottom:1px solid var(--line);align-items:flex-start}.support-number{font:500 .75rem "DM Mono",monospace;color:var(--accent);padding-top:3px}.support-list strong,.support-list small{display:block}.support-list strong{font-size:.9rem}.support-list small{font-size:.79rem;color:var(--muted);margin-top:2px;line-height:1.5}.aside-link{display:inline-flex;align-items:center;gap:8px;margin-top:10px;font-size:.86rem;font-weight:700;color:var(--accent);text-underline-offset:4px}.sample-proof{padding:10px 12px;border-left:2px solid #b99a5a;background:#f7f6f0;color:var(--muted);font-size:.8rem!important;margin:12px 0 15px!important}
+    .nav a,.btn,.contact-links a,.quicklinks a{min-height:44px}.btn{transition:background-color .15s,color .15s,border-color .15s}.btn:hover{transform:none}.text-link:hover,.aside-link:hover{text-decoration:underline;text-underline-offset:4px}
+    :focus-visible{outline:3px solid #9b7839;outline-offset:4px;border-radius:4px}
+    @media(max-width:700px){.nav{background:#f7f6f0;border-color:var(--line);box-shadow:0 16px 24px rgba(29,75,58,.08)}.nav a{min-height:44px;display:flex;align-items:center}.nav .nav-cta{justify-content:center}.hero{padding-top:58px}.hero-grid{gap:28px}.hero-aside{padding:22px}.actions .btn{flex:1 1 150px}.contact-panel{padding:24px}}
+    @media(max-width:380px){.actions .btn{flex-basis:100%}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+
+</style>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -184,21 +208,16 @@
         <div>
           <div class="availability"><span class="dot"></span> Computer Science student · Building in public</div>
           <p class="eyebrow">Technical SEO · Content Strategy · AI Search</p>
-          <h1>Making complex ideas <em>clear</em> and digital content easier to find.</h1>
-          <p class="lead">I’m Naom Kenagwa, a Computer Science student focused on technical writing, SEO content and clear explanations of digital products. I help turn research and technical ideas into structured, reader-friendly content—and bring a technical mindset to every assignment.</p>
-          <div class="actions"><a class="btn btn-primary" href="#writing">Read writing samples <span aria-hidden="true">↘</span></a><a class="btn btn-secondary" href="#projects">Explore projects <span aria-hidden="true">↗</span></a><a class="btn btn-secondary" href="mailto:naom6083@gmail.com?subject=Portfolio%20enquiry">Discuss a project <span aria-hidden="true">↗</span></a></div>
+          <h1>Technical content that makes complex ideas <em>clear</em>—and easier to find.</h1>
+          <p class="lead">I’m Naom Kenagwa, a Computer Science student developing my practice in technical writing and SEO content. I turn research and technical ideas into clear, structured content that helps readers understand a product, solve a problem or take the next step.</p>
+          <div class="actions"><a class="btn btn-primary" href="#writing">Read writing samples <span aria-hidden="true">↘</span></a><a class="btn btn-secondary" href="#projects">Explore selected work <span aria-hidden="true">↗</span></a></div><p class="hero-note">Independent samples and developing projects · No invented client results or performance claims.</p>
         </div>
-        <aside class="hero-aside" aria-label="Professional snapshot">
-          <div class="initials" aria-hidden="true">NK</div>
-          <p class="eyebrow">A little about my work</p>
-          <h2>Research-minded. Search-aware. Tech-curious.</h2>
-          <p>I enjoy connecting content, technology and user needs—then learning by building real projects.</p>
-          <div class="quicklinks">
-            <a href="https://github.com/Moana-star" target="_blank" rel="noopener noreferrer"><span>GitHub</span><span>↗</span></a>
-            <a href="https://www.linkedin.com/in/naom-kenagwa-493107403/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><span>↗</span></a>
-            <a href="https://devpost.com/naom6083" target="_blank" rel="noopener noreferrer"><span>Devpost</span><span>↗</span></a>
-            <a href="https://gamma.app/docs/Naom-Kenagwa-76y7i0rnfpkhu55" target="_blank" rel="noopener noreferrer"><span>Writing portfolio</span><span>↗</span></a>
-          </div>
+        <aside class="hero-aside" aria-label="Ways I can support a project">
+          <p class="eyebrow">Practical content support</p>
+          <h2>Clear writing. Careful research. Useful next steps.</h2>
+          <p>I’m building experience through independent writing samples and hands-on web projects. A good fit starts with a clear brief and a realistic scope.</p>
+          <div class="support-list"><div><span class="support-number">01</span><span><strong>Technical content</strong><small>Research, explainers and clarity edits</small></span></div><div><span class="support-number">02</span><span><strong>SEO content support</strong><small>Content briefs, page reviews and on-page basics</small></span></div><div><span class="support-number">03</span><span><strong>Web project work</strong><small>Responsive interfaces and practical prototypes</small></span></div></div>
+          <a class="aside-link" href="#contact">Discuss a scoped project <span aria-hidden="true">↗</span></a>
         </aside>
       </div>
     </section>
@@ -254,12 +273,12 @@
 
     <section class="section" id="writing">
       <div class="wrap">
-        <div class="section-head"><div class="section-label eyebrow">04 / Writing</div><div><h2>Writing samples, not just claims.</h2><p>Explore concise examples of technical explanations and SEO review. These are independent portfolio samples, not client engagements or claims of measured business results.</p></div></div>
+        <div class="section-head"><div class="section-label eyebrow">04 / Writing</div><div><h2>Writing samples, not just claims.</h2><p>Read the full samples, see the questions each one answers and follow the primary sources. These are independent portfolio pieces—not client engagements or claims of measured business results.</p></div></div>
         <div class="writing-layout">
-          <article class="writing-card"><p class="eyebrow">Featured sample · Technical SEO</p><h3>A practical first-pass SEO review</h3><p>A structured walkthrough of crawlability, indexing signals, page titles, internal links and sitemap checks—organized around what to inspect and why it matters.</p><a href="samples.html#seo-review">Read the sample ↗</a></article>
-          <article class="writing-card"><p class="eyebrow">Featured sample · Technical writing</p><h3>How search engines discover a page</h3><p>A plain-language explainer of crawling, indexing and serving results, with clear distinctions between the stages and links to primary documentation.</p><a href="samples.html#search-basics">Read the explainer ↗</a></article>
+          <article class="writing-card"><p class="eyebrow">Featured sample · Technical SEO</p><h3>A practical first-pass SEO review</h3><p>A practical checklist for checking crawl access, indexing signals, page titles, internal links and sitemaps—plus guidance on recording evidence without overstating impact.</p><p class="sample-proof"><strong>Shows:</strong> structured analysis · clear recommendations · scope awareness</p><a href="samples.html#seo-review">Read the full sample ↗</a></article>
+          <article class="writing-card"><p class="eyebrow">Featured sample · Technical writing</p><h3>How search engines discover a page</h3><p>A beginner-friendly explanation of crawling, indexing and result serving, including why publication does not guarantee indexing or rankings.</p><p class="sample-proof"><strong>Shows:</strong> plain-language explanation · technical accuracy · primary references</p><a href="samples.html#search-basics">Read the full explainer ↗</a></article>
           <article class="writing-card"><p class="eyebrow">Portfolio</p><h3>Technical content & SEO samples</h3><p>My broader writing portfolio and additional material.</p><a href="https://gamma.app/docs/Naom-Kenagwa-76y7i0rnfpkhu55" target="_blank" rel="noopener noreferrer">Read writing portfolio ↗</a></article>
-          <article class="writing-card"><p class="eyebrow">How I can help</p><h3>Content support for technical teams</h3><p>Scoped support with technical article research and drafting, clarity edits, SEO content briefs, on-page content reviews, and beginner-friendly product or feature explanations. Deliverables and scope are agreed before work begins.</p><a href="mailto:naom6083@gmail.com?subject=Content%20project%20enquiry">Discuss a content project ↗</a></article>
+          <article class="writing-card"><p class="eyebrow">How I can help</p><h3>Content support for technical teams</h3><p>Possible deliverables include a researched article draft, a clarity edit, an SEO content brief, a page-level content review or a beginner-friendly feature explainer. Scope, deadline and deliverables are agreed before work begins.</p><a href="mailto:naom6083@gmail.com?subject=Content%20project%20enquiry">Discuss a content project ↗</a></article>
           <article class="writing-card"><p class="eyebrow">Editorial interests</p><h3>Topics I'm developing</h3><p>Technical SEO foundations, clear developer documentation, content quality, search intent, information architecture and practical explanations of software and AI concepts.</p><a href="https://www.linkedin.com/in/naom-kenagwa-493107403/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn ↗</a></article>
         </div>
       </div>
@@ -300,7 +319,7 @@
     <section class="section" id="contact">
       <div class="wrap">
         <div class="contact-panel">
-          <div><p class="eyebrow">08 / Contact</p><h2>Have a thoughtful project in mind?</h2><p>I’m open to remote freelance and contract conversations involving technical content, SEO-focused writing, research and content improvement. Send a short brief or describe the problem you need help with; we can discuss fit, scope and timing before committing.</p><div class="actions"><a class="btn btn-primary" href="mailto:naom6083@gmail.com?subject=Portfolio%20enquiry">Email me ↗</a><a class="btn btn-secondary" href="https://www.linkedin.com/in/naom-kenagwa-493107403/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a></div></div>
+          <div><p class="eyebrow">08 / Contact</p><h2>Need clear content or a careful first review?</h2><p>I’m open to remote freelance and contract conversations involving technical content, SEO-focused writing, research and content improvement. Send a short brief with the audience, goal, expected deliverable and deadline. I’ll be transparent about fit and scope before committing.</p><div class="actions"><a class="btn btn-primary" href="mailto:naom6083@gmail.com?subject=Portfolio%20enquiry">Email me ↗</a><a class="btn btn-secondary" href="https://www.linkedin.com/in/naom-kenagwa-493107403/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a></div></div>
           <div class="contact-links"><a href="mailto:naom6083@gmail.com"><span>Email</span><span>naom6083@gmail.com ↗</span></a><a href="https://github.com/Moana-star" target="_blank" rel="noopener noreferrer"><span>GitHub</span><span>Moana-star ↗</span></a><a href="https://www.linkedin.com/in/naom-kenagwa-493107403/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><span>Connect ↗</span></a><a href="https://devpost.com/naom6083" target="_blank" rel="noopener noreferrer"><span>Devpost</span><span>Projects ↗</span></a></div>
         </div>
       </div>
