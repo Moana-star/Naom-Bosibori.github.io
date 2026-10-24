@@ -217,7 +217,59 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--text)}
     .writing-card-secondary .project-links a{line-height:1.7}
     @media(max-width:700px){.writing-highlight{align-items:flex-start;flex-direction:column;gap:18px}.writing-highlight .btn{width:100%}}
 
-</style>
+
+    /* Contact section: enforce readable contrast across earlier theme overrides. */
+    #contact { background: #f2f4ef !important; }
+    #contact .contact-panel {
+      background: #ffffff !important;
+      color: #202a25 !important;
+      border: 1px solid #cbd5cc !important;
+      box-shadow: 0 12px 32px rgba(23, 63, 53, .08) !important;
+    }
+    #contact .contact-panel .eyebrow {
+      color: #245447 !important;
+    }
+    #contact .contact-panel h2 {
+      color: #202a25 !important;
+    }
+    #contact .contact-panel p {
+      color: #39483f !important;
+    }
+    #contact .contact-panel .btn-primary {
+      background: #17483b !important;
+      color: #ffffff !important;
+      border: 1px solid #17483b !important;
+    }
+    #contact .contact-panel .btn-primary:hover {
+      background: #10372d !important;
+      color: #ffffff !important;
+    }
+    #contact .contact-panel .btn-secondary {
+      background: #ffffff !important;
+      color: #17483b !important;
+      border: 1px solid #547568 !important;
+    }
+    #contact .contact-panel .btn-secondary:hover {
+      background: #edf3ef !important;
+      color: #10372d !important;
+    }
+    #contact .contact-links a {
+      color: #202a25 !important;
+      border-color: #d4ddd5 !important;
+    }
+    #contact .contact-links a span:first-child {
+      color: #39483f !important;
+    }
+    #contact .contact-links a span:last-child {
+      color: #17483b !important;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+    #contact .contact-links a:hover {
+      background: #f3f7f3 !important;
+    }
+
+  </style>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
