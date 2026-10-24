@@ -1,26 +1,26 @@
 # Naom Kenagwa — Personal Portfolio
 
-Personal portfolio for Naom Kenagwa, a Computer Science student specializing in Technical SEO and Content Strategy, with interests in technical writing, AI search, and practical software projects.
+A concise portfolio presenting Naom Kenagwa's independent technical writing samples, SEO content work, and practical student projects.
 
 ## Live website
 
-https://naom-kenagwa-portfolio-naom6083-2980.vercel.app/
+https://moana-star.github.io/Naom-Bosibori.github.io/
 
-## Highlights
+## What you'll find
 
-- Responsive, accessible single-page portfolio with mobile navigation
-- Premium forest-green, ivory, and champagne visual identity
-- Sections for About, Expertise, Projects, Writing, Approach, Learning, Profiles, and Contact
-- SEO metadata, canonical URL, Open Graph basics, Person structured data, `robots.txt`, and XML sitemap
-- Contact links and public professional profiles
+- A short introduction to technical writing, technical SEO, and content strategy
+- Selected practical projects, with project status and contribution described transparently
+- A dedicated writing-samples page with source references and clear labels for fictional or hypothetical examples
+- Direct email and LinkedIn contact links
+- Responsive HTML/CSS/JavaScript, accessible navigation, page metadata, a favicon, robots.txt, and sitemap.xml
 
-## Profiles
+## Professional profiles
 
 - GitHub: https://github.com/Moana-star
 - LinkedIn: https://www.linkedin.com/in/naom-kenagwa-493107403/
 - Devpost: https://devpost.com/naom6083
-- Writing portfolio: https://gamma.app/docs/Naom-Kenagwa-76y7i0rnfpkhu55
+- Extended writing portfolio: https://gamma.app/docs/Naom-Kenagwa-76y7i0rnfpkhu55
 
 ## Editing
 
-The site is built with semantic HTML, CSS, and a small amount of JavaScript. Edit `index.html` for page content and styling. Keep project descriptions factual and update links when a live demo or repository becomes available.
+The site is built with semantic HTML, CSS, and a small amount of JavaScript. Edit `index.html` for the homepage, `samples.html` for writing samples, and `local-seo-audit.html` for the separate hypothetical local SEO audit. Keep project descriptions factual, verify links before sharing, and do not imply client results that have not been measured.
