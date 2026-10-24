@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0d1b33">
-  <meta name="description" content="Naom Kenagwa is a Computer Science student developing her practice in technical writing, SEO content, clear product explanations and practical web projects.">
+  <meta name="description" content="Explore Naom Kenagwa’s technical writing portfolio: five independent samples covering technical SEO, search fundamentals, REST API documentation, RAG and SEO content strategy.">
   <meta name="author" content="Naom Kenagwa">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta property="og:type" content="website">
@@ -201,6 +201,22 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--text)}
 @media(max-width:380px){.actions .btn{flex-basis:100%}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
 
+
+    /* Writing portfolio: stronger sample cards and a clear route to the full collection */
+    .writing-highlight{display:flex;align-items:center;justify-content:space-between;gap:28px;margin:0 0 20px;padding:clamp(22px,4vw,34px);border:1px solid #d9c2c1;border-radius:18px;background:linear-gradient(120deg,#fffefa 0%,#f0e2de 100%);box-shadow:0 12px 30px rgba(81,36,47,.06)}
+    .writing-highlight>div{max-width:650px}
+    .writing-highlight .eyebrow{margin-bottom:10px}
+    .writing-highlight h3{font-size:clamp(1.25rem,2.5vw,1.75rem);margin-bottom:9px}
+    .writing-highlight p:not(.eyebrow){color:#65585a;margin-bottom:0}
+    .writing-highlight .btn{flex-shrink:0;min-height:48px;text-align:center}
+    .writing-card{display:flex;flex-direction:column;align-items:flex-start}
+    .writing-card>.sample-proof{margin-top:auto;padding-top:8px;font-size:.82rem}
+    .writing-card>a:last-child{margin-top:10px}
+    .writing-card-secondary{background:#f0e2de}
+    .writing-card-secondary .project-links{margin-top:auto}
+    .writing-card-secondary .project-links a{line-height:1.7}
+    @media(max-width:700px){.writing-highlight{align-items:flex-start;flex-direction:column;gap:18px}.writing-highlight .btn{width:100%}}
+
 </style>
 </head>
 <body>
@@ -285,14 +301,20 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--text)}
 
     <section class="section" id="writing">
       <div class="wrap">
-        <div class="section-head"><div class="section-label eyebrow">04 / Writing</div><div><h2>Writing samples, not just claims.</h2><p>Read the full samples, see the questions each one answers and follow the primary sources. These are independent portfolio pieces—not client engagements or claims of measured business results.</p></div></div>
-        <div class="writing-layout">
-          <article class="writing-card"><p class="eyebrow">Featured sample · Technical SEO</p><h3>A practical first-pass SEO review</h3><p>A practical checklist for checking crawl access, indexing signals, page titles, internal links and sitemaps—plus guidance on recording evidence without overstating impact.</p><p class="sample-proof"><strong>Shows:</strong> structured analysis · clear recommendations · scope awareness</p><a href="samples.html#seo-review">Read the full sample ↗</a></article>
-          <article class="writing-card"><p class="eyebrow">Featured sample · Technical writing</p><h3>How search engines discover a page</h3><p>A beginner-friendly explanation of crawling, indexing and result serving, including why publication does not guarantee indexing or rankings.</p><p class="sample-proof"><strong>Shows:</strong> plain-language explanation · technical accuracy · primary references</p><a href="samples.html#search-basics">Read the full explainer ↗</a></article>
-          <article class="writing-card"><p class="eyebrow">Portfolio</p><h3>Technical content & SEO samples</h3><p>My broader writing portfolio and additional material.</p><a href="https://gamma.app/docs/Naom-Kenagwa-76y7i0rnfpkhu55" target="_blank" rel="noopener noreferrer">Read writing portfolio ↗</a></article>
-          <article class="writing-card"><p class="eyebrow">How I can help</p><h3>Content support for technical teams</h3><p>Possible deliverables include a researched article draft, a clarity edit, an SEO content brief, a page-level content review or a beginner-friendly feature explainer. Scope, deadline and deliverables are agreed before work begins.</p><a href="mailto:naom6083@gmail.com?subject=Content%20project%20enquiry">Discuss a content project ↗</a></article>
-          <article class="writing-card"><p class="eyebrow">Editorial interests</p><h3>Topics I'm developing</h3><p>Technical SEO foundations, clear developer documentation, content quality, search intent, information architecture and practical explanations of software and AI concepts.</p><a href="https://www.linkedin.com/in/naom-kenagwa-493107403/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn ↗</a></article>
+        <div class="section-head"><div class="section-label eyebrow">04 / Writing</div><div><h2>Writing that makes technical ideas useful.</h2><p>Explore five independent samples across technical SEO, search fundamentals, developer documentation, AI systems and content strategy. Each sample is designed to show how I research, structure and explain a technical topic. They are portfolio demonstrations—not client engagements or claims of measured business results.</p></div></div>
+        <div class="writing-highlight">
+          <div><p class="eyebrow">The complete collection</p><h3>Five samples. Five ways to see how I work.</h3><p>Read the full pieces, follow primary sources and assess the structure, clarity and technical judgment for yourself.</p></div>
+          <a class="btn btn-primary" href="samples.html">Explore all five writing samples <span aria-hidden="true">↗</span></a>
         </div>
+        <div class="writing-layout">
+          <article class="writing-card"><p class="eyebrow">Sample 01 · Technical SEO</p><h3>A practical first-pass SEO review</h3><p>A structured first pass through crawl access, indexing signals, titles, internal links and sitemaps—with a checklist for documenting evidence and prioritizing the next investigation.</p><p class="sample-proof"><strong>Demonstrates:</strong> analytical structure · actionable recommendations · scope awareness</p><a href="samples.html#seo-review">Read the full SEO review ↗</a></article>
+          <article class="writing-card"><p class="eyebrow">Sample 02 · Technical explainer</p><h3>How search engines discover a page</h3><p>A plain-language explanation of crawling, indexing and serving results, with practical steps for site owners and clear distinctions between discovery and ranking.</p><p class="sample-proof"><strong>Demonstrates:</strong> accessible explanations · technical accuracy · source-led research</p><a href="samples.html#search-basics">Read the full explainer ↗</a></article>
+          <article class="writing-card"><p class="eyebrow">Sample 03 · Developer documentation</p><h3>A clear REST API quickstart</h3><p>A fictional API onboarding example covering prerequisites, safe token handling, a request, an illustrative JSON response and common HTTP errors.</p><p class="sample-proof"><strong>Demonstrates:</strong> documentation structure · developer empathy · practical troubleshooting</p><a href="samples.html#api-guide">Read the API quickstart ↗</a></article>
+          <article class="writing-card"><p class="eyebrow">Sample 04 · AI and software</p><h3>Retrieval-augmented generation explained</h3><p>An accessible walkthrough of how RAG systems prepare content, retrieve evidence and generate answers—alongside limitations around relevance, freshness, permissions and evaluation.</p><p class="sample-proof"><strong>Demonstrates:</strong> AI concept research · systems thinking · balanced technical communication</p><a href="samples.html#rag-explainer">Read the RAG explainer ↗</a></article>
+          <article class="writing-card"><p class="eyebrow">Sample 05 · SEO content strategy</p><h3>From search intent to a useful technical article</h3><p>A hypothetical editorial brief with an audience definition, reader problem, article outline, evidence standards, on-page SEO checks and a measurement plan.</p><p class="sample-proof"><strong>Demonstrates:</strong> content planning · search intent · editorial quality standards</p><a href="samples.html#content-brief">Read the content brief ↗</a></article>
+          <article class="writing-card writing-card-secondary"><p class="eyebrow">More about my work</p><h3>Writing portfolio and project enquiries</h3><p>Browse additional portfolio material or contact me about a clearly scoped technical article, documentation task, SEO content brief or content review.</p><div class="project-links"><a class="text-link" href="https://gamma.app/docs/Naom-Kenagwa-76y7i0rnfpkhu55" target="_blank" rel="noopener noreferrer">Open Gamma portfolio ↗</a><a class="text-link" href="mailto:naom6083@gmail.com?subject=Content%20project%20enquiry">Discuss a project ↗</a></div></article>
+        </div>
+        <p class="note">Transparency note: the API example is fictional; the content brief is hypothetical; all five pieces are independent samples. No client outcomes, ranking gains or business results are implied.</p>
       </div>
     </section>
 
