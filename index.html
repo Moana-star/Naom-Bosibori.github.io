@@ -282,6 +282,47 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--text)}
 #contact .btn-secondary { background:#fff !important; color:#173f30 !important; border:2px solid #173f30 !important; }
 #contact a:focus-visible { outline:3px solid #d97706 !important; outline-offset:3px !important; }
 </style>
+
+<style id="concise-portfolio-update">
+/* Client-feedback update: shorter homepage, with detail kept on dedicated pages. */
+.hero{padding-top:68px;padding-bottom:62px}
+.section{padding-top:58px;padding-bottom:58px}
+.section-head{margin-bottom:24px}
+.section-head h2{font-size:clamp(1.8rem,3.6vw,2.65rem);margin-bottom:10px}
+.section-head p{max-width:66ch}
+.about-grid{grid-template-columns:1fr;gap:10px}
+.about-grid .principles{display:none}
+.about-copy p{max-width:72ch;margin-bottom:0}
+.project-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.project:nth-child(n+3){display:none}
+.project-top{min-height:95px;padding:18px}
+.project-body{padding:19px}
+.project-body h3{font-size:1.2rem}
+.project-body p{font-size:.88rem;line-height:1.65}
+.project-body p:nth-of-type(2){display:none}
+.project-body .project-status{font-size:.78rem!important}
+.project .note{display:none}
+.writing-highlight{margin-bottom:14px;padding:22px}
+.writing-highlight h3{font-size:1.25rem}
+.writing-layout{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.writing-card{padding:19px}
+.writing-card:nth-child(n+3){display:none}
+.writing-card p:not(.eyebrow){font-size:.88rem;line-height:1.65}
+#writing .section-head p{max-width:70ch}
+#writing>.wrap>.note{margin-top:14px;font-size:.76rem}
+#contact .contact-panel{padding:30px;gap:24px}
+#contact .contact-panel h2{font-size:clamp(2rem,3.8vw,3rem)}
+@media(max-width:700px){
+ .hero{padding:52px 0 46px}
+ .section{padding:44px 0}
+ .project-grid,.writing-layout{grid-template-columns:1fr}
+ .project:nth-child(n+3),.writing-card:nth-child(n+3){display:none}
+ .project-body{padding:18px}
+ .writing-highlight{padding:20px}
+ #contact .contact-panel{padding:22px}
+}
+</style>
+
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -331,7 +372,7 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--text)}
 
     <section class="section" id="projects">
       <div class="wrap">
-        <div class="section-head"><div class="section-label eyebrow">03 / Selected work</div><div><h2>Projects built around real problems.</h2><p>Here are selected projects I have worked on or contributed to. I distinguish working builds from academic work and describe unfinished work honestly.</p></div></div>
+        <div class="section-head"><div class="section-label eyebrow">03 / Selected work</div><div><h2>Projects built around real problems.</h2><p>Two practical projects showing my approach to building and improving useful digital experiences.</p></div></div>
         <div class="project-grid">
           <article class="project"><div class="project-top"><div><div class="project-kind">Learning technology</div><div class="project-mark">01 / BUILD</div></div><span class="tag">Study tool</span></div><div class="project-body"><h3>ExamPilot</h3><p>A local study companion that turns a learner’s own course notes into a focused practice question and feedback tied to the supplied material. It uses a local Ollama model rather than a hosted AI API.</p><p><strong>My work:</strong> building and refining the Flask study flow, source-context selection, answer feedback and checks that returned evidence excerpts match the notes. I’ve also been reviewing question relevance and repeat-question behaviour.</p><p class="project-status"><strong>Status:</strong> local prototype; not a public hosted demo. Run requirements and test notes are documented in the repository.</p><div class="tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">Ollama</span><span class="tag">Automated tests</span></div><div class="project-links"><a class="text-link" href="https://github.com/Moana-star/exam-pilot" target="_blank" rel="noopener noreferrer">View repository ↗</a></div></div></article>
           
@@ -348,10 +389,10 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--text)}
 
     <section class="section" id="writing">
       <div class="wrap">
-        <div class="section-head"><div class="section-label eyebrow">04 / Writing</div><div><h2>Writing that makes technical ideas useful.</h2><p>Browse three featured samples here, with the complete collection available on the writing samples page. These independent demonstrations show how I research, structure and explain technical topics; they are not client engagements or claims of measured business results.</p></div></div>
+        <div class="section-head"><div class="section-label eyebrow">04 / Writing</div><div><h2>Writing that makes technical ideas useful.</h2><p>Explore two selected writing samples here. The complete collection is available on the dedicated writing samples page.</p></div></div>
         <div class="writing-highlight">
-          <div><p class="eyebrow">The complete collection</p><h3>A few selected samples. The full collection is one click away.</h3><p>Read the full pieces, follow primary sources and assess the structure, clarity and technical judgment for yourself. The local SEO audit demonstrates how I organize findings, priorities and practical next steps.</p></div>
-          <a class="btn btn-primary" href="samples.html">View all six writing samples <span aria-hidden="true">↗</span></a>
+          <div><p class="eyebrow">The complete collection</p><h3>Selected writing, with the full collection one click away.</h3><p>Open the full samples to review the writing, sources and approach in more detail.</p></div>
+          <a class="btn btn-primary" href="samples.html">View all writing samples <span aria-hidden="true">↗</span></a>
         </div>
         <div class="writing-layout">
           <article class="writing-card"><p class="eyebrow">Sample 01 · Technical SEO</p><h3>A practical first-pass SEO review</h3><p>A structured first pass through crawl access, indexing signals, titles, internal links and sitemaps—with a checklist for documenting evidence and prioritizing the next investigation.</p><p class="sample-proof"><strong>Demonstrates:</strong> analytical structure · actionable recommendations · scope awareness</p><a href="samples.html#seo-review">Read the full SEO review ↗</a></article>
