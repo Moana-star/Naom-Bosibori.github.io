@@ -53,22 +53,14 @@
     targets.forEach(({ section }) => navObserver.observe(section));
   }
 
-  // Reliable in-page navigation with correct offsets for the sticky header.
+  // Keep browser-native anchor navigation as the reliable fallback. JavaScript
+  // must never cancel a valid in-page link; the sticky-header offset is CSS-driven.
   document.querySelectorAll('a[href^="#"]').forEach(link => {
-    const id = link.getAttribute("href").slice(1);
-    const target = document.getElementById(id);
-    if (!target) {
-      link.setAttribute("aria-disabled", "true");
-      link.addEventListener("click", event => event.preventDefault());
-      return;
-    }
-    link.addEventListener("click", event => {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      event.preventDefault();
-      target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-      history.replaceState(null, "", "#" + id);
-      if (window.innerWidth < 701) {
-        nav?.classList.remove("open");
+    const id = decodeURIComponent(link.getAttribute("href").slice(1));
+    if (!id || !document.getElementById(id)) return;
+    link.addEventListener("click", () => {
+      if (window.innerWidth < 701 && nav?.contains(link)) {
+        nav.classList.remove("open");
         const menu = document.getElementById("menuBtn");
         menu?.setAttribute("aria-expanded", "false");
         if (menu) menu.textContent = "Menu ☰";
