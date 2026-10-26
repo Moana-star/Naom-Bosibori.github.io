@@ -161,7 +161,7 @@ import { createDOMBridge } from "./DOM_Bridge.js";
         vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
         vColor = aColor;
         vAlpha = pow(max(0.0, 1.0 - aAge), 1.7);
-        gl_PointSize = max(1.0, aSize * uPixelRatio * (0.35 + vAlpha) * (260.0 / max(1.0, -mvPosition.z)));
+        gl_PointSize = max(1.0, aSize * uPixelRatio * (0.35 + vAlpha) * (90.0 / max(1.0, -mvPosition.z)));
         gl_Position = projectionMatrix * mvPosition;
       }
     `,
