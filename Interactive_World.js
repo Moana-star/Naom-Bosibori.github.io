@@ -30,7 +30,27 @@
  const baseMat=new T.MeshStandardMaterial({color:0x27233b,metalness:.6,roughness:.35});const stand=new T.Mesh(new T.CylinderGeometry(.09,.18,.8,12),baseMat);stand.position.set(0,-.35,-1.4);scene.add(stand);const foot=new T.Mesh(new T.BoxGeometry(2.2,.12,.9),baseMat);foot.position.set(0,-.72,-1.4);scene.add(foot);
  const starPos=new Float32Array(2400*3);for(let i=0;i<2400;i++){starPos[i*3]=(Math.random()-.5)*60;starPos[i*3+1]=Math.random()*20-1;starPos[i*3+2]=-Math.random()*50-4}const sg=new T.BufferGeometry();sg.setAttribute("position",new T.BufferAttribute(starPos,3));const stars=new T.Points(sg,new T.PointsMaterial({color:0xc9b8e9,size:.035,transparent:true,opacity:.8,depthWrite:false}));scene.add(stars);
  const motes=[];for(let i=0;i<18;i++){const m=new T.Mesh(new T.IcosahedronGeometry(.07+Math.random()*.16,1),new T.MeshStandardMaterial({color:i%2?0xd69cc7:0x8d8be1,emissive:i%2?0x4b1f48:0x222c68,emissiveIntensity:1.5,metalness:.4,roughness:.3}));m.position.set((Math.random()-.5)*18,Math.random()*6-.5,-Math.random()*14-1);m.userData.phase=Math.random()*6.28;scene.add(m);motes.push(m)}
- group=new T.Group();scene.add(group);const material=(c,r=.65,m=.08)=>new T.MeshStandardMaterial({color:c,roughness:r,metalness:m});function box(g,w,h,d,x,y,z,m){const o=new T.Mesh(new T.BoxGeometry(w,h,d),m);o.position.set(x,y,z);g.add(o);return o}
+ group=new T.Group();scene.add(group);
+ // Three independent 3D features stay in the scene while chapters change.
+ // Their position, rotation and scale are driven by scroll progress, not timers.
+ const featureRig=new T.Group();scene.add(featureRig);
+ const featureMats=[
+  new T.MeshBasicMaterial({color:0xa8f4ed,transparent:true,opacity:.3,wireframe:true,depthWrite:false}),
+  new T.MeshBasicMaterial({color:0xd9a1b6,transparent:true,opacity:.27,wireframe:true,depthWrite:false}),
+  new T.MeshBasicMaterial({color:0xb7a8f0,transparent:true,opacity:.24,wireframe:true,depthWrite:false})
+ ];
+ const featureSpecs=[
+  {geo:new T.TorusKnotGeometry(1.05,.018,110,6,2,3),pos:[3.5,2.8,-3.8],phase:0,scale:.78},
+  {geo:new T.IcosahedronGeometry(.9,1),pos:[-3.4,1.8,-4.8],phase:2.1,scale:.8},
+  {geo:new T.TorusGeometry(.9,.025,8,72),pos:[3.1,1.2,-6.1],phase:4.2,scale:1.05}
+ ];
+ const scrollFeatures=featureSpecs.map((spec,i)=>{
+  const holder=new T.Group();holder.position.set(...spec.pos);holder.scale.setScalar(spec.scale);featureRig.add(holder);
+  const mesh=new T.Mesh(spec.geo,featureMats[i]);holder.add(mesh);
+  const orbit=new T.Mesh(new T.TorusGeometry(1.25,.009,4,90),featureMats[(i+1)%featureMats.length]);orbit.rotation.set(.6+i*.38,.3+i*.52,.2+i*.27);holder.add(orbit);
+  return {holder,mesh,orbit,base:spec.pos,phase:spec.phase,scale:spec.scale,baseRotation:[holder.rotation.x,holder.rotation.y,holder.rotation.z]};
+ });
+ const material=(c,r=.65,m=.08)=>new T.MeshStandardMaterial({color:c,roughness:r,metalness:m});function box(g,w,h,d,x,y,z,m){const o=new T.Mesh(new T.BoxGeometry(w,h,d),m);o.position.set(x,y,z);g.add(o);return o}
  function clear(g){while(g.children.length){const o=g.children.pop();o.parent=null;o.geometry?.dispose();if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material?.dispose()}}
  function arch(g,x,y,z,w,h,d,c){const m=material(c);const sub=new T.Group();sub.position.set(x,y,z);g.add(sub);box(sub,w*.16,h*.6,d,-w*.42,h*.3,0,m);box(sub,w*.16,h*.6,d,w*.42,h*.3,0,m);box(sub,w,h*.15,d,0,h*.62,0,m);const curve=new T.Mesh(new T.TorusGeometry(w*.34,.065,8,28,Math.PI),m);curve.rotation.z=Math.PI;curve.position.set(0,h*.34,0);sub.add(curve)}
  function build(name){
@@ -73,16 +93,32 @@
  const resize=()=>{const w=Math.max(1,root.clientWidth),h=Math.max(1,root.clientHeight);camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5))};addEventListener("resize",resize,{passive:true});if("ResizeObserver"in window){resizeObs=new ResizeObserver(resize);resizeObs.observe(root)}
  let last=0;function animate(t){raf=requestAnimationFrame(animate);if(!renderer)return;if(!reduce&&t-last<30)return;last=t;const now=clock.getElapsedTime();scrollProgress+=(scrollTarget-scrollProgress)*(reduce?.2:.055);
   // Scroll is the timeline: the environment orbits, the camera travels, and foreground details drift with depth.
-  const orbit=scrollProgress*Math.PI*1.05,travel=Math.sin(scrollProgress*Math.PI*2),rise=Math.sin(scrollProgress*Math.PI);
-  camera.position.x+=(tx+Math.sin(orbit)*1.15-camera.position.x)*.035;
-  camera.position.y+=(3.2+ty+rise*.62-camera.position.y)*.035;
-  camera.position.z+=(12.8-scrollProgress*2.1+Math.cos(orbit)*.35-camera.position.z)*.035;
-  camera.lookAt(Math.sin(orbit)*.52+tx*.35,1.3+ty*.2+rise*.22,-1.4);
-  group.rotation.y+=(scrollProgress*Math.PI*1.1+Math.sin(orbit)*.08-group.rotation.y)*.025;
-  group.position.x+=(Math.sin(orbit)*.32-group.position.x)*.025;
-  group.position.y+=(rise*.12-group.position.y)*.025;
+  const orbit=scrollProgress*Math.PI*1.35,rise=Math.sin(scrollProgress*Math.PI*2);
+  // Camera travels through the chapters while the architecture remains stable.
+  camera.position.x+=(tx+Math.sin(orbit)*.72-camera.position.x)*.035;
+  camera.position.y+=(3.2+ty+Math.sin(scrollProgress*Math.PI)*.38-camera.position.y)*.035;
+  camera.position.z+=(12.8-scrollProgress*1.25+Math.cos(orbit)*.18-camera.position.z)*.035;
+  camera.lookAt(Math.sin(orbit)*.28+tx*.3,1.3+ty*.2+Math.sin(scrollProgress*Math.PI)*.14,-1.4);
+  group.rotation.y+=(Math.sin(orbit)*.045+scrollProgress*.28-group.rotation.y)*.025;
+  group.position.x+=(Math.sin(orbit)*.12-group.position.x)*.025;
+  group.position.y+=(Math.sin(scrollProgress*Math.PI)*.045-group.position.y)*.025;
+  // Every feature has its own scroll-synchronised rotation, depth and scale.
+  scrollFeatures.forEach((feature,i)=>{
+   const p=scrollProgress*Math.PI*2+feature.phase;
+   feature.holder.position.x=feature.base[0]+Math.sin(p)*.52;
+   feature.holder.position.y=feature.base[1]+Math.cos(p*.72)*.42;
+   feature.holder.position.z=feature.base[2]+Math.sin(p*.5)*.65;
+   feature.holder.rotation.x=feature.baseRotation[0]+scrollProgress*(i%2?3.8:-4.6)+Math.sin(p)*.18;
+   feature.holder.rotation.y=feature.baseRotation[1]+scrollProgress*(i%2?-5.1:4.4);
+   feature.holder.rotation.z=feature.baseRotation[2]+Math.sin(p*.6)*.3+scrollProgress*(i-1)*1.6;
+   const scale=feature.scale*(.82+.24*(.5+.5*Math.sin(p)));
+   feature.holder.scale.setScalar(scale);
+   feature.orbit.rotation.x=.6+i*.38+scrollProgress*(i%2?2.2:-1.8);
+   feature.orbit.rotation.y=.3+i*.52+scrollProgress*(i%2?-2.6:2.1);
+   feature.mesh.rotation.y=scrollProgress*(i%2?5.5:-4.8)+now*.025;
+  });
   stars.rotation.y=now*.004+scrollProgress*.22;
-  motes.forEach((m,i)=>{m.rotation.y=now*.14+m.userData.phase+scrollProgress*(i%2?1.5:-1.2);m.position.y+=Math.sin(now*.7+m.userData.phase)*.0018;m.position.x+=(Math.sin(orbit+m.userData.phase)*.04-m.position.x*.002)*.012});
+  motes.forEach((m,i)=>{m.rotation.y=now*.14+m.userData.phase+scrollProgress*(i%2?1.5:-1.2);m.position.y+=(Math.sin(now*.7+m.userData.phase)*.0018-m.userData.driftY)*.12;m.userData.driftY=Math.sin(now*.7+m.userData.phase)*.0018;m.position.x+=(Math.sin(orbit+m.userData.phase)*.04-m.position.x*.002)*.012});
   group.children.forEach((o,i)=>{if(o.userData.float){o.rotation.x=now*.16+o.userData.phase+scrollProgress*.7;o.rotation.y=now*.21+o.userData.phase+scrollProgress*1.1;o.position.y+=Math.sin(now*.8+o.userData.phase)*.0015}if(o.userData.water){const p=o.geometry.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i);p.setZ(i,Math.sin(x*.7+now*1.3+scrollProgress*4)*.035+Math.cos(y*.8+now+scrollProgress*3)*.03)}p.needsUpdate=true;o.geometry.computeVertexNormals()}});
   root.style.setProperty("--world-camera-orbit",orbit.toFixed(4));renderer.render(scene,camera)}animate(0);clearTimeout(fallbackTimer);hideLoader()
  }catch(e){console.warn("WebGL fallback",e);canvas.style.display="none";fallback.style.display="grid";hideLoader()}
