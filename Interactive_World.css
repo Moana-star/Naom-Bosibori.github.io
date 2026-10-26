@@ -33,7 +33,7 @@
 
 
 /* The 3D world is the persistent site canvas, not a hero-only decoration. */
-.immersive-world{position:fixed!important;inset:0!important;width:100vw;height:100svh;z-index:0!important;pointer-events:none!important}
+.immersive-world{position:fixed!important;inset:0!important;width:100vw;height:100svh;z-index:1!important;pointer-events:none!important}
 .immersive-world canvas{pointer-events:none!important}
 .immersive-world .world-topline,.immersive-world .world-project-screen,.immersive-world .world-screen-arrows,.immersive-world .world-bottomline,.immersive-world .world-loader,.immersive-world .world-fallback{pointer-events:auto}
 .immersive-world .world-cursor-trail{pointer-events:none}
@@ -47,7 +47,8 @@ body:not(.world-intro-active) .world-topline{top:18px}
 body:not(.world-intro-active) .world-bottomline{bottom:16px;opacity:.92}
 body:not(.world-intro-active) .world-bottom-caption{display:none}
 body:not(.world-intro-active) .world-environments button{padding:8px 11px;background:rgba(7,9,15,.7);backdrop-filter:blur(12px)}
-.topbar{display:none!important}
+.topbar{display:flex!important;position:fixed!important;z-index:40!important;left:0;right:0;top:0;background:rgba(8,10,16,.78)!important;border-bottom:1px solid rgba(220,236,242,.13)!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+body.world-intro-active .topbar{display:none!important}
 #main,.footer{position:relative;z-index:1}
 #home.hero.world-active{position:relative;z-index:1;background:transparent!important}
 #home.world-active .hero-grid{opacity:0!important}
@@ -69,3 +70,11 @@ main .section{min-height:82svh}
  main .section{min-height:0}
 }
 @media(prefers-reduced-motion:reduce){body:not(.world-intro-active) .world-project-screen,body:not(.world-intro-active) .world-screen-arrows{transition:none}}
+
+/* Layering: 3D remains behind the reading chapters but in front of the opening hero. */
+#main{position:relative;z-index:auto}
+#home.hero.world-active{z-index:0!important}
+main .section,.footer{position:relative;z-index:2!important}
+body:not(.world-intro-active) .topbar{display:flex!important}
+body:not(.world-intro-active) main .section{scroll-margin-top:84px}
+@media(max-width:760px){body:not(.world-intro-active) .topbar{padding-top:8px;padding-bottom:8px}body:not(.world-intro-active) main .section{scroll-margin-top:72px}}
