@@ -904,7 +904,7 @@ main section.kinetic-active:after{opacity:.26}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.kinetic-scroll-cue i:after{animation:none}#experience-progress span{transition:none}*{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 <style id="three-dimensional-experience">
-#portfolio-webgl-stage{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;display:block;opacity:.92;mix-blend-mode:screen}
+#portfolio-webgl-stage{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;display:block;opacity:.94;mix-blend-mode:screen}
 body:has(#portfolio-webgl-stage) .kinetic-scene,body:has(#portfolio-webgl-stage) .site-atmosphere{opacity:0!important;visibility:hidden!important}
 body:has(#portfolio-webgl-stage) main{position:relative;z-index:2!important}
 body:has(#portfolio-webgl-stage) .topbar,body:has(#portfolio-webgl-stage) .skip,body:has(#portfolio-webgl-stage) footer{position:relative;z-index:10!important}
@@ -912,8 +912,14 @@ body:has(#portfolio-webgl-stage) main section{background-color:rgba(9,7,13,.48)!
 body:has(#portfolio-webgl-stage) main section:before{background:radial-gradient(ellipse at var(--kinetic-x,50%) var(--kinetic-y,35%),rgba(196,111,172,.10),transparent 50%),linear-gradient(120deg,rgba(255,255,255,.012),transparent 38%,rgba(130,89,178,.018))}
 body:has(#portfolio-webgl-stage) .hero{background:radial-gradient(ellipse at 78% 40%,rgba(119,55,103,.12),transparent 34%),radial-gradient(ellipse at 12% 80%,rgba(180,92,120,.07),transparent 35%)!important}
 body:has(#portfolio-webgl-stage) .section,body:has(#portfolio-webgl-stage) .section:nth-of-type(odd){background:linear-gradient(180deg,rgba(18,14,21,.46),rgba(9,9,13,.58))!important}
-@media(max-width:700px){#portfolio-webgl-stage{opacity:.55}body:has(#portfolio-webgl-stage) main section{background-color:rgba(9,7,13,.65)!important}}
-@media(prefers-reduced-motion:reduce){#portfolio-webgl-stage{opacity:.28}}
+body:has(#portfolio-webgl-stage) .project{background:rgba(12,10,18,.72)!important;border-color:rgba(206,169,217,.24)!important;backdrop-filter:blur(9px);transform-style:preserve-3d;will-change:transform,border-color,box-shadow;transition:transform .4s cubic-bezier(.2,.75,.2,1),border-color .35s,box-shadow .35s}
+body:has(#portfolio-webgl-stage) .project-top{background:linear-gradient(130deg,rgba(76,43,76,.72),rgba(24,18,34,.72))!important;border-color:rgba(206,169,217,.16)!important}
+body:has(#portfolio-webgl-stage) .project:hover,body:has(#portfolio-webgl-stage) .project:focus-within{border-color:rgba(240,174,221,.62)!important;box-shadow:0 22px 65px rgba(5,2,12,.28),0 0 34px rgba(177,117,226,.10)}
+body:has(#portfolio-webgl-stage) .project:after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;background:radial-gradient(circle at var(--card-pointer-x,50%) var(--card-pointer-y,50%),rgba(235,166,218,.14),transparent 52%);transition:opacity .3s}
+body:has(#portfolio-webgl-stage) .project:hover:after,body:has(#portfolio-webgl-stage) .project:focus-within:after{opacity:1}
+body:has(#portfolio-webgl-stage) .project>*{position:relative;z-index:1}
+@media(max-width:700px){#portfolio-webgl-stage{opacity:.55}body:has(#portfolio-webgl-stage) main section{background-color:rgba(9,7,13,.65)!important}body:has(#portfolio-webgl-stage) .project{backdrop-filter:blur(4px)}}
+@media(prefers-reduced-motion:reduce){#portfolio-webgl-stage{opacity:.28}body:has(#portfolio-webgl-stage) .project{transition:none;transform:none!important}}
 </style>
 </head>
 <body>
@@ -1411,99 +1417,321 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&matchMedia('(hover:h
 </script>
 <script type="module" id="portfolio-webgl-engine">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.174.0/build/three.module.js';
-(()=>{
- const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
- const canvas=document.createElement('canvas');canvas.id='portfolio-webgl-stage';canvas.setAttribute('aria-hidden','true');document.body.prepend(canvas);
- let renderer,scene,camera,raf=0,disposed=false;
- try{renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:innerWidth>700,powerPreference:'low-power'});}catch(e){canvas.remove();return}
- renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setSize(innerWidth,innerHeight);renderer.setClearColor(0x000000,0);renderer.outputColorSpace=THREE.SRGBColorSpace;
- scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x09070d,.035);
- camera=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,.1,100);camera.position.set(0,0,12);
 
- // Procedural shader field: a subtle animated grid that bends around the pointer.
- const shaderUniforms={uTime:{value:0},uMouse:{value:new THREE.Vector2(.5,.5)},uScroll:{value:0}};
- const shaderField=new THREE.Mesh(new THREE.PlaneGeometry(200,200),new THREE.ShaderMaterial({
-  transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,uniforms:shaderUniforms,
-  vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
-  fragmentShader:`uniform float uTime;uniform vec2 uMouse;uniform float uScroll;varying vec2 vUv;
-   float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
-   void main(){vec2 uv=vUv;vec2 p=uv-.5;vec2 mouse=uMouse-.5;float d=length((uv-uMouse)*vec2(1.0,.78));
-    float ripple=sin(d*36.0-uTime*1.4)*exp(-d*7.0);
-    vec2 bent=uv+normalize(p-mouse+vec2(.0001))*(.018*exp(-d*5.0)+ripple*.003);
-    float gx=abs(fract(bent.x*34.0)-.5);float gy=abs(fract(bent.y*24.0)-.5);
-    float grid=1.0-smoothstep(.475,.5,min(gx,gy));
-    float wave=.5+.5*sin((bent.x*7.0+bent.y*5.0+uTime*.12+uScroll*2.0)*6.283);
-    float focus=exp(-d*5.0);float alpha=grid*(.045+.12*focus)+focus*.045*wave;
-    vec3 ink=mix(vec3(.30,.18,.48),vec3(.95,.48,.72),focus*.75+wave*.08);
-    gl_FragColor=vec4(ink,alpha);
-   }`
- }));
- shaderField.position.set(0,0,-8);scene.add(shaderField);
+(() => {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'portfolio-webgl-stage';
+  canvas.setAttribute('aria-hidden', 'true');
+  document.body.prepend(canvas);
 
- const world=new THREE.Group();scene.add(world);
- const ambient=new THREE.AmbientLight(0x9d7bb0,1.5);scene.add(ambient);
- const rose=new THREE.PointLight(0xf19bc8,22,28);rose.position.set(4,3,5);scene.add(rose);
- const violet=new THREE.PointLight(0x9777ff,17,25);violet.position.set(-5,-2,1);scene.add(violet);
- const core=new THREE.Group();world.add(core);
- const mat=(color,emissive,intensity,opacity=1)=>new THREE.MeshStandardMaterial({color,emissive,emissiveIntensity:intensity,metalness:.55,roughness:.28,transparent:opacity<1,opacity,wireframe:false});
- const knot=new THREE.Mesh(new THREE.TorusKnotGeometry(1.65,.014,260,8,2,5),new THREE.MeshBasicMaterial({color:0xf1b4d5,transparent:true,opacity:.72,blending:THREE.AdditiveBlending,depthWrite:false}));core.add(knot);
- const knot2=new THREE.Mesh(new THREE.TorusKnotGeometry(2.15,.009,300,6,3,7),new THREE.MeshBasicMaterial({color:0xa996ff,transparent:true,opacity:.48,blending:THREE.AdditiveBlending,depthWrite:false}));knot2.rotation.set(.8,.4,.3);core.add(knot2);
- const rings=[];
- for(let i=0;i<8;i++){const g=new THREE.TorusGeometry(2.35+i*.18,.004+(i%3)*.001,5,180);const m=new THREE.MeshBasicMaterial({color:i%3===0?0xe7a1cb:i%3===1?0x9e8aff:0xf3d4e7,transparent:true,opacity:.17+(i%3)*.055,blending:THREE.AdditiveBlending,depthWrite:false});const mesh=new THREE.Mesh(g,m);mesh.rotation.set(i*.37,i*.61,i*.22);mesh.scale.set(1,.62+(i%4)*.12,1);core.add(mesh);rings.push(mesh)}
- // Sculptural, flowing 3D ribbons made from real tube geometry.
- const ribbons=[];
- for(let k=0;k<5;k++){const pts=[];for(let j=0;j<=90;j++){const u=j/90*Math.PI*2;pts.push(new THREE.Vector3(Math.cos(u)*(2.5+k*.17),Math.sin(u*2+k*.9)*(.45+k*.08)+Math.sin(u)*.7,Math.sin(u)*(1.05+k*.13)+Math.cos(u*3+k)*.22))}const curve=new THREE.CatmullRomCurve3(pts,false,'catmullrom',.5);const geo=new THREE.TubeGeometry(curve,260,.012+(k%2)*.005,5,false);const material=new THREE.MeshBasicMaterial({color:[0xf4b5d5,0xb7a0ff,0xe4a2ce,0x9f8dff,0xf0d2e7][k],transparent:true,opacity:.55-k*.055,blending:THREE.AdditiveBlending,depthWrite:false});const mesh=new THREE.Mesh(geo,material);mesh.rotation.set(k*.45,k*.7,k*.3);core.add(mesh);ribbons.push(mesh)}
- // Floating 3D particles with soft shader-driven glow.
- const count=innerWidth<700?420:950,positions=new Float32Array(count*3),seeds=new Float32Array(count),sizes=new Float32Array(count);
- for(let i=0;i<count;i++){const radius=2.5+Math.random()*9,theta=Math.random()*Math.PI*2,phi=Math.acos(2*Math.random()-1);positions[i*3]=radius*Math.sin(phi)*Math.cos(theta);positions[i*3+1]=radius*Math.cos(phi);positions[i*3+2]=radius*Math.sin(phi)*Math.sin(theta);seeds[i]=Math.random()*Math.PI*2;sizes[i]=.5+Math.random()*2.0}
- const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(positions,3));pg.setAttribute('aSeed',new THREE.BufferAttribute(seeds,1));pg.setAttribute('aSize',new THREE.BufferAttribute(sizes,1));
- const pm=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,uniforms:{uTime:{value:0},uPixelRatio:{value:renderer.getPixelRatio()}},vertexShader:`attribute float aSeed;attribute float aSize;uniform float uTime;uniform float uPixelRatio;varying float vAlpha;void main(){vec3 p=position;p.x+=sin(uTime*.22+aSeed)*.15;p.y+=cos(uTime*.18+aSeed*1.7)*.18;p.z+=sin(uTime*.14+aSeed*2.)*.22;vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;gl_PointSize=aSize*uPixelRatio*(70.0/-mv.z);vAlpha=.3+.55*(.5+.5*sin(uTime*.8+aSeed));}`,fragmentShader:`varying float vAlpha;void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;float glow=exp(-d*13.);gl_FragColor=vec4(1.0,.65,.84,glow*vAlpha);}`});
- const particles=new THREE.Points(pg,pm);world.add(particles);
- // A fine spatial lattice recedes into the scene to establish scale and depth.
- const gridGeo=new THREE.BufferGeometry(),gridPts=[];for(let i=-12;i<=12;i++){gridPts.push(-12,-3,i*.55,12,-3,i*.55,i*.55,-3,-6.6,i*.55,-3,6.6)}gridGeo.setAttribute('position',new THREE.Float32BufferAttribute(gridPts,3));const grid=new THREE.LineSegments(gridGeo,new THREE.LineBasicMaterial({color:0xa879c0,transparent:true,opacity:.11}));grid.position.z=-1;world.add(grid);
+  let renderer, raf = 0, disposed = false;
+  try {
+    renderer = new THREE.WebGLRenderer({
+      canvas, alpha: true, antialias: innerWidth > 700,
+      powerPreference: 'low-power', stencil: false, depth: true
+    });
+  } catch (error) {
+    canvas.remove();
+    console.warn('Portfolio WebGL unavailable; semantic HTML remains active.', error);
+    return;
+  }
 
- // DOM-to-WebGL bridge: lightweight luminous frames follow real project-card bounds.
- // Text, links and headings remain accessible/indexable HTML; WebGL only adds atmosphere.
- const bridge=new THREE.Group();scene.add(bridge);
- const bridgeItems=[...document.querySelectorAll('.project-grid .project')].map((el,index)=>{
-  const geo=new THREE.BufferGeometry();
-  geo.setAttribute('position',new THREE.Float32BufferAttribute([-.5,-.5,0,.5,-.5,0,.5,-.5,0,.5,.5,0,.5,.5,0,-.5,.5,0,-.5,.5,0,-.5,-.5,0],3));
-  const line=new THREE.LineSegments(geo,new THREE.LineBasicMaterial({color:index%2?0xbba0ff:0xf1a9d0,transparent:true,opacity:.26,blending:THREE.AdditiveBlending,depthWrite:false}));
-  bridge.add(line);return {el,line,index};
- });
- const smooth={x:.5,y:.5,tx:.5,ty:.5};let scrollVelocity=0,previousScroll=scrollY,previousFrame=0;
- function syncBridge(){
-  const h=innerHeight,w=innerWidth,visibleHeight=2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.position.z,visibleWidth=visibleHeight*camera.aspect;
-  bridgeItems.forEach(({el,line,index})=>{
-   const r=el.getBoundingClientRect();const shown=r.bottom>0&&r.top<h&&r.right>0&&r.left<w;
-   line.visible=shown;if(!shown)return;
-   const cx=r.left+r.width/2,cy=r.top+r.height/2;
-   line.position.set((cx/w-.5)*visibleWidth,-(cy/h-.5)*visibleHeight+scrollEase*.4,-.2);
-   line.scale.set(Math.max(.2,r.width/w*visibleWidth*1.035),Math.max(.2,r.height/h*visibleHeight*1.045),1);
-   line.material.opacity=(.16+.12*(.5+.5*Math.sin(time*.7+index)))*(innerWidth<700?.55:1);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, innerWidth < 700 ? 1 : 1.5));
+  renderer.setSize(innerWidth, innerHeight, false);
+  renderer.setClearColor(0x000000, 0);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.autoClear = false;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 100);
+  camera.position.set(0, 0, 12);
+
+  // Fullscreen procedural shader field. The DOM stays real, semantic HTML.
+  const fieldUniforms = {
+    uTime: { value: 0 },
+    uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+    uScroll: { value: 0 },
+    uResolution: { value: new THREE.Vector2(innerWidth, innerHeight) }
+  };
+  const field = new THREE.Mesh(
+    new THREE.PlaneGeometry(200, 200),
+    new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, depthTest: false,
+      blending: THREE.AdditiveBlending, uniforms: fieldUniforms,
+      vertexShader: `varying vec2 vUv;
+        void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+      fragmentShader: `precision highp float;
+        uniform float uTime; uniform vec2 uMouse; uniform float uScroll; uniform vec2 uResolution;
+        varying vec2 vUv;
+        float line(float p,float scale){float f=abs(fract(p*scale-.5)-.5);return 1.0-smoothstep(.475,.5,f);}
+        void main(){
+          vec2 uv=vUv; vec2 aspect=vec2(uResolution.x/max(uResolution.y,1.0),1.0);
+          vec2 delta=(uv-uMouse)*aspect; float d=length(delta);
+          float ripple=sin(d*42.0-uTime*1.6)*exp(-d*7.0);
+          vec2 direction=delta/max(d,.0001);
+          uv+=direction*(.018*exp(-d*5.0)+ripple*.0025);
+          float grid=max(line(uv.x,34.0),line(uv.y,24.0));
+          float wave=.5+.5*sin((uv.x*7.0+uv.y*5.0+uTime*.12+uScroll*1.8)*6.283);
+          float focus=exp(-d*5.5);
+          float alpha=grid*(.028+.12*focus)+focus*.055*wave;
+          vec3 color=mix(vec3(.28,.18,.46),vec3(.96,.48,.76),clamp(focus*.8+wave*.12,0.0,1.0));
+          gl_FragColor=vec4(color,alpha);
+        }`
+    })
+  );
+  field.position.set(0, 0, -8);
+  scene.add(field);
+
+  const ambient = new THREE.AmbientLight(0x9d7bb0, 1.25);
+  scene.add(ambient);
+  const rose = new THREE.PointLight(0xf19bc8, 18, 28);
+  rose.position.set(4, 3, 5); scene.add(rose);
+  const violet = new THREE.PointLight(0x9777ff, 14, 25);
+  violet.position.set(-5, -2, 1); scene.add(violet);
+
+  const core = new THREE.Group();
+  scene.add(core);
+  const knot = new THREE.Mesh(
+    new THREE.TorusKnotGeometry(1.65, .014, 220, 8, 2, 5),
+    new THREE.MeshBasicMaterial({ color: 0xf1b4d5, transparent: true, opacity: .64, blending: THREE.AdditiveBlending, depthWrite: false })
+  );
+  core.add(knot);
+  const knot2 = new THREE.Mesh(
+    new THREE.TorusKnotGeometry(2.15, .009, 240, 6, 3, 7),
+    new THREE.MeshBasicMaterial({ color: 0xa996ff, transparent: true, opacity: .42, blending: THREE.AdditiveBlending, depthWrite: false })
+  );
+  knot2.rotation.set(.8, .4, .3); core.add(knot2);
+
+  const rings = [];
+  for (let i = 0; i < 8; i++) {
+    const mesh = new THREE.Mesh(
+      new THREE.TorusGeometry(2.35 + i * .18, .004 + (i % 3) * .001, 5, 160),
+      new THREE.MeshBasicMaterial({
+        color: i % 3 === 0 ? 0xe7a1cb : i % 3 === 1 ? 0x9e8aff : 0xf3d4e7,
+        transparent: true, opacity: .14 + (i % 3) * .045,
+        blending: THREE.AdditiveBlending, depthWrite: false
+      })
+    );
+    mesh.rotation.set(i * .37, i * .61, i * .22);
+    mesh.scale.set(1, .62 + (i % 4) * .12, 1);
+    core.add(mesh); rings.push(mesh);
+  }
+
+  const ribbons = [];
+  for (let k = 0; k < 5; k++) {
+    const points = [];
+    for (let j = 0; j <= 80; j++) {
+      const u = j / 80 * Math.PI * 2;
+      points.push(new THREE.Vector3(
+        Math.cos(u) * (2.5 + k * .17),
+        Math.sin(u * 2 + k * .9) * (.45 + k * .08) + Math.sin(u) * .7,
+        Math.sin(u) * (1.05 + k * .13) + Math.cos(u * 3 + k) * .22
+      ));
+    }
+    const curve = new THREE.CatmullRomCurve3(points, false, 'catmullrom', .5);
+    const ribbon = new THREE.Mesh(
+      new THREE.TubeGeometry(curve, 220, .012 + (k % 2) * .004, 5, false),
+      new THREE.MeshBasicMaterial({
+        color: [0xf4b5d5, 0xb7a0ff, 0xe4a2ce, 0x9f8dff, 0xf0d2e7][k],
+        transparent: true, opacity: .48 - k * .045,
+        blending: THREE.AdditiveBlending, depthWrite: false
+      })
+    );
+    ribbon.rotation.set(k * .45, k * .7, k * .3);
+    core.add(ribbon); ribbons.push(ribbon);
+  }
+
+  const particleCount = innerWidth < 700 ? 320 : 720;
+  const particlePositions = new Float32Array(particleCount * 3);
+  const particleSeeds = new Float32Array(particleCount);
+  const particleSizes = new Float32Array(particleCount);
+  for (let i = 0; i < particleCount; i++) {
+    const radius = 2.5 + Math.random() * 9;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    particlePositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+    particlePositions[i * 3 + 1] = radius * Math.cos(phi);
+    particlePositions[i * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
+    particleSeeds[i] = Math.random() * Math.PI * 2;
+    particleSizes[i] = .5 + Math.random() * 1.8;
+  }
+  const particleGeometry = new THREE.BufferGeometry();
+  particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+  particleGeometry.setAttribute('aSeed', new THREE.BufferAttribute(particleSeeds, 1));
+  particleGeometry.setAttribute('aSize', new THREE.BufferAttribute(particleSizes, 1));
+  const particleMaterial = new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    uniforms: { uTime: { value: 0 }, uPixelRatio: { value: renderer.getPixelRatio() } },
+    vertexShader: `attribute float aSeed; attribute float aSize; uniform float uTime; uniform float uPixelRatio; varying float vAlpha;
+      void main(){vec3 p=position;p.x+=sin(uTime*.22+aSeed)*.15;p.y+=cos(uTime*.18+aSeed*1.7)*.18;p.z+=sin(uTime*.14+aSeed*2.0)*.22;
+      vec4 mv=modelViewMatrix*vec4(p,1.0);gl_Position=projectionMatrix*mv;gl_PointSize=aSize*uPixelRatio*(64.0/max(1.0,-mv.z));vAlpha=.28+.52*(.5+.5*sin(uTime*.8+aSeed));}`,
+    fragmentShader: `varying float vAlpha;void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;float glow=exp(-d*13.0);gl_FragColor=vec4(1.0,.65,.84,glow*vAlpha);}`
   });
- }
+  const particles = new THREE.Points(particleGeometry, particleMaterial);
+  scene.add(particles);
 
- const pointer={x:0,y:0,tx:0,ty:0};let scrollTarget=0,scrollEase=0,time=0,last=0;
- addEventListener('pointermove',e=>{pointer.tx=(e.clientX/innerWidth-.5)*2;pointer.ty=(e.clientY/innerHeight-.5)*2;smooth.tx=e.clientX/innerWidth;smooth.ty=1-e.clientY/innerHeight;const card=e.target.closest&&e.target.closest('.project-grid .project');if(card){const r=card.getBoundingClientRect();card.style.setProperty('--card-pointer-x',((e.clientX-r.left)/r.width*100)+'%');card.style.setProperty('--card-pointer-y',((e.clientY-r.top)/r.height*100)+'%')}},{passive:true});
- document.querySelectorAll('.project-grid .project').forEach(card=>{card.addEventListener('pointermove',e=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches||innerWidth<700)return;const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform='perspective(1000px) rotateX('+(-y*2.8)+'deg) rotateY('+(x*3.5)+'deg) translate3d(0,-3px,0)'},{passive:true});card.addEventListener('pointerleave',()=>{card.style.transform=''})});
- addEventListener('scroll',()=>{scrollTarget=scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight)},{passive:true});
- function resize(){if(disposed)return;const w=innerWidth,h=innerHeight;renderer.setPixelRatio(Math.min(devicePixelRatio||1,w<700?1:1.5));renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w<700?54:42;camera.position.z=w<700?14:12;camera.updateProjectionMatrix();pm.uniforms.uPixelRatio.value=renderer.getPixelRatio();syncBridge()}
- addEventListener('resize',resize,{passive:true});
- function draw(now){if(disposed)return;raf=requestAnimationFrame(draw);if(document.hidden)return;if(reduce&&now-last<80)return;previousFrame=now;last=now;time=now*.001;pointer.x+=(pointer.tx-pointer.x)*.035;pointer.y+=(pointer.ty-pointer.y)*.035;smooth.x+=(smooth.tx-smooth.x)*.075;smooth.y+=(smooth.ty-smooth.y)*.075;scrollEase+=(scrollTarget-scrollEase)*.035;scrollVelocity+=(Math.abs(scrollY-previousScroll)-scrollVelocity)*.12;previousScroll=scrollY;pm.uniforms.uTime.value=time;shaderUniforms.uTime.value=time;shaderUniforms.uMouse.value.set(smooth.x,smooth.y);shaderUniforms.uScroll.value=scrollVelocity/Math.max(1,innerHeight);
-  core.rotation.y=time*.055+pointer.x*.14+scrollEase*1.2;core.rotation.x=Math.sin(time*.13)*.08+pointer.y*.1+scrollEase*.25;core.rotation.z=Math.sin(time*.09)*.07;
-  core.position.x=pointer.x*.42;core.position.y=-scrollEase*1.15+pointer.y*.2;core.scale.setScalar(innerWidth<700?.72:1);
-  knot.rotation.x=time*.09;knot.rotation.y=-time*.12;knot2.rotation.x=.8+time*.07;knot2.rotation.z=.3-time*.06;
-  rings.forEach((r,i)=>{r.rotation.x+=Math.sin(time*.13+i)*.0008;r.rotation.y+=.00045*(i%2?1:-1);r.rotation.z=Math.sin(time*.11+i*.8)*.06});
-  ribbons.forEach((r,i)=>{r.rotation.y=time*(.018+i*.003)*(i%2?1:-1);r.rotation.x=Math.sin(time*.16+i)*.12});
-  particles.rotation.y=-time*.009+scrollEase*.32;particles.rotation.x=Math.sin(time*.08)*.05;
-  rose.position.x=4+pointer.x*2;rose.position.y=3-pointer.y*2;violet.position.x=-5-pointer.x;
-  camera.position.x+=(pointer.x*.42-camera.position.x)*.018;camera.position.y+=(-pointer.y*.28-camera.position.y)*.018;camera.lookAt(0,-scrollEase*.4,0);shaderField.position.x=pointer.x*.12;shaderField.position.y=-scrollEase*.08;syncBridge();renderer.render(scene,camera)
- }
- const contextLost=e=>{e.preventDefault();disposed=true;cancelAnimationFrame(raf);canvas.style.opacity='.2'};canvas.addEventListener('webglcontextlost',contextLost,false);
- document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!disposed)renderer.render(scene,camera)});
- resize();draw(0);
- // On small screens, keep the canvas decorative and ensure the actual content remains the priority.
+  const gridPositions = [];
+  for (let i = -12; i <= 12; i++) {
+    gridPositions.push(-12,-3,i*.55, 12,-3,i*.55, i*.55,-3,-6.6, i*.55,-3,6.6);
+  }
+  const gridGeometry = new THREE.BufferGeometry();
+  gridGeometry.setAttribute('position', new THREE.Float32BufferAttribute(gridPositions, 3));
+  const grid = new THREE.LineSegments(gridGeometry, new THREE.LineBasicMaterial({ color: 0xa879c0, transparent: true, opacity: .09 }));
+  grid.position.z = -1; scene.add(grid);
+
+  // A separate orthographic overlay scene makes DOM-to-WebGL alignment pixel-accurate.
+  const overlayScene = new THREE.Scene();
+  const overlayCamera = new THREE.OrthographicCamera(-innerWidth/2, innerWidth/2, innerHeight/2, -innerHeight/2, .1, 20);
+  overlayCamera.position.z = 10;
+  const cardShaders = [];
+  const cardVertexShader = `varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`;
+  const cardFragmentShader = `precision highp float;
+    uniform float uTime; uniform float uHover; uniform vec2 uMouse; uniform vec2 uResolution;
+    varying vec2 vUv;
+    float noise(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+    void main(){
+      vec2 uv=vUv; vec2 delta=uv-uMouse; float d=length(delta*vec2(uResolution.x/max(uResolution.y,1.0),1.0));
+      float wave=sin((uv.x*8.0+uv.y*5.0)*6.283-uTime*1.8)*exp(-d*5.0);
+      vec2 bend=uv+normalize(delta+vec2(.0001))*(.018*wave*uHover);
+      float edge=min(min(uv.x,1.0-uv.x),min(uv.y,1.0-uv.y));
+      float rim=1.0-smoothstep(.0,.012,edge);
+      float glow=exp(-d*7.0)*uHover;
+      float scan=.5+.5*sin((bend.y*24.0+uTime*.18)*6.283);
+      float alpha=glow*(.18+.08*scan)+rim*(.10+.15*uHover);
+      vec3 base=vec3(.60,.34,.72);
+      vec3 chroma=vec3(.96,.45,.75)*(glow*.18);
+      gl_FragColor=vec4(base+chroma,alpha);
+    }`;
+  const projectCards = [...document.querySelectorAll('.project-grid .project')];
+  projectCards.forEach((element, index) => {
+    const uniforms = {
+      uTime: { value: 0 }, uHover: { value: 0 },
+      uMouse: { value: new THREE.Vector2(.5,.5) },
+      uResolution: { value: new THREE.Vector2(1,1) }
+    };
+    const material = new THREE.ShaderMaterial({
+      uniforms, vertexShader: cardVertexShader, fragmentShader: cardFragmentShader,
+      transparent: true, depthTest: false, depthWrite: false,
+      blending: THREE.AdditiveBlending, side: THREE.DoubleSide
+    });
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1,1), material);
+    mesh.position.z = 0;
+    overlayScene.add(mesh);
+    cardShaders.push({ element, mesh, uniforms, index, hoverTarget: 0 });
+    element.addEventListener('pointerenter', () => { cardShaders[index].hoverTarget = 1; });
+    element.addEventListener('pointerleave', () => { cardShaders[index].hoverTarget = 0; });
+    element.addEventListener('pointermove', event => {
+      const rect = element.getBoundingClientRect();
+      uniforms.uMouse.value.set(
+        THREE.MathUtils.clamp((event.clientX - rect.left) / Math.max(rect.width,1), 0, 1),
+        1 - THREE.MathUtils.clamp((event.clientY - rect.top) / Math.max(rect.height,1), 0, 1)
+      );
+      element.style.setProperty('--card-pointer-x', ((event.clientX-rect.left)/Math.max(rect.width,1)*100)+'%');
+      element.style.setProperty('--card-pointer-y', ((event.clientY-rect.top)/Math.max(rect.height,1)*100)+'%');
+      if (!reducedMotion && innerWidth > 700) {
+        const x=(event.clientX-rect.left)/Math.max(rect.width,1)-.5;
+        const y=(event.clientY-rect.top)/Math.max(rect.height,1)-.5;
+        element.style.transform='perspective(1000px) rotateX('+(-y*2.2)+'deg) rotateY('+(x*2.8)+'deg) translate3d(0,-2px,0)';
+      }
+    }, { passive: true });
+    element.addEventListener('pointerleave', () => { element.style.transform = ''; });
+  });
+
+  const pointer = { x: 0, y: 0, targetX: 0, targetY: 0 };
+  const scroll = { current: 0, target: 0, velocity: 0, previous: window.scrollY };
+  let time = 0, lastFrame = 0;
+
+  window.addEventListener('pointermove', event => {
+    pointer.targetX = (event.clientX / Math.max(innerWidth,1) - .5) * 2;
+    pointer.targetY = (event.clientY / Math.max(innerHeight,1) - .5) * 2;
+    fieldUniforms.uMouse.value.set(event.clientX/Math.max(innerWidth,1), 1-event.clientY/Math.max(innerHeight,1));
+  }, { passive: true });
+  window.addEventListener('scroll', () => {
+    scroll.target = window.scrollY / Math.max(1, document.documentElement.scrollHeight-innerHeight);
+  }, { passive: true });
+
+  function syncProjectMeshes() {
+    const w=innerWidth, h=innerHeight;
+    cardShaders.forEach(({element,mesh,uniforms}) => {
+      const rect=element.getBoundingClientRect();
+      const visible=rect.bottom>0 && rect.top<h && rect.right>0 && rect.left<w;
+      mesh.visible=visible;
+      if(!visible) return;
+      mesh.position.set(rect.left+rect.width/2-w/2, h/2-(rect.top+rect.height/2), 0);
+      mesh.scale.set(rect.width,rect.height,1);
+      uniforms.uResolution.value.set(rect.width,rect.height);
+    });
+  }
+
+  function resize() {
+    if(disposed) return;
+    const w=innerWidth,h=innerHeight;
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1,w<700?1:1.5));
+    renderer.setSize(w,h,false);
+    camera.aspect=w/h;camera.fov=w<700?54:42;camera.position.z=w<700?14:12;camera.updateProjectionMatrix();
+    overlayCamera.left=-w/2;overlayCamera.right=w/2;overlayCamera.top=h/2;overlayCamera.bottom=-h/2;overlayCamera.updateProjectionMatrix();
+    fieldUniforms.uResolution.value.set(w,h);
+    particleMaterial.uniforms.uPixelRatio.value=renderer.getPixelRatio();
+    syncProjectMeshes();
+  }
+  window.addEventListener('resize',resize,{passive:true});
+
+  function frame(now) {
+    if(disposed) return;
+    raf=requestAnimationFrame(frame);
+    if(document.hidden) return;
+    const delta=lastFrame?Math.min((now-lastFrame)/1000,.05):.016;
+    lastFrame=now;time=now*.001;
+    const ease=reducedMotion?.12:.065;
+    pointer.x+=(pointer.targetX-pointer.x)*ease;
+    pointer.y+=(pointer.targetY-pointer.y)*ease;
+    scroll.current+=(scroll.target-scroll.current)*(reducedMotion?.12:.045);
+    scroll.velocity+=(Math.abs(window.scrollY-scroll.previous)-scroll.velocity)*.12;
+    scroll.previous=window.scrollY;
+
+    fieldUniforms.uTime.value=time;
+    fieldUniforms.uScroll.value=scroll.current+scroll.velocity/Math.max(1,innerHeight);
+    particleMaterial.uniforms.uTime.value=time;
+    core.rotation.y=time*.05+pointer.x*.12+scroll.current*.85;
+    core.rotation.x=Math.sin(time*.12)*.07+pointer.y*.08+scroll.current*.2;
+    core.rotation.z=Math.sin(time*.08)*.05;
+    core.position.x=pointer.x*.34;
+    core.position.y=-scroll.current*.9+pointer.y*.18;
+    core.scale.setScalar(innerWidth<700?.7:1);
+    knot.rotation.x=time*.08;knot.rotation.y=-time*.11;
+    knot2.rotation.x=.8+time*.06;knot2.rotation.z=.3-time*.05;
+    rings.forEach((ring,i)=>{ring.rotation.y+=.00035*(i%2?1:-1);ring.rotation.z=Math.sin(time*.1+i*.8)*.055});
+    ribbons.forEach((ribbon,i)=>{ribbon.rotation.y=time*(.016+i*.002)*(i%2?1:-1);ribbon.rotation.x=Math.sin(time*.14+i)*.1});
+    particles.rotation.y=-time*.008+scroll.current*.22;
+    particles.rotation.x=Math.sin(time*.07)*.04;
+    rose.position.x=4+pointer.x*1.6;rose.position.y=3-pointer.y*1.6;
+    violet.position.x=-5-pointer.x;
+    camera.position.x+=(pointer.x*.35-camera.position.x)*.018;
+    camera.position.y+=(-pointer.y*.22-camera.position.y)*.018;
+    camera.lookAt(0,-scroll.current*.3,0);
+    field.position.x=pointer.x*.1;field.position.y=-scroll.current*.06;
+
+    cardShaders.forEach(({uniforms,hoverTarget}) => {
+      uniforms.uTime.value=time;
+      uniforms.uHover.value+=(hoverTarget-uniforms.uHover.value)*(reducedMotion?.2:.12);
+    });
+    // Re-read rects in the same frame as rendering: scrolling and resizing cannot drift.
+    syncProjectMeshes();
+    renderer.clear();
+    renderer.render(scene,camera);
+    renderer.clearDepth();
+    renderer.render(overlayScene,overlayCamera);
+  }
+
+  const onContextLost = event => {
+    event.preventDefault();disposed=true;cancelAnimationFrame(raf);
+    canvas.style.opacity='.2';
+  };
+  canvas.addEventListener('webglcontextlost',onContextLost,false);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!disposed){lastFrame=0;frame(performance.now());}});
+  resize();
+  frame(0);
 })();
 </script>
 </body>
