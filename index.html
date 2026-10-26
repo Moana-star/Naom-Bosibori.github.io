@@ -16,7 +16,8 @@
   <link rel="canonical" href="https://naom-kenagwa-portfolio.vercel.app/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="Styles.css">
-  <link rel="stylesheet" href="Immersive_Experience.css">\n  <link rel="stylesheet" href="Work_Filters.css">
+  <link rel="stylesheet" href="Immersive_Experience.css">
+  <link rel="stylesheet" href="Work_Filters.css">
   <title>Naom Kenagwa | Technical Writing, SEO Content & Web Projects</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1259,7 +1260,8 @@ body:has(#portfolio-webgl-stage) .project>*{position:relative;z-index:1}
     document.getElementById('year').textContent=new Date().getFullYear();
     document.querySelectorAll('[data-service]').forEach(link=>link.addEventListener('click',()=>{const select=document.getElementById('enquiryService');if(select)select.value=link.dataset.service;}));
     const enquiryForm=document.getElementById('enquiryForm');
-    if(enquiryForm){const feedback=document.getElementById('enquiryFeedback');enquiryForm.addEventListener('invalid',()=>{if(feedback)feedback.textContent='Please complete the required fields and check your email address.';},true);enquiryForm.addEventListener('input',()=>{if(feedback)feedback.textContent='';});enquiryForm.addEventListener('submit',event=>{event.preventDefault();if(!enquiryForm.reportValidity()){if(feedback)feedback.textContent='Please complete the required fields and check your email address.';return;}const data=new FormData(enquiryForm);if(feedback)feedback.textContent='Your email draft is being prepared. Review it in your email app before sending.';const subject='Portfolio project enquiry — '+data.get('service');const body=['Name: '+data.get('name'),'Email: '+data.get('email'),'Service: '+data.get('service'),'','Project overview:',data.get('brief')].join('\n');window.location.href='mailto:naom6083@gmail.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);});}
+    if(enquiryForm){const feedback=document.getElementById('enquiryFeedback');enquiryForm.addEventListener('invalid',()=>{if(feedback)feedback.textContent='Please complete the required fields and check your email address.';},true);enquiryForm.addEventListener('input',()=>{if(feedback)feedback.textContent='';});enquiryForm.addEventListener('submit',event=>{event.preventDefault();if(!enquiryForm.reportValidity()){if(feedback)feedback.textContent='Please complete the required fields and check your email address.';return;}const data=new FormData(enquiryForm);if(feedback)feedback.textContent='Your email draft is being prepared. Review it in your email app before sending.';const subject='Portfolio project enquiry — '+data.get('service');const body=['Name: '+data.get('name'),'Email: '+data.get('email'),'Service: '+data.get('service'),'','Project overview:',data.get('brief')].join('
+');window.location.href='mailto:naom6083@gmail.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);});}
 
 
       // Cinematic canvas scene: a living, wireframe-like form with light ribbons and cursor influence.
