@@ -87,7 +87,7 @@ export function createDOMBridge({ THREE, renderer }) {
     const material = new THREE.ShaderMaterial({
       uniforms, vertexShader: baseVertex, fragmentShader: baseFragment,
       transparent: true, depthTest: false, depthWrite: false,
-      blending: THREE.AdditiveBlending, side: THREE.DoubleSide
+      blending: THREE.NormalBlending, side: THREE.DoubleSide
     });
     const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), material);
     mesh.renderOrder = 20;
