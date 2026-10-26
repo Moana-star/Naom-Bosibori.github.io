@@ -147,4 +147,54 @@
       fastTimer = window.setTimeout(() => topbar.classList.remove("is-scrolling-fast"), 220);
     }
   }, { passive: true });
+
+  // Project filters use the real category labels already present in the portfolio.
+  const projectGrid = document.querySelector(".project-grid");
+  const projects = [...document.querySelectorAll(".project")];
+  if (projectGrid && projects.length) {
+    const filters = document.createElement("div");
+    filters.className = "work-filters";
+    filters.setAttribute("role", "group");
+    filters.setAttribute("aria-label", "Filter projects by type");
+    const kinds = [...new Set(projects.map(card => card.querySelector(".project-kind")?.textContent.trim()).filter(Boolean))];
+    const choices = [{ label: "All work", value: "all" }, ...kinds.map(kind => ({ label: kind, value: kind }))];
+    filters.innerHTML = choices.map((choice, index) =>
+      '<button type="button" class="work-filter' + (index === 0 ? ' is-active' : '') +
+      '" data-kind="' + choice.value.replace(/&/g, "&amp;").replace(/"/g, "&quot;") +
+      '" aria-pressed="' + (index === 0 ? "true" : "false") + '">' + choice.label + "</button>"
+    ).join("");
+    projectGrid.parentNode.insertBefore(filters, projectGrid);
+    filters.addEventListener("click", event => {
+      const button = event.target.closest(".work-filter");
+      if (!button) return;
+      const kind = button.dataset.kind;
+      filters.querySelectorAll(".work-filter").forEach(item => {
+        const active = item === button;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+      projects.forEach(card => {
+        const cardKind = card.querySelector(".project-kind")?.textContent.trim() || "";
+        const show = kind === "all" || cardKind === kind;
+        card.hidden = !show;
+        card.setAttribute("aria-hidden", String(!show));
+      });
+    });
+  }
+
+  // Keep the navigation pill in sync with the section in view.
+  const navLinks = [...document.querySelectorAll('#siteNav a[href^="#"]')];
+  const sections = navLinks.map(link => document.querySelector(link.getAttribute("href"))).filter(Boolean);
+  if ("IntersectionObserver" in window && sections.length) {
+    const navObserver = new IntersectionObserver(entries => {
+      const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      navLinks.forEach(link => {
+        if (link.getAttribute("href") === "#" + visible.target.id) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+    }, { rootMargin: "-18% 0px -58% 0px", threshold: [0, .15, .35, .6] });
+    sections.forEach(section => navObserver.observe(section));
+  }
+
 })();
