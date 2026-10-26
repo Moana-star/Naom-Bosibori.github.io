@@ -672,6 +672,14 @@ section:not(.hero){position:relative}
     .form-submit{width:100%;margin-top:18px;border:0;cursor:pointer;font:inherit;font-weight:700;min-height:46px}
     @media(max-width:900px){.service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:700px){.service-grid{grid-template-columns:1fr}.contact-panel{grid-template-columns:1fr}.enquiry-form{padding:18px}}
+
+/* Immersive bridge: keep semantic DOM in front while the WebGL scene responds to it. */
+#portfolio-webgl-stage{isolation:isolate}
+.project-grid .project{transform-style:preserve-3d;will-change:transform;transition:transform .45s cubic-bezier(.2,.75,.2,1),border-color .35s,box-shadow .35s;position:relative}
+.project-grid .project:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;opacity:0;background:radial-gradient(circle at var(--card-pointer-x,50%) var(--card-pointer-y,50%),rgba(235,166,218,.18),transparent 48%);transition:opacity .35s}
+.project-grid .project:hover:after,.project-grid .project:focus-within:after{opacity:1}
+.project-grid .project:hover{border-color:rgba(224,160,213,.48);box-shadow:0 22px 65px rgba(15,5,24,.2),0 0 0 1px rgba(190,144,255,.09)}
+@media (prefers-reduced-motion:reduce){.project-grid .project{transition:none;transform:none!important}}
 </style>
 
 
@@ -1411,6 +1419,27 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.174.0/build/three.m
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setSize(innerWidth,innerHeight);renderer.setClearColor(0x000000,0);renderer.outputColorSpace=THREE.SRGBColorSpace;
  scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x09070d,.035);
  camera=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,.1,100);camera.position.set(0,0,12);
+
+ // Procedural shader field: a subtle animated grid that bends around the pointer.
+ const shaderUniforms={uTime:{value:0},uMouse:{value:new THREE.Vector2(.5,.5)},uScroll:{value:0}};
+ const shaderField=new THREE.Mesh(new THREE.PlaneGeometry(200,200),new THREE.ShaderMaterial({
+  transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,uniforms:shaderUniforms,
+  vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+  fragmentShader:`uniform float uTime;uniform vec2 uMouse;uniform float uScroll;varying vec2 vUv;
+   float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+   void main(){vec2 uv=vUv;vec2 p=uv-.5;vec2 mouse=uMouse-.5;float d=length((uv-uMouse)*vec2(1.0,.78));
+    float ripple=sin(d*36.0-uTime*1.4)*exp(-d*7.0);
+    vec2 bent=uv+normalize(p-mouse+vec2(.0001))*(.018*exp(-d*5.0)+ripple*.003);
+    float gx=abs(fract(bent.x*34.0)-.5);float gy=abs(fract(bent.y*24.0)-.5);
+    float grid=1.0-smoothstep(.475,.5,min(gx,gy));
+    float wave=.5+.5*sin((bent.x*7.0+bent.y*5.0+uTime*.12+uScroll*2.0)*6.283);
+    float focus=exp(-d*5.0);float alpha=grid*(.045+.12*focus)+focus*.045*wave;
+    vec3 ink=mix(vec3(.30,.18,.48),vec3(.95,.48,.72),focus*.75+wave*.08);
+    gl_FragColor=vec4(ink,alpha);
+   }`
+ }));
+ shaderField.position.set(0,0,-8);scene.add(shaderField);
+
  const world=new THREE.Group();scene.add(world);
  const ambient=new THREE.AmbientLight(0x9d7bb0,1.5);scene.add(ambient);
  const rose=new THREE.PointLight(0xf19bc8,22,28);rose.position.set(4,3,5);scene.add(rose);
@@ -1432,12 +1461,36 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.174.0/build/three.m
  const particles=new THREE.Points(pg,pm);world.add(particles);
  // A fine spatial lattice recedes into the scene to establish scale and depth.
  const gridGeo=new THREE.BufferGeometry(),gridPts=[];for(let i=-12;i<=12;i++){gridPts.push(-12,-3,i*.55,12,-3,i*.55,i*.55,-3,-6.6,i*.55,-3,6.6)}gridGeo.setAttribute('position',new THREE.Float32BufferAttribute(gridPts,3));const grid=new THREE.LineSegments(gridGeo,new THREE.LineBasicMaterial({color:0xa879c0,transparent:true,opacity:.11}));grid.position.z=-1;world.add(grid);
+
+ // DOM-to-WebGL bridge: lightweight luminous frames follow real project-card bounds.
+ // Text, links and headings remain accessible/indexable HTML; WebGL only adds atmosphere.
+ const bridge=new THREE.Group();scene.add(bridge);
+ const bridgeItems=[...document.querySelectorAll('.project-grid .project')].map((el,index)=>{
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.Float32BufferAttribute([-.5,-.5,0,.5,-.5,0,.5,-.5,0,.5,.5,0,.5,.5,0,-.5,.5,0,-.5,.5,0,-.5,-.5,0],3));
+  const line=new THREE.LineSegments(geo,new THREE.LineBasicMaterial({color:index%2?0xbba0ff:0xf1a9d0,transparent:true,opacity:.26,blending:THREE.AdditiveBlending,depthWrite:false}));
+  bridge.add(line);return {el,line,index};
+ });
+ const smooth={x:.5,y:.5,tx:.5,ty:.5};let scrollVelocity=0,previousScroll=scrollY,previousFrame=0;
+ function syncBridge(){
+  const h=innerHeight,w=innerWidth,visibleHeight=2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.position.z,visibleWidth=visibleHeight*camera.aspect;
+  bridgeItems.forEach(({el,line,index})=>{
+   const r=el.getBoundingClientRect();const shown=r.bottom>0&&r.top<h&&r.right>0&&r.left<w;
+   line.visible=shown;if(!shown)return;
+   const cx=r.left+r.width/2,cy=r.top+r.height/2;
+   line.position.set((cx/w-.5)*visibleWidth,-(cy/h-.5)*visibleHeight+scrollEase*.4,-.2);
+   line.scale.set(Math.max(.2,r.width/w*visibleWidth*1.035),Math.max(.2,r.height/h*visibleHeight*1.045),1);
+   line.material.opacity=(.16+.12*(.5+.5*Math.sin(time*.7+index)))*(innerWidth<700?.55:1);
+  });
+ }
+
  const pointer={x:0,y:0,tx:0,ty:0};let scrollTarget=0,scrollEase=0,time=0,last=0;
- addEventListener('pointermove',e=>{pointer.tx=(e.clientX/innerWidth-.5)*2;pointer.ty=(e.clientY/innerHeight-.5)*2},{passive:true});
+ addEventListener('pointermove',e=>{pointer.tx=(e.clientX/innerWidth-.5)*2;pointer.ty=(e.clientY/innerHeight-.5)*2;smooth.tx=e.clientX/innerWidth;smooth.ty=1-e.clientY/innerHeight;const card=e.target.closest&&e.target.closest('.project-grid .project');if(card){const r=card.getBoundingClientRect();card.style.setProperty('--card-pointer-x',((e.clientX-r.left)/r.width*100)+'%');card.style.setProperty('--card-pointer-y',((e.clientY-r.top)/r.height*100)+'%')}},{passive:true});
+ document.querySelectorAll('.project-grid .project').forEach(card=>{card.addEventListener('pointermove',e=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches||innerWidth<700)return;const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform='perspective(1000px) rotateX('+(-y*2.8)+'deg) rotateY('+(x*3.5)+'deg) translate3d(0,-3px,0)'},{passive:true});card.addEventListener('pointerleave',()=>{card.style.transform=''})});
  addEventListener('scroll',()=>{scrollTarget=scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight)},{passive:true});
- function resize(){if(disposed)return;const w=innerWidth,h=innerHeight;renderer.setPixelRatio(Math.min(devicePixelRatio||1,w<700?1:1.5));renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w<700?54:42;camera.position.z=w<700?14:12;camera.updateProjectionMatrix();pm.uniforms.uPixelRatio.value=renderer.getPixelRatio()}
+ function resize(){if(disposed)return;const w=innerWidth,h=innerHeight;renderer.setPixelRatio(Math.min(devicePixelRatio||1,w<700?1:1.5));renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w<700?54:42;camera.position.z=w<700?14:12;camera.updateProjectionMatrix();pm.uniforms.uPixelRatio.value=renderer.getPixelRatio();syncBridge()}
  addEventListener('resize',resize,{passive:true});
- function draw(now){if(disposed)return;raf=requestAnimationFrame(draw);if(document.hidden)return;if(reduce&&now-last<80)return;last=now;time=now*.001;pointer.x+=(pointer.tx-pointer.x)*.035;pointer.y+=(pointer.ty-pointer.y)*.035;scrollEase+=(scrollTarget-scrollEase)*.035;pm.uniforms.uTime.value=time;
+ function draw(now){if(disposed)return;raf=requestAnimationFrame(draw);if(document.hidden)return;if(reduce&&now-last<80)return;previousFrame=now;last=now;time=now*.001;pointer.x+=(pointer.tx-pointer.x)*.035;pointer.y+=(pointer.ty-pointer.y)*.035;smooth.x+=(smooth.tx-smooth.x)*.075;smooth.y+=(smooth.ty-smooth.y)*.075;scrollEase+=(scrollTarget-scrollEase)*.035;scrollVelocity+=(Math.abs(scrollY-previousScroll)-scrollVelocity)*.12;previousScroll=scrollY;pm.uniforms.uTime.value=time;shaderUniforms.uTime.value=time;shaderUniforms.uMouse.value.set(smooth.x,smooth.y);shaderUniforms.uScroll.value=scrollVelocity/Math.max(1,innerHeight);
   core.rotation.y=time*.055+pointer.x*.14+scrollEase*1.2;core.rotation.x=Math.sin(time*.13)*.08+pointer.y*.1+scrollEase*.25;core.rotation.z=Math.sin(time*.09)*.07;
   core.position.x=pointer.x*.42;core.position.y=-scrollEase*1.15+pointer.y*.2;core.scale.setScalar(innerWidth<700?.72:1);
   knot.rotation.x=time*.09;knot.rotation.y=-time*.12;knot2.rotation.x=.8+time*.07;knot2.rotation.z=.3-time*.06;
@@ -1445,7 +1498,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.174.0/build/three.m
   ribbons.forEach((r,i)=>{r.rotation.y=time*(.018+i*.003)*(i%2?1:-1);r.rotation.x=Math.sin(time*.16+i)*.12});
   particles.rotation.y=-time*.009+scrollEase*.32;particles.rotation.x=Math.sin(time*.08)*.05;
   rose.position.x=4+pointer.x*2;rose.position.y=3-pointer.y*2;violet.position.x=-5-pointer.x;
-  camera.position.x+=(pointer.x*.42-camera.position.x)*.018;camera.position.y+=(-pointer.y*.28-camera.position.y)*.018;camera.lookAt(0,-scrollEase*.4,0);renderer.render(scene,camera)
+  camera.position.x+=(pointer.x*.42-camera.position.x)*.018;camera.position.y+=(-pointer.y*.28-camera.position.y)*.018;camera.lookAt(0,-scrollEase*.4,0);shaderField.position.x=pointer.x*.12;shaderField.position.y=-scrollEase*.08;syncBridge();renderer.render(scene,camera)
  }
  const contextLost=e=>{e.preventDefault();disposed=true;cancelAnimationFrame(raf);canvas.style.opacity='.2'};canvas.addEventListener('webglcontextlost',contextLost,false);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!disposed)renderer.render(scene,camera)});
