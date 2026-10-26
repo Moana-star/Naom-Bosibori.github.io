@@ -325,7 +325,10 @@ import { createDOMBridge } from "./DOM_Bridge.js";
     slider.velocity = (slider.currentPosition - previous) / dt;
     slider.lastPosition = previous;
 
-    for (let i = 0; i < trailCount; i++) trailAges[i] = Math.min(1, trailAges[i] + dt * 0.62);\n    trailGeometry.attributes.aAge.needsUpdate = true;\n\n    uniforms.uTime.value = time;
+    for (let i = 0; i < trailCount; i++) trailAges[i] = Math.min(1, trailAges[i] + dt * 0.62);
+    trailGeometry.attributes.aAge.needsUpdate = true;
+
+    uniforms.uTime.value = time;
     uniforms.uMouse.value.set(pointer.u, pointer.v);
     uniforms.uScroll.value = slider.currentPosition;
     uniforms.uVelocity.value.set(
@@ -372,7 +375,8 @@ import { createDOMBridge } from "./DOM_Bridge.js";
   function dispose() {
     disposed = true;
     window.cancelAnimationFrame(raf);
-    window.removeEventListener("pointermove", trackPointer);\n    window.removeEventListener("pointermove", trackTrail);
+    window.removeEventListener("pointermove", trackPointer);
+    window.removeEventListener("pointermove", trackTrail);
     window.removeEventListener("scroll", setTargetScroll);
     window.removeEventListener("resize", resize);
     document.removeEventListener("visibilitychange", onVisibilityChange);
