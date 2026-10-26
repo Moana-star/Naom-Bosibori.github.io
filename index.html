@@ -710,6 +710,33 @@ body{position:relative;isolation:isolate}
 @media(max-width:700px){.site-atmosphere{opacity:.32}.section{background-image:radial-gradient(ellipse at 78% 12%,rgba(194,139,169,.08),transparent 42%)}.reveal-on-scroll{filter:none;transform:translateY(18px)}}
 @media(prefers-reduced-motion:reduce){.site-atmosphere{display:none!important}.reveal-on-scroll{opacity:1;transform:none;filter:none;transition:none}.section:before{display:none}.project,.service-card,.writing-card,.skill-card,.value-card{will-change:auto}}
 </style>
+
+<style id="sitewide-motion-v2">
+/* Stronger whole-site motion treatment */
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{overflow-x:hidden}
+.site-atmosphere{z-index:0!important;opacity:.9!important;mix-blend-mode:multiply!important}
+main,#main,.topbar,footer{position:relative;z-index:1}
+.section{position:relative;isolation:isolate;overflow:hidden}
+.section:before{content:"";position:absolute;z-index:-1;inset:-15% -20%;pointer-events:none;opacity:.85;background:radial-gradient(ellipse at var(--spot-x,75%) var(--spot-y,20%),rgba(191,125,157,.24),transparent 32%),linear-gradient(112deg,transparent 18%,rgba(125,53,69,.09) 48%,transparent 75%);transform:translate3d(var(--parallax-x,0),var(--parallax-y,0),0) rotate(-3deg);transition:transform .8s cubic-bezier(.2,.7,.2,1),opacity .6s}
+.section.is-in-view:before{opacity:1;transform:translate3d(var(--parallax-x,0),var(--parallax-y,0),0) rotate(2deg) scale(1.08)}
+.section:nth-of-type(even){background-color:rgba(226,210,216,.32)}
+.section-head,.about-grid,.value-grid,.skill-grid,.service-grid,.project-grid,.writing-layout,.writing-highlight,.contact-panel{position:relative;z-index:1}
+.reveal-on-scroll{opacity:0;transform:translate3d(0,44px,0) scale(.985);filter:blur(7px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1),filter .85s}
+.reveal-on-scroll.is-visible{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0)}
+.topbar{transition:background .4s,box-shadow .4s,backdrop-filter .4s}
+.topbar.is-scrolled{background:rgba(17,13,20,.96)!important;backdrop-filter:blur(18px);box-shadow:0 12px 42px rgba(30,10,24,.2)}
+.topbar.is-scrolled a{color:#f6eaf0}
+.project,.service-card,.writing-card,.skill-card,.value-card,.principle{transform-style:preserve-3d;transition:transform .5s cubic-bezier(.16,1,.3,1),box-shadow .5s,border-color .4s!important}
+.project:hover,.service-card:hover,.writing-card:hover,.skill-card:hover,.value-card:hover,.principle:hover{box-shadow:0 28px 75px rgba(67,29,47,.2)!important;border-color:rgba(125,53,69,.55)!important}
+.project-top{overflow:hidden;position:relative}
+.project-top:after{content:"";position:absolute;inset:-60% auto -60% -50%;width:42%;transform:rotate(18deg) translateX(-180%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.36),transparent);transition:transform 1s cubic-bezier(.16,1,.3,1)}
+.project:hover .project-top:after{transform:rotate(18deg) translateX(600%)}
+.scroll-progress{position:fixed!important;z-index:999!important;top:0!important;left:0!important;right:0!important;height:3px!important;background:rgba(125,53,69,.12)!important}
+.scroll-progress span{display:block;height:100%;background:linear-gradient(90deg,#7d3545,#d79aa7,#b6a2ce)!important;box-shadow:0 0 15px rgba(215,154,167,.65)}
+@media(max-width:700px){.site-atmosphere{opacity:.45!important}.reveal-on-scroll{filter:none;transform:translateY(24px) scale(.99)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.site-atmosphere{display:none!important}.reveal-on-scroll{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}.section:before{transition:none!important}}
+</style>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -1103,6 +1130,27 @@ body{position:relative;isolation:isolate}
         const topbar=document.querySelector('.topbar');const navLinks=[...document.querySelectorAll('#siteNav a[href^="#"]')];
         const updateHeader=()=>{if(topbar)topbar.classList.toggle('is-scrolled',window.scrollY>24);};window.addEventListener('scroll',updateHeader,{passive:true});updateHeader();
         if('IntersectionObserver' in window&&navLinks.length){const navObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){navLinks.forEach(a=>{if(a.getAttribute('href')==='#'+entry.target.id)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}}),{rootMargin:'-25% 0px -60% 0px'});navLinks.forEach(a=>{const target=document.querySelector(a.getAttribute('href'));if(target)navObserver.observe(target);});}
+      })();
+
+
+      // Make the cinematic treatment work throughout the entire document.
+      (function(){
+        const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const sections=[...document.querySelectorAll('main section,.section')];
+        const reveal=[...document.querySelectorAll('main section > *, .section-head, .about-grid > *, .value-card, .skill-card, .service-card, .project, .writing-card, .writing-highlight, .contact-panel, .principle')];
+        reveal.forEach((el,i)=>{el.classList.add('reveal-on-scroll');if(i%4===1)el.classList.add('reveal-delay-2');if(i%4===2)el.classList.add('reveal-delay-3');if(i%4===3)el.classList.add('reveal-delay-4');});
+        if(!reduce&&'IntersectionObserver' in window){
+          const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target);}}),{threshold:.08,rootMargin:'0px 0px -4% 0px'});
+          reveal.forEach(el=>io.observe(el));
+          const sio=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-in-view');e.target.style.setProperty('--spot-x',(20+Math.random()*60)+'%');e.target.style.setProperty('--spot-y',(15+Math.random()*55)+'%');}}),{threshold:.12});
+          sections.forEach(el=>sio.observe(el));
+        }else reveal.forEach(el=>el.classList.add('is-visible'));
+        const bar=document.createElement('div');bar.className='scroll-progress';bar.setAttribute('aria-hidden','true');bar.innerHTML='<span></span>';document.body.appendChild(bar);const fill=bar.firstElementChild;
+        let ticking=false;
+        function update(){const max=document.documentElement.scrollHeight-innerHeight;const p=max>0?(scrollY/max):0;fill.style.width=(p*100)+'%';const y=scrollY;sections.forEach((sec,i)=>{const r=sec.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0){sec.style.setProperty('--parallax-y',((y*.025)%26-13)+'px');sec.style.setProperty('--parallax-x',((i%2?1:-1)*((y*.008)%12))+'px');}});const nav=document.querySelector('.topbar');if(nav)nav.classList.toggle('is-scrolled',y>24);ticking=false;}
+        window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(update);ticking=true;}},{passive:true});window.addEventListener('resize',update,{passive:true});update();
+        const fine=window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+        if(!reduce&&fine)document.querySelectorAll('.project,.service-card,.writing-card,.skill-card,.value-card,.principle').forEach(card=>{card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width;const y=(e.clientY-r.top)/r.height;card.style.transform='perspective(1000px) rotateX('+((.5-y)*5)+'deg) rotateY('+((x-.5)*6)+'deg) translateY(-5px)';},{passive:true});card.addEventListener('pointerleave',()=>{card.style.transform='';},{passive:true});});
       })();
 
 </script>
