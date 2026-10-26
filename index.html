@@ -863,6 +863,38 @@ main{position:relative;z-index:2}
 @media(max-width:560px){.project{min-height:340px}.project-top{min-height:160px!important}.kinetic-scroll-cue{font-size:8px;bottom:12px}.kinetic-scroll-cue i{height:27px}}
 @media(prefers-reduced-motion:reduce){.hero h1,.hero .eyebrow,.hero .availability,.hero .lead,.hero .actions,.hero-aside{animation:none!important}.kinetic-scroll-cue i{animation:none!important}.kinetic-scene{display:none!important}}
 </style>
+
+<style id="visible-experience-fix">
+/* Full-page experience layer: this is intentionally visible, not another palette-only patch. */
+:root{--experience-progress:0%;--experience-x:50vw;--experience-y:45vh}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
+body{background:#09070d!important}
+.kinetic-scene{z-index:1!important;opacity:.94!important;mix-blend-mode:screen!important;pointer-events:none!important}
+main{z-index:auto!important;position:relative!important}
+main section{position:relative;isolation:isolate;overflow:clip}
+main section:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at var(--kinetic-x,50%) var(--kinetic-y,35%),rgba(196,111,172,.115),transparent 48%),linear-gradient(120deg,rgba(255,255,255,.018),transparent 38%,rgba(130,89,178,.025));opacity:.5;transition:opacity .7s ease,background-position .8s ease}
+main section.kinetic-active:before{opacity:1}
+main section:after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.16;background-image:linear-gradient(rgba(238,205,226,.075) 1px,transparent 1px),linear-gradient(90deg,rgba(238,205,226,.075) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom,transparent,black 20%,black 78%,transparent);transform:perspective(800px) rotateX(0deg);transition:opacity .6s ease}
+main section.kinetic-active:after{opacity:.26}
+#experience-progress{position:fixed;z-index:9999;top:0;left:0;width:100%;height:3px;background:rgba(255,255,255,.08);pointer-events:none}
+#experience-progress span{display:block;width:var(--experience-progress);height:100%;background:linear-gradient(90deg,#d18ab8,#a78bfa,#f4c3de);box-shadow:0 0 18px rgba(216,133,187,.85);transition:width .08s linear}
+#experience-index{position:fixed;z-index:99;left:22px;bottom:28px;display:flex;align-items:center;gap:12px;color:#f4e8f0;font:600 10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.16em;writing-mode:vertical-rl;transform:rotate(180deg);pointer-events:none;text-shadow:0 0 12px rgba(0,0,0,.8)}
+#experience-index .current{font-size:14px;color:#efb8d8}
+#experience-index .line{width:1px;height:54px;background:linear-gradient(to top,#df9fc4,transparent)}
+#experience-index .total{color:rgba(244,232,240,.52)}
+#experience-glow{position:fixed;z-index:4;inset:0;pointer-events:none;background:radial-gradient(480px circle at var(--experience-x) var(--experience-y),rgba(197,124,183,.10),transparent 65%);mix-blend-mode:screen;opacity:0;transition:opacity .25s ease}
+@media(hover:hover) and (pointer:fine){body:hover #experience-glow{opacity:1}.project,.skill-card,.principle,.writing-card,.value-card,.service-card,.hero-aside{transform-style:preserve-3d;transition:transform .22s ease,border-color .3s ease,box-shadow .3s ease!important;will-change:transform}.project:hover,.skill-card:hover,.principle:hover,.writing-card:hover,.value-card:hover,.service-card:hover,.hero-aside:hover{border-color:rgba(233,167,207,.58)!important;box-shadow:0 24px 70px rgba(0,0,0,.3),0 0 34px rgba(190,112,174,.10)!important}}
+.project,.writing-card,.service-card,.value-card,.principle,.skill-card{backface-visibility:hidden}
+.project:after{content:"EXPLORE ↗";position:absolute;right:20px;bottom:18px;font:600 9px/1 ui-monospace,monospace;letter-spacing:.18em;color:#f0b9d8;opacity:0;transform:translateY(7px);transition:opacity .3s ease,transform .3s ease;pointer-events:none}
+.project:hover:after{opacity:1;transform:translateY(0)}
+.kinetic-scroll-cue{position:absolute!important;right:clamp(24px,5vw,76px)!important;bottom:38px!important;display:flex!important;align-items:center!important;gap:13px!important;color:rgba(255,255,255,.72)!important;font:600 9px/1.2 ui-monospace,monospace!important;letter-spacing:.2em!important;text-transform:uppercase!important;z-index:6!important}
+.kinetic-scroll-cue i{display:block!important;width:26px!important;height:42px!important;border:1px solid rgba(236,181,213,.6)!important;border-radius:20px!important;position:relative!important}
+.kinetic-scroll-cue i:after{content:"";position:absolute;left:50%;top:7px;width:3px;height:7px;border-radius:4px;background:#e8afd0;transform:translateX(-50%);animation:experience-scroll 1.4s ease-in-out infinite}
+@keyframes experience-scroll{0%{opacity:0;transform:translate(-50%,0)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,17px)}}
+.hero h1,.hero h2,.hero .hero-title{letter-spacing:-.055em;text-wrap:balance}
+@media(max-width:700px){#experience-index{left:8px;bottom:16px;font-size:8px;opacity:.7}.kinetic-scroll-cue{right:18px!important;bottom:20px!important;font-size:8px!important}.kinetic-scroll-cue i{width:21px!important;height:34px!important}main section:after{background-size:42px 42px;opacity:.12}#experience-glow{display:none}.project:after{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.kinetic-scroll-cue i:after{animation:none}#experience-progress span{transition:none}*{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -1342,6 +1374,19 @@ main{position:relative;z-index:2}
  // Strong but controlled 3D tilt follows the pointer on cards.
  if(!reduce&&matchMedia('(hover:hover) and (pointer:fine)').matches){document.querySelectorAll('.project,.skill-card,.principle,.writing-card,.value-card,.service-card,.hero-aside').forEach(card=>{card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform='perspective(950px) rotateX('+(-y*4.5)+'deg) rotateY('+(x*5.5)+'deg) translateY(-4px)';});card.addEventListener('pointerleave',()=>{card.style.transform='';});});}
  const hero=document.querySelector('.hero');if(hero&&!hero.querySelector('.kinetic-scroll-cue')){const cue=document.createElement('div');cue.className='kinetic-scroll-cue';cue.innerHTML='<span>Scroll to explore</span><i></i>';hero.appendChild(cue);const label=document.createElement('div');label.className='kinetic-ring-label';label.textContent='Research · Strategy · Technical storytelling';hero.appendChild(label);}
+})();
+</script>
+
+<script id="visible-experience-engine">
+(()=>{const d=document,root=d.documentElement;
+if(!d.getElementById('experience-progress')){const p=d.createElement('div');p.id='experience-progress';p.innerHTML='<span></span>';d.body.appendChild(p)}
+if(!d.getElementById('experience-index')){const n=d.createElement('div');n.id='experience-index';n.innerHTML='<span class="current">01</span><span class="line"></span><span class="total">/ 07</span>';d.body.appendChild(n)}
+if(!d.getElementById('experience-glow')){const g=d.createElement('div');g.id='experience-glow';d.body.appendChild(g)}
+const sections=[...d.querySelectorAll('main section')];const counter=d.querySelector('#experience-index .current'),total=d.querySelector('#experience-index .total');if(total)total.textContent='/ '+String(sections.length).padStart(2,'0');
+let ticking=false;function update(){const max=root.scrollHeight-innerHeight;root.style.setProperty('--experience-progress',(max>0?(scrollY/max*100):0)+'%');let best=0,dist=Infinity;sections.forEach((s,i)=>{const r=s.getBoundingClientRect(),d0=Math.abs(r.top-innerHeight*.34);if(r.bottom>80&&r.top<innerHeight&&d0<dist){dist=d0;best=i}});if(counter)counter.textContent=String(best+1).padStart(2,'0');ticking=false}
+addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(update);ticking=true}},{passive:true});addEventListener('resize',update,{passive:true});update();
+addEventListener('pointermove',e=>{root.style.setProperty('--experience-x',e.clientX+'px');root.style.setProperty('--experience-y',e.clientY+'px')},{passive:true});
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&matchMedia('(hover:hover) and (pointer:fine)').matches){d.querySelectorAll('.project,.skill-card,.principle,.writing-card,.value-card,.service-card,.hero-aside').forEach(card=>{card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform='perspective(1100px) rotateX('+(-y*6)+'deg) rotateY('+(x*7)+'deg) translate3d(0,-5px,12px)'});card.addEventListener('pointerleave',()=>{card.style.transform=''})})}
 })();
 </script>
 </body>
