@@ -4,7 +4,7 @@
  const projects=cards.map((c,i)=>({title:c.querySelector("h3")?.textContent.trim()||"Selected project",kind:c.querySelector(".project-kind")?.textContent.trim()||"Independent work",desc:c.querySelector(".project-body>p")?.textContent.trim()||"",links:[...c.querySelectorAll(".project-links a")].map(a=>({label:a.textContent.trim(),href:a.href})),i:i+1}));
  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
  const root=document.createElement("div");root.className="immersive-world";root.innerHTML=`
- <canvas aria-label="Interactive 3D portfolio environment" tabindex="0"></canvas><div class="world-transition" aria-hidden="true"></div><div class="world-cursor-trail" aria-hidden="true"></div><div class="world-fallback"><div><p class="world-screen-label">NAOM KENAGWA · SELECTED WORK</p><h2 class="world-screen-title">Ideas, built into experiences.</h2><p>Explore projects and writing through this interactive portfolio. This device is using a lightweight visual mode.</p></div></div>
+ <canvas aria-label="Interactive 3D portfolio environment" tabindex="0"></canvas><div class="world-scroll-features" aria-hidden="true"><i class="scroll-feature scroll-feature-a"><b></b><em></em></i><i class="scroll-feature scroll-feature-b"><b></b><em></em></i><i class="scroll-feature scroll-feature-c"><b></b><em></em></i></div><div class="world-transition" aria-hidden="true"></div><div class="world-cursor-trail" aria-hidden="true"></div><div class="world-fallback"><div><p class="world-screen-label">NAOM KENAGWA · SELECTED WORK</p><h2 class="world-screen-title">Ideas, built into experiences.</h2><p>Explore projects and writing through this interactive portfolio. This device is using a lightweight visual mode.</p></div></div>
  <div class="world-loader" role="status"><div class="world-loader-mark"></div><div class="world-loader-label">Building your world</div><div class="world-loader-progress"><span></span></div></div>
  
  <div class="world-kicker">Independent practice / 2026</div><div class="world-side-note">Research · Clarity · Useful technology</div>
@@ -35,14 +35,14 @@
  // Their position, rotation and scale are driven by scroll progress, not timers.
  const featureRig=new T.Group();scene.add(featureRig);
  const featureMats=[
-  new T.MeshBasicMaterial({color:0xa8f4ed,transparent:true,opacity:.3,wireframe:true,depthWrite:false}),
-  new T.MeshBasicMaterial({color:0xd9a1b6,transparent:true,opacity:.27,wireframe:true,depthWrite:false}),
-  new T.MeshBasicMaterial({color:0xb7a8f0,transparent:true,opacity:.24,wireframe:true,depthWrite:false})
+  new T.MeshBasicMaterial({color:0xa8f4ed,transparent:true,opacity:.78,wireframe:true,depthWrite:false}),
+  new T.MeshBasicMaterial({color:0xd9a1b6,transparent:true,opacity:.72,wireframe:true,depthWrite:false}),
+  new T.MeshBasicMaterial({color:0xb7a8f0,transparent:true,opacity:.7,wireframe:true,depthWrite:false})
  ];
  const featureSpecs=[
-  {geo:new T.TorusKnotGeometry(1.05,.018,110,6,2,3),pos:[3.5,2.8,-3.8],phase:0,scale:.78},
-  {geo:new T.IcosahedronGeometry(.9,1),pos:[-3.4,1.8,-4.8],phase:2.1,scale:.8},
-  {geo:new T.TorusGeometry(.9,.025,8,72),pos:[3.1,1.2,-6.1],phase:4.2,scale:1.05}
+  {geo:new T.TorusKnotGeometry(1.05,.025,110,8,2,3),pos:[3.6,4.1,2.2],phase:0,scale:.82},
+  {geo:new T.IcosahedronGeometry(.9,1),pos:[-3.35,2.2,2.8],phase:2.1,scale:.88},
+  {geo:new T.TorusGeometry(.9,.035,10,84),pos:[2.9,.45,3.2],phase:4.2,scale:1.05}
  ];
  const scrollFeatures=featureSpecs.map((spec,i)=>{
   const holder=new T.Group();holder.position.set(...spec.pos);holder.scale.setScalar(spec.scale);featureRig.add(holder);
@@ -103,6 +103,7 @@
   group.position.x+=(Math.sin(orbit)*.12-group.position.x)*.025;
   group.position.y+=(Math.sin(scrollProgress*Math.PI)*.045-group.position.y)*.025;
   // Every feature has its own scroll-synchronised rotation, depth and scale.
+  root.querySelectorAll(".scroll-feature").forEach((el,i)=>{const phase=[0,2.1,4.2][i];const baseX=[-1,1,0][i];const drift=Math.sin(scrollProgress*Math.PI*2+phase);const rotX=scrollProgress*(i%2?210:-250)+Math.sin(now*.22+phase)*8;const rotY=scrollProgress*(i%2?-280:240)+now*2+phase*30;const scale=.82+.22*(.5+.5*Math.sin(scrollProgress*Math.PI*2+phase));el.style.transform="translate3d("+((baseX*28)+drift*18)+"px,"+((Math.cos(scrollProgress*Math.PI*2+phase)*18))+"px,0) rotateX("+rotX+"deg) rotateY("+rotY+"deg) rotateZ("+(scrollProgress*90+phase*24)+"deg) scale("+scale+")";});
   scrollFeatures.forEach((feature,i)=>{
    const p=scrollProgress*Math.PI*2+feature.phase;
    feature.holder.position.x=feature.base[0]+Math.sin(p)*.52;
