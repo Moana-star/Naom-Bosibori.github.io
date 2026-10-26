@@ -10,10 +10,10 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Naom Kenagwa — Technical Writer & SEO Content Strategist">
   <meta property="og:description" content="Clear technical writing, search-focused content strategy, and practical projects by Naom Kenagwa. Explore independent samples and a research-led approach.">
-  <meta property="og:url" content="https://moana-star.github.io/Naom-Bosibori.github.io/">
+  <meta property="og:url" content="https://naom-kenagwa-portfolio.vercel.app/">
   <meta property="og:site_name" content="Naom Kenagwa">
   <meta name="twitter:card" content="summary">
-  <link rel="canonical" href="https://moana-star.github.io/Naom-Bosibori.github.io/">
+  <link rel="canonical" href="https://naom-kenagwa-portfolio.vercel.app/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <title>Naom Kenagwa | Technical Writing, SEO Content & Web Projects</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@
     "@context":"https://schema.org",
     "@type":"Person",
     "name":"Naom Kenagwa",
-    "url":"https://moana-star.github.io/Naom-Bosibori.github.io/",
+    "url":"https://naom-kenagwa-portfolio.vercel.app/",
     "jobTitle":"Technical Writer and SEO Content Specialist",
     "description":"Computer Science student developing technical writing, SEO content and practical web projects.",
     "email":"mailto:naom6083@gmail.com",
@@ -412,6 +412,75 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--text)}
       .value-card:hover,.skill-card:hover,.service-card:hover,.writing-card:hover,.learning span:hover{transform:none;box-shadow:none}
     }
 
+  
+    /* Final motion system: section-specific, restrained and accessible */
+    .scroll-progress{position:fixed;z-index:100;top:0;left:0;width:100%;height:3px;pointer-events:none;background:rgba(81,36,47,.07)}
+    .scroll-progress span{display:block;width:100%;height:100%;background:linear-gradient(90deg,#51242F,#B77783);transform:scaleX(0);transform-origin:left center}
+    .hero-grid>*{animation:hero-settle .7s cubic-bezier(.2,.7,.25,1) both}
+    .hero-grid>*:nth-child(2){animation-delay:.13s}
+    .hero .availability{animation:hero-label .55s ease-out both}
+    .hero h1{animation:hero-title .75s cubic-bezier(.2,.7,.25,1) .08s both}
+    .hero .lead{animation:hero-copy .65s ease-out .2s both}
+    .hero .actions{animation:hero-copy .65s ease-out .3s both}
+    @keyframes hero-settle{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes hero-label{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes hero-title{from{opacity:0;transform:translateY(18px);clip-path:inset(0 0 12% 0)}to{opacity:1;transform:translateY(0);clip-path:inset(0)}}
+    @keyframes hero-copy{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    /* About: quiet editorial timeline cue rather than another floating card */
+    #about .about-copy{position:relative;padding-left:22px;border-left:1px solid #D6A7A7}
+    #about .about-copy:before{content:"";position:absolute;left:-4px;top:.55em;width:7px;height:7px;border-radius:50%;background:#7D3545;box-shadow:0 0 0 4px #F0E2DE}
+    /* Expertise: small, tactile response; content remains stable */
+    .skill-card .symbol{display:inline-block;transition:transform .24s ease,color .24s ease}
+    .skill-card:hover .symbol{transform:translateY(-3px) rotate(-4deg);color:#51242F}
+    /* Projects: technical detail lives in the header artwork; keep tilt subtle */
+    .project-top:after{transition:transform .55s cubic-bezier(.2,.7,.25,1),opacity .35s ease}
+    .project:hover .project-top:after{transform:translate(-8px,8px) scale(1.04);opacity:.9}
+    /* Writing: editorial underline and arrow movement */
+    .writing-card a{display:inline-flex;align-items:center;gap:5px;text-decoration:none;transition:color .2s ease,gap .2s ease}
+    .writing-card a:hover{gap:10px;text-decoration:underline;text-underline-offset:4px}
+    .writing-card h3{transition:color .2s ease}
+    .writing-card:hover h3{color:#51242F}
+    /* Process: a line draws in sequence when each step enters view */
+    .process .step{position:relative;border-top-color:#E5D5D1}
+    .process .step:before{content:"";position:absolute;left:0;top:-1px;width:100%;height:2px;background:#8B4A58;transform:scaleX(0);transform-origin:left;transition:transform .65s cubic-bezier(.2,.7,.25,1)}
+    .process .step.is-visible:before{transform:scaleX(1)}
+    .process .step .num{display:inline-block;transition:transform .25s ease}
+    .process .step.is-visible .num{transform:translateY(-2px)}
+    /* Learning labels behave like calm index chips, not fake progress indicators */
+    .learning span{transition:background .2s ease,border-color .2s ease,transform .2s ease}
+    .learning span:hover{background:#fff;border-color:#CBAEB0;transform:translateY(-2px)}
+    /* Contact decoration stays behind content and never competes with the form */
+    .contact-panel{position:relative;overflow:hidden}
+    .contact-panel:before{content:"";position:absolute;right:-95px;top:-120px;width:260px;height:260px;border:1px solid rgba(81,36,47,.1);border-radius:50%;pointer-events:none}
+    .contact-panel:after{content:"";position:absolute;right:-55px;top:-80px;width:180px;height:180px;border:1px solid rgba(81,36,47,.08);border-radius:50%;pointer-events:none}
+    .contact-panel>*{position:relative;z-index:1}
+    .nav a{position:relative}
+    .nav a:not(.nav-cta):after{content:"";position:absolute;left:0;right:0;bottom:3px;height:1px;background:#B77783;transform:scaleX(0);transform-origin:left;transition:transform .22s ease}
+    .nav a:not(.nav-cta):hover:after,.nav a[aria-current="location"]:after{transform:scaleX(1)}
+    .btn{position:relative;overflow:hidden}
+    .btn:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,.2) 48%,transparent 72%);transform:translateX(-120%);transition:transform .55s ease;pointer-events:none}
+    .btn:hover:after{transform:translateX(120%)}
+    .enquiry-form input:focus,.enquiry-form select:focus,.enquiry-form textarea:focus{border-color:#8B4A58;box-shadow:0 0 0 3px rgba(139,74,88,.1);outline:none}
+    .enquiry-form input:invalid:not(:placeholder-shown),.enquiry-form textarea:invalid:not(:placeholder-shown){border-color:#A33E4B}
+    .form-feedback{margin:12px 0 0;padding:10px 12px;border-radius:8px;font-size:.84rem;line-height:1.5;background:#F7F0E9;border:1px solid #E5D5D1;color:#51242F}
+    .form-feedback:empty{display:none}
+    .service-card .service-cta{display:inline-flex;gap:5px;transition:gap .2s ease}
+    .service-card .service-cta:hover{gap:9px}
+    @media(hover:hover) and (pointer:fine) and (min-width:1000px){.project{transition:transform .16s ease-out,box-shadow .3s ease,border-color .3s ease}}
+    @media(max-width:700px){
+      .hero-grid>*{animation:none}
+      .hero .availability,.hero h1,.hero .lead,.hero .actions{animation:none}
+      #about .about-copy{padding-left:16px}
+      .contact-panel:before,.contact-panel:after{right:-150px}
+      .project:hover,.skill-card:hover,.service-card:hover,.writing-card:hover,.value-card:hover{transform:none}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .hero-grid>*,.hero h1,.hero .availability,.hero .lead,.hero .actions{animation:none!important}
+      .scroll-progress span{display:none}
+      .section-head .section-label:after,.value-card,.value-card:before,.skill-card,.skill-card .symbol,.service-card,.service-card:after,.project,.project-top:after,.project-mark,.writing-card,.writing-card:before,.step:before,.step .num,.learning span,.nav a:after,.btn:after{transition:none!important}
+      .value-card:hover,.skill-card:hover,.service-card:hover,.writing-card:hover,.learning span:hover{transform:none;box-shadow:none}
+    }
+
   </style>
 <style id="contact-contrast-fix">
 #contact { background:#fff !important; color:#17251f !important; }
@@ -632,6 +701,7 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--text)}
             <label for="enquiryService">What do you need?</label><select id="enquiryService" name="service" required><option value="">Choose a service</option><option>Technical writing</option><option>Developer documentation</option><option>Technical SEO review</option><option>SEO content planning</option><option>AI and software content</option><option>Other / not sure yet</option></select>
             <label for="enquiryBrief">Project overview</label><textarea id="enquiryBrief" name="brief" required maxlength="2500" rows="4" placeholder="Audience, goal, expected deliverable and deadline…"></textarea>
             <button class="btn btn-primary form-submit" type="submit">Prepare email enquiry ↗</button>
+            <p class="form-feedback" id="enquiryFeedback" role="status" aria-live="polite"></p>
           </form>
           <div class="contact-links"><a href="mailto:naom6083@gmail.com"><span>Email</span><span>naom6083@gmail.com ↗</span></a><a href="https://github.com/Moana-star" target="_blank" rel="noopener noreferrer"><span>GitHub</span><span>Moana-star ↗</span></a><a href="https://www.linkedin.com/in/naom-kenagwa-493107403/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><span>Connect ↗</span></a><a href="https://devpost.com/naom6083" target="_blank" rel="noopener noreferrer"><span>Devpost</span><span>Projects ↗</span></a></div>
         </div>
@@ -724,6 +794,19 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--text)}
         sections.forEach(section=>sectionObserver.observe(section));
       }
 
+      // Step-by-step process line: reveal each stage independently as it enters view.
+      document.querySelectorAll('.process .step').forEach((step,index)=>{
+        step.style.transitionDelay=(Math.min(index,3)*70)+'ms';
+      });
+
+      // Writing and service links guide the eye without changing layout or content.
+      document.querySelectorAll('.writing-card a,.service-cta').forEach(link=>{
+        if(!link.querySelector('[aria-hidden="true"]')){
+          link.addEventListener('focus',()=>link.classList.add('is-focused'));
+          link.addEventListener('blur',()=>link.classList.remove('is-focused'));
+        }
+      });
+
       if(!reduced&&window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 1000px)').matches){
         document.querySelectorAll('.project').forEach(card=>{
           card.addEventListener('pointermove',event=>{
@@ -745,7 +828,7 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--text)}
     document.getElementById('year').textContent=new Date().getFullYear();
     document.querySelectorAll('[data-service]').forEach(link=>link.addEventListener('click',()=>{const select=document.getElementById('enquiryService');if(select)select.value=link.dataset.service;}));
     const enquiryForm=document.getElementById('enquiryForm');
-    if(enquiryForm){enquiryForm.addEventListener('submit',event=>{event.preventDefault();if(!enquiryForm.reportValidity())return;const data=new FormData(enquiryForm);const subject='Portfolio project enquiry — '+data.get('service');const body=['Name: '+data.get('name'),'Email: '+data.get('email'),'Service: '+data.get('service'),'','Project overview:',data.get('brief')].join('\n');window.location.href='mailto:naom6083@gmail.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);});}
+    if(enquiryForm){const feedback=document.getElementById('enquiryFeedback');enquiryForm.addEventListener('invalid',()=>{if(feedback)feedback.textContent='Please complete the required fields and check your email address.',true);},true);enquiryForm.addEventListener('input',()=>{if(feedback)feedback.textContent='';});enquiryForm.addEventListener('submit',event=>{event.preventDefault();if(!enquiryForm.reportValidity()){if(feedback)feedback.textContent='Please complete the required fields and check your email address.';return;}const data=new FormData(enquiryForm);if(feedback)feedback.textContent='Your email draft is being prepared. Review it in your email app before sending.';const subject='Portfolio project enquiry — '+data.get('service');const body=['Name: '+data.get('name'),'Email: '+data.get('email'),'Service: '+data.get('service'),'','Project overview:',data.get('brief')].join('\n');window.location.href='mailto:naom6083@gmail.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);});}
   </script>
 </body>
 </html>
