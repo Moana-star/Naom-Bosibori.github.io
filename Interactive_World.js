@@ -10,7 +10,7 @@
  <div class="world-kicker">Independent practice / 2026</div><div class="world-side-note">Research · Clarity · Useful technology</div>
  <section class="world-project-screen" aria-label="Featured project"><div class="world-screen-copy"><p class="world-screen-label">Selected work / <span>01</span></p><div class="world-screen-number">PROJECT 01 — 03</div><h2 class="world-screen-title">ExamPilot</h2><p class="world-screen-description"></p><div class="world-screen-actions"></div></div><div class="world-screen-art" aria-hidden="true"><div class="world-art-core"></div><span class="world-art-index">NAOM KENAGWA / WORK ARCHIVE</span></div></section>
  <div class="world-screen-arrows"><button type="button" data-step="-1" aria-label="Previous project">←</button><button type="button" data-step="1" aria-label="Next project">→</button></div>
- <div class="world-bottomline"><div class="world-environments" aria-label="Choose a 3D environment"><button type="button" data-world="canal" aria-pressed="true">01 / Canal City</button><button type="button" data-world="venice" aria-pressed="false">02 / Lagoon</button><button type="button" data-world="studio" aria-pressed="false">03 / After Hours</button></div><div class="world-bottom-caption"><strong>Scroll to explore</strong>or choose a world</div></div>`;
+ <div class="world-bottomline"><div class="world-environments" aria-label="Choose a 3D environment"><button type="button" data-world="canal" aria-pressed="true">01 / Amsterdam Canals</button><button type="button" data-world="venice" aria-pressed="false">02 / Venice Beach</button><button type="button" data-world="studio" aria-pressed="false">03 / After Hours</button></div><div class="world-bottom-caption"><strong>Scroll to explore</strong>or choose a world</div></div>`;
  hero.classList.add("world-active");hero.append(root);
  const screen=root.querySelector(".world-project-screen"),loader=root.querySelector(".world-loader"),canvas=root.querySelector("canvas"),fallback=root.querySelector(".world-fallback");let active=0;
  function showProject(n){active=(n+projects.length)%projects.length;const p=projects[active];screen.classList.add("is-switching");setTimeout(()=>{screen.querySelector(".world-screen-label span").textContent=String(active+1).padStart(2,"0");screen.querySelector(".world-screen-number").textContent="PROJECT "+String(active+1).padStart(2,"0")+" — "+String(projects.length).padStart(2,"0");screen.querySelector(".world-screen-title").textContent=p.title;screen.querySelector(".world-screen-description").textContent=p.desc;const actions=screen.querySelector(".world-screen-actions");actions.replaceChildren();p.links.slice(0,2).forEach((l,i)=>{const a=document.createElement("a");a.href=l.href;a.textContent=i?"Source / details ↗":"Explore project ↗";if(/^https?:/.test(l.href)){a.target="_blank";a.rel="noopener noreferrer"}actions.append(a)});const more=document.createElement("button");more.type="button";more.textContent="All work ↓";more.onclick=()=>document.querySelector("#projects")?.scrollIntoView({behavior:reduce?"auto":"smooth"});actions.append(more);root.querySelector(".world-art-index").textContent=String(active+1).padStart(2,"0")+" / "+p.kind.toUpperCase();screen.classList.remove("is-switching")},reduce?0:150)}
@@ -30,7 +30,40 @@
  group=new T.Group();scene.add(group);const material=(c,r=.65,m=.08)=>new T.MeshStandardMaterial({color:c,roughness:r,metalness:m});function box(g,w,h,d,x,y,z,m){const o=new T.Mesh(new T.BoxGeometry(w,h,d),m);o.position.set(x,y,z);g.add(o);return o}
  function clear(g){while(g.children.length){const o=g.children.pop();o.parent=null;o.geometry?.dispose();if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material?.dispose()}}
  function arch(g,x,y,z,w,h,d,c){const m=material(c);const sub=new T.Group();sub.position.set(x,y,z);g.add(sub);box(sub,w*.16,h*.6,d,-w*.42,h*.3,0,m);box(sub,w*.16,h*.6,d,w*.42,h*.3,0,m);box(sub,w,h*.15,d,0,h*.62,0,m);const curve=new T.Mesh(new T.TorusGeometry(w*.34,.065,8,28,Math.PI),m);curve.rotation.z=Math.PI;curve.position.set(0,h*.34,0);sub.add(curve)}
- function build(name){clear(group);if(name!=="studio"){const water=new T.Mesh(new T.PlaneGeometry(42,20,42,24),material(name==="venice"?0x28515e:0x1b354e,.24,.6));water.rotation.x=-Math.PI/2;water.position.set(0,-.04,-7);water.userData.water=true;group.add(water);for(const side of [-1,1]){box(group,4.4,5.4,16,side*5.6,2.4,-7,material(name==="venice"?0xc9a88d:0x6e627e));for(let i=0;i<5;i++)box(group,.27,.45,.08,side*(4+i*.65),1.1+(i%3)*.75,-1.8-i*2.6,material(i%2?0xe4c5a0:0x272c43));for(let i=0;i<4;i++){box(group,.5,.75,.3,side*(4.5+i*.4),4.8,-3-i*3,material(0x342b44));box(group,.58,.12,.36,side*(4.5+i*.4),5.25,-3-i*3,material(0xe0b8ce))}box(group,.14,.3,18,side*3.3,.05,-7,material(0xb7a4c8,.4,.45));for(let i=0;i<8;i++){const l=new T.Mesh(new T.SphereGeometry(.07,8,8),new T.MeshBasicMaterial({color:0xf3c6df}));l.position.set(side*3.4,.25,-1-i*2.2);group.add(l)}}if(name==="venice"){arch(group,0,1.2,-5.4,7.2,2.7,.45,0xbca28e)}else{box(group,7,.28,1.1,0,1.1,-4.2,material(0x8b7e9e));for(let i=0;i<13;i++)box(group,.07,.4,.08,-3+i*.5,1.43,-4.2,material(0xd4b6ce))}}else{for(let i=0;i<9;i++){const x=(i-4)*1.65,h=3+(i*7%5)*.75,z=-5-(i%3)*2;box(group,.82,h,.8,x,h/2-.1,z,material(i%2?0x28243e:0x34314e,.4,.35));box(group,.86,.035,.84,x,h-.1,z,new T.MeshBasicMaterial({color:i%2?0xdca8cf:0x9d9ce5}))}const ring=new T.Mesh(new T.TorusGeometry(2.8,.035,8,100),new T.MeshBasicMaterial({color:0xcaa3d2}));ring.position.set(0,2.6,-6);ring.rotation.x=.25;group.add(ring)}
+ function build(name){clear(group);
+ if(name==="canal"){
+  const water=new T.Mesh(new T.PlaneGeometry(42,20,42,24),material(0x1b354e,.24,.6));water.rotation.x=-Math.PI/2;water.position.set(0,-.04,-7);water.userData.water=true;group.add(water);
+  for(const side of [-1,1]){
+   box(group,4.4,5.4,16,side*5.6,2.4,-7,material(0x6e627e));
+   for(let i=0;i<5;i++)box(group,.27,.45,.08,side*(4+i*.65),1.1+(i%3)*.75,-1.8-i*2.6,material(i%2?0xe4c5a0:0x272c43));
+   for(let i=0;i<4;i++){box(group,.5,.75,.3,side*(4.5+i*.4),4.8,-3-i*3,material(0x342b44));box(group,.58,.12,.36,side*(4.5+i*.4),5.25,-3-i*3,material(0xe0b8ce))}
+   box(group,.14,.3,18,side*3.3,.05,-7,material(0xb7a4c8,.4,.45));
+   for(let i=0;i<8;i++){const l=new T.Mesh(new T.SphereGeometry(.07,8,8),new T.MeshBasicMaterial({color:0xf3c6df}));l.position.set(side*3.4,.25,-1-i*2.2);group.add(l)}
+  }
+  box(group,7,.28,1.1,0,1.1,-4.2,material(0x8b7e9e));for(let i=0;i<13;i++)box(group,.07,.4,.08,-3+i*.5,1.43,-4.2,material(0xd4b6ce));
+ } else if(name==="venice"){
+  // Venice Beach-inspired coast: ocean, sandy boardwalk, low-rise beachfront buildings and palms.
+  const ocean=new T.Mesh(new T.PlaneGeometry(48,30,48,30),material(0x1c5265,.2,.55));ocean.rotation.x=-Math.PI/2;ocean.position.set(0,-.08,-10);ocean.userData.water=true;group.add(ocean);
+  box(group,48,.18,5,0,.02,1.8,material(0xbca88d,.9,0));
+  box(group,48,.22,1.1,0,.18,-.9,material(0x846c66,.75,.1));
+  for(let i=0;i<9;i++){
+   const x=(i-4)*2.6,h=2.1+(i%3)*.45,z=-4-(i%2)*1.3;
+   box(group,1.7,h,1.5,x,h/2,z,material([0xc69e91,0xe0c9a7,0x9babb2][i%3],.75,.03));
+   box(group,1.78,.13,1.58,x,h+.05,z,material(0x473b4a));
+   for(let w=-1;w<=1;w+=2)box(group,.22,.45,.08,x+w*.42,h*.48,z+.79,material(0x26344a,.4,.1));
+  }
+  for(let i=0;i<7;i++){
+   const x=-10+i*3.25,z=-.6-(i%2)*1.1;
+   const trunk=new T.Mesh(new T.CylinderGeometry(.09,.15,2.5,8),material(0x765846));trunk.position.set(x,1.25,z);trunk.rotation.z=(i%2?-.1:.1);group.add(trunk);
+   for(let j=0;j<6;j++){const leaf=new T.Mesh(new T.ConeGeometry(.16,1.45,5),material(0x3f786b,.7,.02));leaf.position.set(x+Math.cos(j*Math.PI/3)*.52,2.45+Math.sin(j*2.1)*.14,z+Math.sin(j*Math.PI/3)*.42);leaf.rotation.z=Math.cos(j*Math.PI/3)*.9;leaf.rotation.x=Math.sin(j*Math.PI/3)*.5;group.add(leaf)}
+  }
+  const sun=new T.Mesh(new T.SphereGeometry(.72,24,24),new T.MeshBasicMaterial({color:0xe7b6ce}));sun.position.set(7,5.7,-15);group.add(sun);
+ } else {
+  for(let i=0;i<9;i++){const x=(i-4)*1.65,h=3+(i*7%5)*.75,z=-5-(i%3)*2;box(group,.82,h,.8,x,h/2-.1,z,material(i%2?0x28243e:0x34314e,.4,.35));box(group,.86,.035,.84,x,h-.1,z,new T.MeshBasicMaterial({color:i%2?0xdca8cf:0x9d9ce5}))}
+  const ring=new T.Mesh(new T.TorusGeometry(2.8,.035,8,100),new T.MeshBasicMaterial({color:0xcaa3d2}));ring.position.set(0,2.6,-6);ring.rotation.x=.25;group.add(ring)
+ }
+ for(let i=0;i<7;i++){const shape=i%2?new T.OctahedronGeometry(.42):new T.TorusKnotGeometry(.3,.08,40,8),o=new T.Mesh(shape,material(i%2?0x8d87c9:0xd19cbe,.25,.65));o.position.set((i-3)*1.55,3.8+i%3*.45,-5-i%2*2);o.userData.float=true;o.userData.phase=i*.7;group.add(o)}
+}
  for(let i=0;i<7;i++){const shape=i%2?new T.OctahedronGeometry(.42):new T.TorusKnotGeometry(.3,.08,40,8),o=new T.Mesh(shape,material(i%2?0x8d87c9:0xd19cbe,.25,.65));o.position.set((i-3)*1.55,3.8+i%3*.45,-5-i%2*2);o.userData.float=true;o.userData.phase=i*.7;group.add(o)}}
  build("canal");worldAPI={change:name=>{build(name);camera.position.lerp(new T.Vector3(name==="venice"?1.2:0,name==="studio"?3:3.2,name==="studio"?12:12.8),.55);scene.fog.color.set(name==="venice"?0x17111a:name==="studio"?0x10101c:0x101322)}};let mx=0,my=0,tx=0,ty=0;root.addEventListener("pointermove",e=>{if(matchMedia("(pointer:fine)").matches){tx=(e.clientX/innerWidth-.5)*.8;ty=(e.clientY/innerHeight-.5)*.35}},{passive:true});root.addEventListener("pointerleave",()=>{tx=0;ty=0},{passive:true});
  const resize=()=>{const w=Math.max(1,root.clientWidth),h=Math.max(1,root.clientHeight);camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5))};addEventListener("resize",resize,{passive:true});if("ResizeObserver"in window){resizeObs=new ResizeObserver(resize);resizeObs.observe(root)}
