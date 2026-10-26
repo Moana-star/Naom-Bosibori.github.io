@@ -14,6 +14,30 @@
  hero.classList.add("world-active");document.body.append(root);
  const screen=root.querySelector(".world-project-screen"),loader=root.querySelector(".world-loader"),canvas=root.querySelector("canvas"),fallback=root.querySelector(".world-fallback"),veil=root.querySelector(".world-transition"),trail=root.querySelector(".world-cursor-trail");let active=0;
  let scrollProgress=0,scrollTarget=0;
+ // CSS feature motion is deliberately independent of WebGL so it still runs
+ // when the external Three.js module is blocked or unsupported.
+ const cssFeatures=[...root.querySelectorAll(".scroll-feature")];
+ let cssMotionFrame=0;
+ const updateCssFeatures=()=>{
+   cssMotionFrame=0;
+   const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);
+   const progress=Math.min(1,Math.max(0,window.scrollY/max));
+   const time=performance.now()*.001;
+   cssFeatures.forEach((el,i)=>{
+     const phase=[0,2.1,4.2][i]||0;
+     const drift=Math.sin(progress*Math.PI*2+phase);
+     const x=[-1,1,0][i];
+     const rx=progress*(i%2?210:-250)+Math.sin(time*.22+phase)*8;
+     const ry=progress*(i%2?-280:240)+time*2+phase*30;
+     const rz=progress*90+phase*24;
+     const scale=.82+.22*(.5+.5*Math.sin(progress*Math.PI*2+phase));
+     el.style.transform="translate3d("+(x*28+drift*18)+"px,"+(Math.cos(progress*Math.PI*2+phase)*18)+"px,0) rotateX("+rx+"deg) rotateY("+ry+"deg) rotateZ("+rz+"deg) scale("+scale+")";
+   });
+ };
+ const queueCssFeatureMotion=()=>{if(!cssMotionFrame)cssMotionFrame=requestAnimationFrame(updateCssFeatures)};
+ addEventListener("scroll",queueCssFeatureMotion,{passive:true});
+ addEventListener("resize",queueCssFeatureMotion,{passive:true});
+ updateCssFeatures();
  const updateScrollMotion=()=>{const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);scrollTarget=Math.min(1,Math.max(0,scrollY/max));root.style.setProperty("--world-scroll-progress",scrollTarget.toFixed(4));const intro=window.scrollY<Math.max(120,hero.offsetHeight*.42);root.classList.toggle("world-intro",intro);document.body.classList.toggle("world-intro-active",intro)};
  addEventListener("scroll",updateScrollMotion,{passive:true});addEventListener("resize",updateScrollMotion,{passive:true});updateScrollMotion();
  function showProject(n){active=(n+projects.length)%projects.length;const p=projects[active];screen.classList.add("is-switching");setTimeout(()=>{screen.querySelector(".world-screen-label span").textContent=String(active+1).padStart(2,"0");screen.querySelector(".world-screen-number").textContent="PROJECT "+String(active+1).padStart(2,"0")+" — "+String(projects.length).padStart(2,"0");screen.querySelector(".world-screen-title").textContent=p.title;screen.querySelector(".world-screen-description").textContent=p.desc;const actions=screen.querySelector(".world-screen-actions");actions.replaceChildren();p.links.slice(0,2).forEach((l,i)=>{const a=document.createElement("a");a.href=l.href;a.textContent=i?"Source / details ↗":"Explore project ↗";if(/^https?:/.test(l.href)){a.target="_blank";a.rel="noopener noreferrer"}actions.append(a)});const more=document.createElement("button");more.type="button";more.textContent="All work ↓";more.onclick=()=>document.querySelector("#projects")?.scrollIntoView({behavior:reduce?"auto":"smooth"});actions.append(more);root.querySelector(".world-art-index").textContent=String(active+1).padStart(2,"0")+" / "+p.kind.toUpperCase();screen.classList.remove("is-switching")},reduce?0:150)}
