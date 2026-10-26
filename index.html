@@ -36,6 +36,44 @@
     ],
     "knowsAbout":["Technical SEO","Content Strategy","AI Search","Generative Engine Optimization","Technical Writing","Software Development","Web Development"]
   }
+
+    // Pointer ribbon + scroll-velocity response: a lightweight local interpretation of immersive motion.
+    (function(){
+      const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(reduced)return;
+      const fine=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+      if(!fine)return;
+      const canvas=document.createElement('canvas');canvas.className='motion-ribbon';canvas.setAttribute('aria-hidden','true');
+      document.body.appendChild(canvas);
+      const ctx=canvas.getContext('2d');if(!ctx)return;
+      let w=0,h=0,dpr=1,raf=0,last=0,scrollY=window.scrollY,velocity=0;
+      const trail=[];
+      const resize=()=>{dpr=Math.min(window.devicePixelRatio||1,1.5);w=innerWidth;h=innerHeight;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)};
+      const move=e=>{trail.push({x:e.clientX,y:e.clientY,t:performance.now()});if(trail.length>24)trail.shift()};
+      const scroll=()=>{const now=window.scrollY;velocity=Math.max(-36,Math.min(36,now-scrollY));scrollY=now;document.documentElement.style.setProperty('--scroll-velocity',Math.abs(velocity).toFixed(1));};
+      window.addEventListener('pointermove',move,{passive:true});window.addEventListener('scroll',scroll,{passive:true});window.addEventListener('resize',resize,{passive:true});
+      const draw=now=>{
+        ctx.clearRect(0,0,w,h);
+        while(trail.length&&now-trail[0].t>620)trail.shift();
+        if(trail.length>2){
+          ctx.lineCap='round';ctx.lineJoin='round';
+          for(let i=1;i<trail.length;i++){
+            const a=trail[i-1],b=trail[i],life=Math.max(0,1-(now-b.t)/620);
+            ctx.beginPath();ctx.moveTo(a.x,a.y);
+            const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+            ctx.quadraticCurveTo(a.x,a.y,mx,my);
+            ctx.strokeStyle='rgba(139,74,88,'+(life*.15)+')';ctx.lineWidth=.8+life*5;ctx.stroke();
+            ctx.beginPath();ctx.arc(b.x,b.y,life*2.2,0,Math.PI*2);
+            ctx.fillStyle='rgba(190,125,139,'+(life*.2)+')';ctx.fill();
+          }
+        }
+        velocity*=.88;
+        raf=requestAnimationFrame(draw);
+      };
+      resize();draw(performance.now());
+      document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelAnimationFrame(raf);else raf=requestAnimationFrame(draw)});
+    })();
+
   </script>
   <style>
     :root{--bg:#f7f5ef;--panel:#ffffff;--panel2:#edf1eb;--text:#252d29;--muted:#505d55;--soft:#65736a;--line:#d9dfd7;--accent:#173f35;--accent2:#c6a66b;--ink:#ffffff;--max:1180px;--radius:18px}
@@ -489,6 +527,34 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--text)}
       .scroll-progress span{display:none}
       .section-head .section-label:after,.value-card,.value-card:before,.skill-card,.skill-card .symbol,.service-card,.service-card:after,.project,.project-top:after,.project-mark,.writing-card,.writing-card:before,.step:before,.step .num,.learning span,.nav a:after,.btn:after{transition:none!important}
       .value-card:hover,.skill-card:hover,.service-card:hover,.writing-card:hover,.learning span:hover{transform:none;box-shadow:none}
+    }
+
+  
+    /* Signature motion pass: a visible, responsive signal field inspired by creative-tech portfolios. */
+    .hero{position:relative;isolation:isolate;overflow:hidden}
+    .hero-network{position:absolute;inset:0;z-index:0!important;display:block;pointer-events:none;opacity:1!important;mix-blend-mode:multiply}
+    .hero:after{z-index:0;pointer-events:none;opacity:.5}
+    .hero-grid{position:relative;z-index:1}
+    .hero h1 em{position:relative;display:inline-block;text-shadow:0 0 28px rgba(139,74,88,.12)}
+    .hero h1 em:after{content:"";position:absolute;left:0;right:0;bottom:.02em;height:.09em;background:linear-gradient(90deg,#8b4a58,#d7a6ad,#8b4a58);transform-origin:left;animation:signalUnderline 1.2s .65s cubic-bezier(.2,.7,.2,1) both;border-radius:99px}
+    @keyframes signalUnderline{from{transform:scaleX(0);opacity:.2}to{transform:scaleX(1);opacity:.9}}
+    .motion-ribbon{position:fixed;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;opacity:.85}
+    .nav a[aria-current="location"]:not(.nav-cta){background:rgba(139,74,88,.09);border-radius:999px}
+    .nav a:not(.nav-cta){transition:background .25s ease,color .25s ease,transform .25s ease}
+    .project,.service-card,.writing-card,.skill-card,.value-card{transform-style:preserve-3d;will-change:transform}
+    .project:focus-within,.service-card:focus-within,.writing-card:focus-within{outline:2px solid rgba(139,74,88,.45);outline-offset:3px}
+    .section-head h2{ text-wrap:balance }
+    .hero-aside{backdrop-filter:blur(8px)}
+    @media(max-width:700px){
+      .motion-ribbon{opacity:.38}
+      .hero-network{opacity:.62!important}
+      .hero h1 em:after{animation-duration:.7s}
+      .hero-aside{backdrop-filter:none}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .motion-ribbon{display:none!important}
+      .hero h1 em:after{animation:none!important}
+      .hero h1 em:after{transform:scaleX(1)}
     }
 
   </style>
