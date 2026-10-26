@@ -37,42 +37,7 @@
     "knowsAbout":["Technical SEO","Content Strategy","AI Search","Generative Engine Optimization","Technical Writing","Software Development","Web Development"]
   }
 
-    // Pointer ribbon + scroll-velocity response: a lightweight local interpretation of immersive motion.
-    (function(){
-      const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if(reduced)return;
-      const fine=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-      if(!fine)return;
-      const canvas=document.createElement('canvas');canvas.className='motion-ribbon';canvas.setAttribute('aria-hidden','true');
-      document.body.appendChild(canvas);
-      const ctx=canvas.getContext('2d');if(!ctx)return;
-      let w=0,h=0,dpr=1,raf=0,last=0,scrollY=window.scrollY,velocity=0;
-      const trail=[];
-      const resize=()=>{dpr=Math.min(window.devicePixelRatio||1,1.5);w=innerWidth;h=innerHeight;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)};
-      const move=e=>{trail.push({x:e.clientX,y:e.clientY,t:performance.now()});if(trail.length>24)trail.shift()};
-      const scroll=()=>{const now=window.scrollY;velocity=Math.max(-36,Math.min(36,now-scrollY));scrollY=now;document.documentElement.style.setProperty('--scroll-velocity',Math.abs(velocity).toFixed(1));};
-      window.addEventListener('pointermove',move,{passive:true});window.addEventListener('scroll',scroll,{passive:true});window.addEventListener('resize',resize,{passive:true});
-      const draw=now=>{
-        ctx.clearRect(0,0,w,h);
-        while(trail.length&&now-trail[0].t>620)trail.shift();
-        if(trail.length>2){
-          ctx.lineCap='round';ctx.lineJoin='round';
-          for(let i=1;i<trail.length;i++){
-            const a=trail[i-1],b=trail[i],life=Math.max(0,1-(now-b.t)/620);
-            ctx.beginPath();ctx.moveTo(a.x,a.y);
-            const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
-            ctx.quadraticCurveTo(a.x,a.y,mx,my);
-            ctx.strokeStyle='rgba(139,74,88,'+(life*.15)+')';ctx.lineWidth=.8+life*5;ctx.stroke();
-            ctx.beginPath();ctx.arc(b.x,b.y,life*2.2,0,Math.PI*2);
-            ctx.fillStyle='rgba(190,125,139,'+(life*.2)+')';ctx.fill();
-          }
-        }
-        velocity*=.88;
-        raf=requestAnimationFrame(draw);
-      };
-      resize();draw(performance.now());
-      document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelAnimationFrame(raf);else raf=requestAnimationFrame(draw)});
-    })();
+
 
   </script>
   <style>
@@ -940,6 +905,42 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--text)}
     document.querySelectorAll('[data-service]').forEach(link=>link.addEventListener('click',()=>{const select=document.getElementById('enquiryService');if(select)select.value=link.dataset.service;}));
     const enquiryForm=document.getElementById('enquiryForm');
     if(enquiryForm){const feedback=document.getElementById('enquiryFeedback');enquiryForm.addEventListener('invalid',()=>{if(feedback)feedback.textContent='Please complete the required fields and check your email address.';},true);enquiryForm.addEventListener('input',()=>{if(feedback)feedback.textContent='';});enquiryForm.addEventListener('submit',event=>{event.preventDefault();if(!enquiryForm.reportValidity()){if(feedback)feedback.textContent='Please complete the required fields and check your email address.';return;}const data=new FormData(enquiryForm);if(feedback)feedback.textContent='Your email draft is being prepared. Review it in your email app before sending.';const subject='Portfolio project enquiry — '+data.get('service');const body=['Name: '+data.get('name'),'Email: '+data.get('email'),'Service: '+data.get('service'),'','Project overview:',data.get('brief')].join('\n');window.location.href='mailto:naom6083@gmail.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);});}
-  </script>
+      // Pointer ribbon + scroll-velocity response: a lightweight local interpretation of immersive motion.
+    (function(){
+      const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(reduced)return;
+      const fine=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+      if(!fine)return;
+      const canvas=document.createElement('canvas');canvas.className='motion-ribbon';canvas.setAttribute('aria-hidden','true');
+      document.body.appendChild(canvas);
+      const ctx=canvas.getContext('2d');if(!ctx)return;
+      let w=0,h=0,dpr=1,raf=0,last=0,scrollY=window.scrollY,velocity=0;
+      const trail=[];
+      const resize=()=>{dpr=Math.min(window.devicePixelRatio||1,1.5);w=innerWidth;h=innerHeight;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)};
+      const move=e=>{trail.push({x:e.clientX,y:e.clientY,t:performance.now()});if(trail.length>24)trail.shift()};
+      const scroll=()=>{const now=window.scrollY;velocity=Math.max(-36,Math.min(36,now-scrollY));scrollY=now;document.documentElement.style.setProperty('--scroll-velocity',Math.abs(velocity).toFixed(1));};
+      window.addEventListener('pointermove',move,{passive:true});window.addEventListener('scroll',scroll,{passive:true});window.addEventListener('resize',resize,{passive:true});
+      const draw=now=>{
+        ctx.clearRect(0,0,w,h);
+        while(trail.length&&now-trail[0].t>620)trail.shift();
+        if(trail.length>2){
+          ctx.lineCap='round';ctx.lineJoin='round';
+          for(let i=1;i<trail.length;i++){
+            const a=trail[i-1],b=trail[i],life=Math.max(0,1-(now-b.t)/620);
+            ctx.beginPath();ctx.moveTo(a.x,a.y);
+            const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+            ctx.quadraticCurveTo(a.x,a.y,mx,my);
+            ctx.strokeStyle='rgba(139,74,88,'+(life*.15)+')';ctx.lineWidth=.8+life*5;ctx.stroke();
+            ctx.beginPath();ctx.arc(b.x,b.y,life*2.2,0,Math.PI*2);
+            ctx.fillStyle='rgba(190,125,139,'+(life*.2)+')';ctx.fill();
+          }
+        }
+        velocity*=.88;
+        raf=requestAnimationFrame(draw);
+      };
+      resize();draw(performance.now());
+      document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelAnimationFrame(raf);else raf=requestAnimationFrame(draw)});
+    })();
+</script>
 </body>
 </html>
