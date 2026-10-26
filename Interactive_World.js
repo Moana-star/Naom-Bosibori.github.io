@@ -78,7 +78,7 @@
   camera.position.y+=(3.2+ty+rise*.62-camera.position.y)*.035;
   camera.position.z+=(12.8-scrollProgress*2.1+Math.cos(orbit)*.35-camera.position.z)*.035;
   camera.lookAt(Math.sin(orbit)*.52+tx*.35,1.3+ty*.2+rise*.22,-1.4);
-  group.rotation.y+=(Math.sin(orbit)*.12+scrollProgress*.38-group.rotation.y)*.025;
+  group.rotation.y+=(scrollProgress*Math.PI*1.1+Math.sin(orbit)*.08-group.rotation.y)*.025;
   group.position.x+=(Math.sin(orbit)*.32-group.position.x)*.025;
   group.position.y+=(rise*.12-group.position.y)*.025;
   stars.rotation.y=now*.004+scrollProgress*.22;
