@@ -24,3 +24,9 @@
 .world-art-core{border-color:#b7f3ef9e;background:#72c8c32e;box-shadow:0 0 65px #80d8d22e}
 .world-screen-actions a:first-child,.world-screen-arrows button:hover,.world-environments button[aria-pressed=true]{background:#a8f4ed;border-color:#a8f4ed;color:#081012}
 @media(prefers-reduced-motion:reduce){.world-transition{transition:none}}
+
+.world-cursor-trail{position:fixed;inset:0;z-index:9;pointer-events:none;overflow:hidden}
+.world-cursor-trail i{position:absolute;width:5px;height:5px;border-radius:50%;background:#b2fff5;box-shadow:0 0 13px #71f5e9;transform:translate(-50%,-50%);animation:worldwake .62s ease-out forwards}
+@keyframes worldwake{to{opacity:0;transform:translate(-50%,-50%) scale(.08)}}
+@media(max-width:760px){.world-cursor-trail{display:none}}
+@media(prefers-reduced-motion:reduce){.world-cursor-trail{display:none}}
