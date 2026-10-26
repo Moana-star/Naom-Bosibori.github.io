@@ -14,9 +14,9 @@ export function createDOMBridge({ THREE, renderer }) {
 
   const entries = [];
   const cardSelector = ".project";
-  const trackedNames = /exampilot|student learning platform/i;
-  const cards = [...document.querySelectorAll(cardSelector)]
-    .filter(card => trackedNames.test(card.innerText || card.textContent || ""));
+  // Every project card is a visual work item, not only ExamPilot.
+  // The DOM remains the accessible source of text and links.
+  const cards = [...document.querySelectorAll(cardSelector)];
 
   const clamp = THREE.MathUtils.clamp;
   const vertexShader = `
