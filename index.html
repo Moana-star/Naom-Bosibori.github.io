@@ -1243,7 +1243,7 @@ footer a{color:#e4a7bd!important}.backtop{border-color:rgba(227,162,181,.4)!impo
  document.body.appendChild(indicator);
  const css=document.createElement('style');css.textContent='.experience-index{position:fixed;z-index:45;left:22px;bottom:26px;display:flex;align-items:center;gap:10px;color:rgba(245,222,235,.7);font:10px/1 "DM Mono",monospace;letter-spacing:.12em;pointer-events:none;mix-blend-mode:difference}.experience-index-line{width:34px;height:1px;background:#e3a2b5}.experience-index-current{color:#f0b0c4}.experience-index-total{opacity:.55}@media(max-width:650px){.experience-index{left:13px;bottom:14px;font-size:9px}.experience-index-line{width:20px}}';document.head.appendChild(css);
  const current=indicator.querySelector('.experience-index-current');
- if('IntersectionObserver'in window){const active=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){current.textContent=e.target.dataset.scene||'01';e.target.style.setProperty('--spot-x',(24+Math.random()*52)+'%');e.target.style.setProperty('--spot-y',(20+Math.random()*45)+'%';}}),{threshold:.2});sections.forEach(s=>active.observe(s));}
+ if('IntersectionObserver'in window){const active=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){current.textContent=e.target.dataset.scene||'01';e.target.style.setProperty('--spot-x',(24+Math.random()*52)+'%');e.target.style.setProperty('--spot-y',(20+Math.random()*45)+'%');}}),{threshold:.2});sections.forEach(s=>active.observe(s));}
  // Magnetic-ish cursor light follows the pointer and feeds CSS variables to visible content.
  if(!reduce&&matchMedia('(hover:hover) and (pointer:fine)').matches){
   let mx=innerWidth*.5,my=innerHeight*.5,px=mx,py=my,raf=0;
