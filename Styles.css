@@ -31,12 +31,12 @@ body::before {
 #portfolio-webgl-stage {
   position: fixed !important;
   inset: 0 !important;
-  z-index: 0 !important;
+  z-index: -1 !important;
   display: block;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  opacity: .9;
+  opacity: 1 !important;
   contain: strict;
 }
 body > *:not(#portfolio-webgl-stage) { position: relative; z-index: 1; }
@@ -107,3 +107,9 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px s
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
 @media (forced-colors: active) { #portfolio-webgl-stage, #experience-glow { display: none !important; } }
+
+.project .project-top img {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none;
+}
