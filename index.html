@@ -923,6 +923,33 @@ body:has(#portfolio-webgl-stage) .project>*{position:relative;z-index:1}
 @media(prefers-reduced-motion:reduce){#portfolio-webgl-stage{opacity:.28}body:has(#portfolio-webgl-stage) .project{transition:none;transform:none!important}}
 </style>
   <link rel="stylesheet" href="Final_Styles.css">
+<style id="portfolio-experience-polish">
+.topbar{transition:transform .32s cubic-bezier(.16,1,.3,1),box-shadow .32s ease,background .32s ease}
+.topbar.is-scrolling-fast{box-shadow:0 10px 34px rgba(0,0,0,.2);background:rgba(22,15,19,.96)!important}
+#siteNav{padding:7px;border:1px solid rgba(217,161,182,.16);border-radius:999px;background:rgba(255,255,255,.025)}
+#siteNav a{border-radius:999px;padding:9px 13px;transition:background .25s ease,color .25s ease,transform .25s ease}
+#siteNav a[aria-current="location"]{background:rgba(217,161,182,.13);color:#f4bfd0}
+#siteNav .nav-cta{border:1px solid rgba(217,161,182,.42)}
+#portfolio-guide-launch{position:fixed;right:24px;bottom:24px;z-index:90;display:flex;align-items:center;gap:10px;border:1px solid rgba(217,161,182,.48);border-radius:999px;padding:13px 17px;background:rgba(36,22,29,.94);color:#fff7f1;font:600 .82rem "DM Sans",sans-serif;box-shadow:0 12px 36px rgba(0,0,0,.28);backdrop-filter:blur(18px);cursor:pointer;transition:transform .25s ease,border-color .25s ease}
+#portfolio-guide-launch:hover{transform:translateY(-3px);border-color:#d9a1b6}
+#portfolio-guide-launch .guide-orb{width:9px;height:9px;border-radius:50%;background:#d9a1b6;box-shadow:0 0 0 5px rgba(217,161,182,.12),0 0 16px rgba(217,161,182,.6)}
+#portfolio-guide{position:fixed;right:24px;bottom:84px;z-index:91;width:min(390px,calc(100vw - 32px));padding:22px;border:1px solid rgba(217,161,182,.28);border-radius:20px;background:rgba(26,17,23,.97);color:#f7f0e9;box-shadow:0 24px 80px rgba(0,0,0,.42);backdrop-filter:blur(22px);transform:translateY(12px) scale(.98);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,transform .22s ease,visibility .22s}
+#portfolio-guide.is-open{transform:translateY(0) scale(1);opacity:1;visibility:visible;pointer-events:auto}
+.guide-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:16px}
+.guide-kicker{font:.68rem "DM Mono",monospace;letter-spacing:.13em;text-transform:uppercase;color:#d9a1b6;margin:0 0 8px}
+.guide-head h2{font:700 1.35rem/1.2 Manrope,sans-serif;letter-spacing:-.04em;margin:0;color:#fff7f1}
+#portfolio-guide-close{border:1px solid rgba(217,161,182,.28);border-radius:50%;width:34px;height:34px;background:transparent;color:#f7f0e9;font-size:1.2rem;cursor:pointer}
+#portfolio-guide p{font-size:.86rem;line-height:1.6;color:#d4c4c7;margin-bottom:15px}
+#portfolio-guide-search{width:100%;border:1px solid rgba(217,161,182,.28);border-radius:11px;background:rgba(255,255,255,.045);color:#fff7f1;padding:12px 13px;font:inherit;font-size:.88rem;outline-offset:3px}
+#portfolio-guide-search::placeholder{color:#b6a2a9}
+.guide-prompts{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0}
+.guide-prompt{border:1px solid rgba(217,161,182,.24);border-radius:999px;background:rgba(217,161,182,.07);color:#f3dce4;padding:8px 11px;font:500 .76rem "DM Sans",sans-serif;cursor:pointer;transition:background .2s,border-color .2s}
+.guide-prompt:hover,.guide-prompt:focus-visible{background:rgba(217,161,182,.17);border-color:#d9a1b6}
+#portfolio-guide-result{min-height:42px;margin:12px 0 0;padding:12px;border-radius:10px;background:rgba(217,161,182,.07);color:#f3dce4;font-size:.8rem;line-height:1.55}
+.guide-match{outline:2px solid rgba(217,161,182,.82)!important;outline-offset:5px;box-shadow:0 0 0 8px rgba(217,161,182,.07),0 20px 60px rgba(0,0,0,.25)!important}
+@media(max-width:700px){#siteNav{border-radius:0;border:0;background:#160f13!important;padding:14px 20px}#siteNav a{border-radius:8px;padding:11px 8px}#portfolio-guide-launch{right:14px;bottom:14px;padding:12px 14px}#portfolio-guide{right:12px;bottom:72px;padding:18px}}
+@media(prefers-reduced-motion:reduce){#portfolio-guide,#portfolio-guide-launch,.topbar,#siteNav a{transition:none!important}}
+</style>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -1346,6 +1373,7 @@ body:has(#portfolio-webgl-stage) .project>*{position:relative;z-index:1}
 
 
 
+<script defer src="Portfolio_Guide.js"></script>
 <script type="module" src="WebGL_Slider_Engine.js"></script>
 <script type="module" src="Audio_Engine.js"></script>
 
