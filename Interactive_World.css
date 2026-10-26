@@ -78,3 +78,17 @@ main .section,.footer{position:relative;z-index:2!important}
 body:not(.world-intro-active) .topbar{display:flex!important}
 body:not(.world-intro-active) main .section{scroll-margin-top:84px}
 @media(max-width:760px){body:not(.world-intro-active) .topbar{padding-top:8px;padding-bottom:8px}body:not(.world-intro-active) main .section{scroll-margin-top:72px}}
+
+/* Visible scroll-linked feature layer: remains available if WebGL/CDN is blocked. */
+.immersive-world .world-scroll-features{position:absolute;inset:0;z-index:2;pointer-events:none;perspective:900px;overflow:hidden}
+.immersive-world .scroll-feature{position:absolute;display:block;width:clamp(54px,7vw,104px);aspect-ratio:1;transform-style:preserve-3d;will-change:transform;opacity:.92;filter:drop-shadow(0 0 14px rgba(168,244,237,.14))}
+.immersive-world .scroll-feature b,.immersive-world .scroll-feature em{position:absolute;inset:0;display:block;border:1px solid rgba(168,244,237,.8);border-radius:50%;transform-style:preserve-3d;box-shadow:inset 0 0 18px rgba(168,244,237,.08),0 0 18px rgba(168,244,237,.12)}
+.immersive-world .scroll-feature em{transform:rotateY(64deg) rotateX(22deg);border-color:rgba(217,161,182,.85)}
+.immersive-world .scroll-feature b:after{content:"";position:absolute;inset:24%;border:1px solid rgba(183,168,240,.9);border-radius:50%;transform:rotateX(65deg)}
+.immersive-world .scroll-feature-a{left:8%;top:18%;color:#a8f4ed}
+.immersive-world .scroll-feature-b{right:8%;top:24%;width:clamp(48px,5.8vw,82px)}
+.immersive-world .scroll-feature-c{left:17%;bottom:14%;width:clamp(46px,5.2vw,76px)}
+.immersive-world .scroll-feature-b b{border-color:rgba(217,161,182,.8)}
+.immersive-world .scroll-feature-c b{border-color:rgba(183,168,240,.82)}
+@media(max-width:700px){.immersive-world .scroll-feature-a{left:4%;top:14%}.immersive-world .scroll-feature-b{right:4%;top:17%}.immersive-world .scroll-feature-c{left:5%;bottom:19%}.immersive-world .scroll-feature{opacity:.72}}
+html{scroll-padding-top:100px}main section[id],footer[id],#home[id]{scroll-margin-top:100px}
