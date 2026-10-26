@@ -123,6 +123,20 @@ import { createDOMBridge } from "./DOM_Bridge.js";
     bridge.resize(w, h);
   }
 
+  function wakeUpAudioPipeline() {
+    if (window.NaomAudioEngine && !window.NaomAudioEngine.unlocked) {
+      window.NaomAudioEngine.unlock();
+      window.removeEventListener("click", wakeUpAudioPipeline);
+      window.removeEventListener("pointerdown", wakeUpAudioPipeline);
+      window.removeEventListener("touchstart", wakeUpAudioPipeline);
+      window.removeEventListener("keydown", wakeUpAudioPipeline);
+    }
+  }
+  window.addEventListener("click", wakeUpAudioPipeline, { passive: true });
+  window.addEventListener("pointerdown", wakeUpAudioPipeline, { passive: true });
+  window.addEventListener("touchstart", wakeUpAudioPipeline, { passive: true });
+  window.addEventListener("keydown", wakeUpAudioPipeline, { passive: true });
+
   function animate(now) {
     if (disposed) return;
     raf = requestAnimationFrame(animate);
