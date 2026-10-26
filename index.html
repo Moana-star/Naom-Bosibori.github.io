@@ -1638,14 +1638,15 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.174.0/build/three.m
     element.addEventListener('pointerleave', () => { element.style.transform = ''; });
   });
 
-  const pointer = { x: 0, y: 0, targetX: 0, targetY: 0 };
+  const pointer = { x: 0, y: 0, targetX: 0, targetY: 0, uvX: 0.5, uvY: 0.5, targetUvX: 0.5, targetUvY: 0.5 };
   const scroll = { current: 0, target: 0, velocity: 0, previous: window.scrollY };
   let time = 0, lastFrame = 0;
 
   window.addEventListener('pointermove', event => {
     pointer.targetX = (event.clientX / Math.max(innerWidth,1) - .5) * 2;
     pointer.targetY = (event.clientY / Math.max(innerHeight,1) - .5) * 2;
-    fieldUniforms.uMouse.value.set(event.clientX/Math.max(innerWidth,1), 1-event.clientY/Math.max(innerHeight,1));
+    pointer.targetUvX = event.clientX/Math.max(innerWidth,1);
+    pointer.targetUvY = 1-event.clientY/Math.max(innerHeight,1);
   }, { passive: true });
   window.addEventListener('scroll', () => {
     scroll.target = window.scrollY / Math.max(1, document.documentElement.scrollHeight-innerHeight);
@@ -1683,10 +1684,13 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.174.0/build/three.m
     if(document.hidden) return;
     const delta=lastFrame?Math.min((now-lastFrame)/1000,.05):.016;
     lastFrame=now;time=now*.001;
-    const ease=reducedMotion?.12:.065;
+    const ease = reducedMotion ? .12 : .065;
     pointer.x+=(pointer.targetX-pointer.x)*ease;
     pointer.y+=(pointer.targetY-pointer.y)*ease;
-    scroll.current+=(scroll.target-scroll.current)*(reducedMotion?.12:.045);
+    pointer.uvX+=(pointer.targetUvX-pointer.uvX)*ease;
+    pointer.uvY+=(pointer.targetUvY-pointer.uvY)*ease;
+    fieldUniforms.uMouse.value.set(pointer.uvX,pointer.uvY);
+    scroll.current+=(scroll.target-scroll.current)*(reducedMotion ? .12 : .045);
     scroll.velocity+=(Math.abs(window.scrollY-scroll.previous)-scroll.velocity)*.12;
     scroll.previous=window.scrollY;
 
@@ -1729,7 +1733,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.174.0/build/three.m
     canvas.style.opacity='.2';
   };
   canvas.addEventListener('webglcontextlost',onContextLost,false);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!disposed){lastFrame=0;frame(performance.now());}});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)lastFrame=0;});
   resize();
   frame(0);
 })();
