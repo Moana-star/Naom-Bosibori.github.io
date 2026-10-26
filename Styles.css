@@ -99,7 +99,6 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px s
 #experience-glow { position: fixed; z-index: 0; inset: 0; pointer-events: none; background: radial-gradient(400px circle at var(--experience-x,50%) var(--experience-y,30%), rgba(217,161,182,.045), transparent 70%); }
 @media (max-width: 700px) {
   .nav { background: #160f13 !important; }
-  #portfolio-webgl-stage { opacity: .55; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto !important; }
