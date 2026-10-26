@@ -92,3 +92,11 @@ body:not(.world-intro-active) main .section{scroll-margin-top:84px}
 .immersive-world .scroll-feature-c b{border-color:rgba(183,168,240,.82)}
 @media(max-width:700px){.immersive-world .scroll-feature-a{left:4%;top:14%}.immersive-world .scroll-feature-b{right:4%;top:17%}.immersive-world .scroll-feature-c{left:5%;bottom:19%}.immersive-world .scroll-feature{opacity:.72}}
 html{scroll-padding-top:100px}main section[id],footer[id],#home[id]{scroll-margin-top:100px}
+
+/* Fix fallback stacking: it must never cover navigation or hide scroll features. */
+.immersive-world .world-fallback{z-index:0!important;pointer-events:none!important}
+.immersive-world .world-scroll-features{z-index:2!important;pointer-events:none!important}
+.immersive-world .world-cursor-trail{z-index:3!important;pointer-events:none!important}
+.immersive-world .world-transition{z-index:8!important;pointer-events:none!important}
+.topbar{z-index:100!important;pointer-events:auto!important}
+.topbar .navrow,.topbar #siteNav,.topbar #siteNav a,.topbar #menuBtn{pointer-events:auto!important}
