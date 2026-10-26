@@ -113,18 +113,18 @@ import { createDOMBridge } from "./DOM_Bridge.js";
   const sculpture = new THREE.Group();
   scene.add(sculpture);
   const knot = new THREE.Mesh(
-    new THREE.TorusKnotGeometry(1.7, 0.012, 260, 6, 2, 5),
-    new THREE.MeshBasicMaterial({ color: 0xd9a1b6, transparent: true, opacity: 0.42, blending: THREE.NormalBlending, depthWrite: false })
+    new THREE.TorusKnotGeometry(2.6, 0.018, 320, 8, 2, 5),
+    new THREE.MeshBasicMaterial({ color: 0xd9a1b6, transparent: true, opacity: 0.62, blending: THREE.NormalBlending, depthWrite: false })
   );
   sculpture.add(knot);
 
   for (let i = 0; i < 6; i++) {
     const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(2.2 + i * 0.2, 0.004, 4, 144),
+      new THREE.TorusGeometry(3.1 + i * 0.28, 0.006, 4, 180),
       new THREE.MeshBasicMaterial({
         color: i % 2 ? 0x9b86b7 : 0xd9a1b6,
         transparent: true,
-        opacity: 0.07 + i * 0.009,
+        opacity: 0.12 + i * 0.012,
         blending: THREE.NormalBlending,
         depthWrite: false
       })
@@ -133,6 +133,105 @@ import { createDOMBridge } from "./DOM_Bridge.js";
     ring.scale.y = 0.65 + (i % 3) * 0.12;
     sculpture.add(ring);
   }
+
+  // Cursor ribbon: lightweight GPU points create a living, touch-responsive trail.
+  const trailCount = 420;
+  const trailPositions = new Float32Array(trailCount * 3);
+  const trailAges = new Float32Array(trailCount);
+  const trailSizes = new Float32Array(trailCount);
+  const trailColors = new Float32Array(trailCount * 3);
+  const trailGeometry = new THREE.BufferGeometry();
+  trailGeometry.setAttribute("position", new THREE.BufferAttribute(trailPositions, 3).setUsage(THREE.DynamicDrawUsage));
+  trailGeometry.setAttribute("aAge", new THREE.BufferAttribute(trailAges, 1).setUsage(THREE.DynamicDrawUsage));
+  trailGeometry.setAttribute("aSize", new THREE.BufferAttribute(trailSizes, 1).setUsage(THREE.DynamicDrawUsage));
+  trailGeometry.setAttribute("aColor", new THREE.BufferAttribute(trailColors, 3).setUsage(THREE.DynamicDrawUsage));
+  const trailMaterial = new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    uniforms: { uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 1.5) } },
+    vertexShader: `
+      attribute float aAge;
+      attribute float aSize;
+      attribute vec3 aColor;
+      varying float vAlpha;
+      varying vec3 vColor;
+      uniform float uPixelRatio;
+      void main() {
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        vColor = aColor;
+        vAlpha = pow(max(0.0, 1.0 - aAge), 1.7);
+        gl_PointSize = max(1.0, aSize * uPixelRatio * (0.35 + vAlpha) * (260.0 / max(1.0, -mvPosition.z)));
+        gl_Position = projectionMatrix * mvPosition;
+      }
+    `,
+    fragmentShader: `
+      varying float vAlpha;
+      varying vec3 vColor;
+      void main() {
+        vec2 p = gl_PointCoord - 0.5;
+        float d = length(p);
+        float glow = exp(-d * 13.0) * (1.0 - smoothstep(0.22, 0.5, d));
+        if (glow < 0.015) discard;
+        gl_FragColor = vec4(vColor, glow * vAlpha * 0.82);
+      }
+    `
+  });
+  const trailPoints = new THREE.Points(trailGeometry, trailMaterial);
+  trailPoints.frustumCulled = false;
+  trailPoints.renderOrder = 20;
+  scene.add(trailPoints);
+  let trailHead = 0;
+  let trailSpawnAccumulator = 0;
+  const trailPalette = [
+    new THREE.Color("#e7a8c0"),
+    new THREE.Color("#ad91dc"),
+    new THREE.Color("#f4d3df"),
+    new THREE.Color("#7f9dca")
+  ];
+
+  function spawnTrailPoint(x, y, strength = 1) {
+    const index = trailHead;
+    trailHead = (trailHead + 1) % trailCount;
+    const height = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5)) * camera.position.z;
+    const width = height * camera.aspect;
+    trailPositions[index * 3] = (x / Math.max(1, window.innerWidth) - 0.5) * width;
+    trailPositions[index * 3 + 1] = (0.5 - y / Math.max(1, window.innerHeight)) * height;
+    trailPositions[index * 3 + 2] = 0.12 + Math.random() * 0.5;
+    trailAges[index] = 0;
+    trailSizes[index] = (3 + Math.random() * 9) * strength;
+    const color = trailPalette[Math.floor(Math.random() * trailPalette.length)];
+    trailColors[index * 3] = color.r;
+    trailColors[index * 3 + 1] = color.g;
+    trailColors[index * 3 + 2] = color.b;
+    trailGeometry.attributes.position.needsUpdate = true;
+    trailGeometry.attributes.aAge.needsUpdate = true;
+    trailGeometry.attributes.aSize.needsUpdate = true;
+    trailGeometry.attributes.aColor.needsUpdate = true;
+  }
+  let lastTrailX = -1000;
+  let lastTrailY = -1000;
+  function trackTrail(event) {
+    const dx = event.clientX - lastTrailX;
+    const dy = event.clientY - lastTrailY;
+    const distance = Math.hypot(dx, dy);
+    if (distance > 2) {
+      const count = Math.min(8, Math.max(1, Math.floor(distance / 9)));
+      for (let i = 1; i <= count; i++) {
+        const t = i / count;
+        spawnTrailPoint(lastTrailX < 0 ? event.clientX : lastTrailX + dx * t,
+          lastTrailY < 0 ? event.clientY : lastTrailY + dy * t,
+          Math.min(1.5, 0.7 + distance / 90));
+      }
+    }
+    lastTrailX = event.clientX;
+    lastTrailY = event.clientY;
+  }
+  window.addEventListener("pointermove", trackTrail, { passive: true });
+  window.addEventListener("pointerdown", event => {
+    for (let i = 0; i < 18; i++) spawnTrailPoint(event.clientX + (Math.random() - 0.5) * 30,
+      event.clientY + (Math.random() - 0.5) * 30, 1.25);
+  }, { passive: true });
 
   const bridge = createDOMBridge({ THREE, renderer });
   const pointer = {
@@ -226,7 +325,7 @@ import { createDOMBridge } from "./DOM_Bridge.js";
     slider.velocity = (slider.currentPosition - previous) / dt;
     slider.lastPosition = previous;
 
-    uniforms.uTime.value = time;
+    for (let i = 0; i < trailCount; i++) trailAges[i] = Math.min(1, trailAges[i] + dt * 0.62);\n    trailGeometry.attributes.aAge.needsUpdate = true;\n\n    uniforms.uTime.value = time;
     uniforms.uMouse.value.set(pointer.u, pointer.v);
     uniforms.uScroll.value = slider.currentPosition;
     uniforms.uVelocity.value.set(
@@ -238,7 +337,7 @@ import { createDOMBridge } from "./DOM_Bridge.js";
     sculpture.rotation.x = pointer.y * 0.04;
     sculpture.position.x += (pointer.x * 0.16 - sculpture.position.x) * 0.08;
     sculpture.position.y += (-slider.currentPosition * 0.45 - sculpture.position.y) * 0.08;
-    sculpture.scale.setScalar(window.innerWidth < 700 ? 0.68 : 1);
+    sculpture.scale.setScalar(window.innerWidth < 700 ? 0.78 : 1.22);
     camera.position.x += (pointer.x * 0.18 - camera.position.x) * 0.08;
     camera.position.y += (-pointer.y * 0.12 - camera.position.y) * 0.08;
     camera.lookAt(0, -slider.currentPosition * 0.2, 0);
@@ -273,7 +372,7 @@ import { createDOMBridge } from "./DOM_Bridge.js";
   function dispose() {
     disposed = true;
     window.cancelAnimationFrame(raf);
-    window.removeEventListener("pointermove", trackPointer);
+    window.removeEventListener("pointermove", trackPointer);\n    window.removeEventListener("pointermove", trackTrail);
     window.removeEventListener("scroll", setTargetScroll);
     window.removeEventListener("resize", resize);
     document.removeEventListener("visibilitychange", onVisibilityChange);
