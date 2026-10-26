@@ -30,3 +30,42 @@
 @keyframes worldwake{to{opacity:0;transform:translate(-50%,-50%) scale(.08)}}
 @media(max-width:760px){.world-cursor-trail{display:none}}
 @media(prefers-reduced-motion:reduce){.world-cursor-trail{display:none}}
+
+
+/* The 3D world is the persistent site canvas, not a hero-only decoration. */
+.immersive-world{position:fixed!important;inset:0!important;width:100vw;height:100svh;z-index:0!important;pointer-events:none!important}
+.immersive-world canvas{pointer-events:none!important}
+.immersive-world .world-topline,.immersive-world .world-project-screen,.immersive-world .world-screen-arrows,.immersive-world .world-bottomline,.immersive-world .world-loader,.immersive-world .world-fallback{pointer-events:auto}
+.immersive-world .world-cursor-trail{pointer-events:none}
+body{background:#080a12!important}
+body:not(.world-intro-active) .world-project-screen,
+body:not(.world-intro-active) .world-screen-arrows,
+body:not(.world-intro-active) .world-kicker,
+body:not(.world-intro-active) .world-side-note{opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,-46%) scale(.97);transition:opacity .35s ease,visibility .35s ease,transform .35s ease}
+body:not(.world-intro-active) .world-screen-arrows{transform:translate(-50%,8px)}
+body:not(.world-intro-active) .world-topline{top:18px}
+body:not(.world-intro-active) .world-bottomline{bottom:16px;opacity:.92}
+body:not(.world-intro-active) .world-bottom-caption{display:none}
+body:not(.world-intro-active) .world-environments button{padding:8px 11px;background:rgba(7,9,15,.7);backdrop-filter:blur(12px)}
+.topbar{display:none!important}
+#main,.footer{position:relative;z-index:1}
+#home.hero.world-active{position:relative;z-index:1;background:transparent!important}
+#home.world-active .hero-grid{opacity:0!important}
+main .section{background:linear-gradient(180deg,rgba(8,10,18,.1),rgba(8,10,18,.2))!important;backdrop-filter:none}
+main .section .wrap{position:relative}
+main .section-head{padding:clamp(22px,3vw,38px) 0}
+main .section-head>div:last-child{max-width:980px}
+main .about-copy,main .principle,main .value-card,main .service-card,main .project,main .writing-card,main .writing-highlight,main .contact-panel{backdrop-filter:blur(18px) saturate(125%);-webkit-backdrop-filter:blur(18px) saturate(125%)}
+main .section .wrap:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 15%,rgba(168,244,237,.035),transparent 55%)}
+main .section{min-height:82svh}
+@media(max-width:760px){
+ .immersive-world .world-topline{left:14px;right:14px;top:12px;gap:8px;align-items:center}
+ .immersive-world .world-toplinks{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+ .immersive-world .world-toplinks a:not(.world-contact){display:inline;font-size:7px;letter-spacing:.02em}
+ .immersive-world .world-contact{padding:7px 8px;font-size:7px}
+ body:not(.world-intro-active) .world-bottomline{left:12px;right:12px;bottom:12px}
+ body:not(.world-intro-active) .world-environments{gap:4px}
+ body:not(.world-intro-active) .world-environments button{font-size:7px;padding:7px 8px;letter-spacing:0}
+ main .section{min-height:0}
+}
+@media(prefers-reduced-motion:reduce){body:not(.world-intro-active) .world-project-screen,body:not(.world-intro-active) .world-screen-arrows{transition:none}}
