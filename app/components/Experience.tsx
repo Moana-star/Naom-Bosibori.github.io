@@ -522,86 +522,71 @@ export default function Experience({ content }: { content: string }) {
     };
   }, []);
 
-  // Keep navigation independent of the WebGL/animation setup so it still works if the 3D scene fails.
+  // Directly bind to the actual menu button; keep this independent from WebGL and document click handlers.
   useEffect(() => {
     const button = document.getElementById("menuBtn") as HTMLButtonElement | null;
     const nav = document.getElementById("siteNav");
     if (!button || !nav) return;
 
-    const closeMenu = () => {
-      button.setAttribute("aria-expanded", "false");
-      button.setAttribute("aria-label", "Open navigation menu");
-      nav.classList.remove("open");
-      nav.removeAttribute("data-menu-open");
-      ["display", "position", "top", "right", "left", "z-index", "min-width", "max-width", "padding", "background", "border", "box-shadow", "visibility", "opacity", "pointer-events"].forEach((property) => nav.style.removeProperty(property));
-      nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
-        ["display", "padding", "border-bottom"].forEach((property) => link.style.removeProperty(property));
-      });
+    const setOpen = (open: boolean) => {
+      button.setAttribute("aria-expanded", String(open));
+      button.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
+      button.textContent = open ? "Close ✕" : "Menu ☰";
+      nav.classList.toggle("open", open);
+      if (open) {
+        nav.style.setProperty("display", "grid", "important");
+        nav.style.setProperty("visibility", "visible", "important");
+        nav.style.setProperty("opacity", "1", "important");
+        nav.style.setProperty("pointer-events", "auto", "important");
+      } else {
+        ["display", "position", "top", "right", "left", "z-index", "min-width", "max-width", "padding", "background", "border", "box-shadow", "visibility", "opacity", "pointer-events"].forEach((property) => nav.style.removeProperty(property));
+        nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
+          ["display", "padding", "border-bottom", "color", "background"].forEach((property) => link.style.removeProperty(property));
+        });
+      }
     };
 
-    const openMenu = () => {
-      button.setAttribute("aria-expanded", "true");
-      button.setAttribute("aria-label", "Close navigation menu");
-      nav.classList.add("open");
-      nav.setAttribute("data-menu-open", "true");
-      nav.style.setProperty("display", "grid", "important");
-      nav.style.setProperty("position", "fixed", "important");
-      nav.style.setProperty("top", "58px", "important");
-      nav.style.setProperty("right", "14px", "important");
-      nav.style.setProperty("left", "auto", "important");
-      nav.style.setProperty("z-index", "110", "important");
-      nav.style.setProperty("min-width", "min(230px, calc(100vw - 28px))", "important");
-      nav.style.setProperty("max-width", "calc(100vw - 28px)", "important");
-      nav.style.setProperty("padding", "6px", "important");
-      nav.style.setProperty("background", "rgba(2, 6, 23, .98)", "important");
-      nav.style.setProperty("border", "1px solid rgba(143, 168, 255, .5)", "important");
-      nav.style.setProperty("box-shadow", "0 18px 48px rgba(0, 0, 0, .45)", "important");
-      nav.style.setProperty("visibility", "visible", "important");
-      nav.style.setProperty("opacity", "1", "important");
-      nav.style.setProperty("pointer-events", "auto", "important");
-      nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
-        link.style.setProperty("display", "block", "important");
-        link.style.setProperty("padding", "13px 14px", "important");
-        link.style.setProperty("border-bottom", "1px solid rgba(143, 168, 255, .14)", "important");
-      });
-    };
-
-    const toggleMenu = (event: Event) => {
+    const onButtonClick = (event: Event) => {
       event.preventDefault();
       event.stopPropagation();
-      if (button.getAttribute("aria-expanded") === "true") closeMenu();
-      else openMenu();
+      setOpen(button.getAttribute("aria-expanded") !== "true");
+    };
+    const onButtonPointerUp = (event: PointerEvent) => {
+      if (event.pointerType === "touch") {
+        // The native click below remains the single toggle; this listener ensures the touch target is active.
+        button.style.touchAction = "manipulation";
+      }
     };
     const onDocumentClick = (event: Event) => {
       const target = event.target as HTMLElement | null;
-      if (target?.closest("#menuBtn")) {
-        toggleMenu(event);
-        return;
-      }
+      if (target?.closest("#menuBtn")) return;
       if (target?.closest("#siteNav a")) {
-        closeMenu();
+        setOpen(false);
         return;
       }
-      if (button.getAttribute("aria-expanded") === "true" && !target?.closest("#siteNav")) closeMenu();
+      if (button.getAttribute("aria-expanded") === "true" && !target?.closest("#siteNav")) setOpen(false);
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape" && button.getAttribute("aria-expanded") === "true") {
-        closeMenu();
+        setOpen(false);
         button.focus();
       }
     };
-    const onResize = () => {
-      if (window.innerWidth > 680) closeMenu();
-    };
-    // Capture phase makes the menu resilient to other document-level click handlers.
-    document.addEventListener("click", onDocumentClick, true);
+    const onResize = () => { if (window.innerWidth > 680) setOpen(false); };
+
+    button.addEventListener("click", onButtonClick);
+    button.addEventListener("pointerup", onButtonPointerUp, { passive: true });
+    document.addEventListener("click", onDocumentClick);
     document.addEventListener("keydown", onKeyDown);
     window.addEventListener("resize", onResize);
+
     return () => {
-      document.removeEventListener("click", onDocumentClick, true);
+      button.removeEventListener("click", onButtonClick);
+      button.removeEventListener("pointerup", onButtonPointerUp);
+      document.removeEventListener("click", onDocumentClick);
       document.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("resize", onResize);
-      closeMenu();
+      setOpen(false);
     };
   }, []);
 
