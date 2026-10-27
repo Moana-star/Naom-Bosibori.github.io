@@ -161,13 +161,13 @@ export default function Experience({ content }: { content: string }) {
           environmentTarget = (environmentTarget + 1) % environmentPalettes.length;
         };
         const onEnvironmentScroll = () => {
-          const sections = Array.from(document.querySelectorAll<HTMLElement>("#home, #about, #services, #projects, #writing, #contact"));
+          const sections = Array.from(document.querySelectorAll<HTMLElement>("#home, #about, #services, #projects, #writing, #approach, #contact"));
           const active = sections.find((section) => {
             const rect = section.getBoundingClientRect();
             return rect.top <= window.innerHeight * 0.48 && rect.bottom >= window.innerHeight * 0.48;
           });
           const id = active?.id || "home";
-          environmentTarget = id === "projects" || id === "writing" ? 2 : id === "services" || id === "about" ? 1 : 0;
+          environmentTarget = id === "projects" || id === "writing" ? 2 : id === "services" || id === "about" || id === "approach" ? 1 : 0;
         };
         const onEnvironmentCycle = () => { environmentTarget = (Math.round(environmentMode) + 1) % environmentPalettes.length; };
         window.addEventListener("keydown", onEnvironmentKey);
@@ -422,13 +422,13 @@ export default function Experience({ content }: { content: string }) {
         { threshold: 0.1, rootMargin: "0px 0px -4% 0px" }
       );
       document
-        .querySelectorAll(".section-head, .project, .writing-card, .writing-highlight, .skill-card, .service-card, .principle, .value-card, .contact-panel")
+        .querySelectorAll(".section-head, .project, .writing-card, .writing-highlight, .skill-card, .service-card, .principle, .value-card, .contact-panel, .process-card")
         .forEach((element) => observer?.observe(element));
     }
 
     // Magnetic cards stay within a restrained radius and are disabled for touch/reduced motion.
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    const cards = Array.from(document.querySelectorAll<HTMLElement>(".project, .service-card, .writing-card, .skill-card, .value-card, .principle"));
+    const cards = Array.from(document.querySelectorAll<HTMLElement>(".project, .service-card, .writing-card, .skill-card, .value-card, .principle, .process-card"));
     const moveCard = (event: Event) => {
       const pointerEvent = event as PointerEvent;
       const card = pointerEvent.currentTarget as HTMLElement;
