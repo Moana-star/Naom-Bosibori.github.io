@@ -114,6 +114,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   color: #b5c2e2; border-left: 1px solid var(--line); transition: color .2s, background .2s;
 }
 .hud-social > a:hover { color: white; background: rgba(93, 123, 255, .13); }
+.environment-toggle {
+  display: flex; align-items: center; gap: 7px; padding: 12px 11px;
+  color: #b5c2e2; border: 0; border-left: 1px solid var(--line);
+  background: rgba(55, 78, 156, .12); font: 8px var(--mono); letter-spacing: .1em;
+  transition: color .2s, background .2s;
+}
+.environment-toggle:hover { color: #fff; background: rgba(93, 123, 255, .18); }
 .sound-toggle {
   display: flex; align-items: center; gap: 8px; padding: 12px 13px;
   color: #b5c2e2; border: 0; border-left: 1px solid var(--line);
@@ -303,6 +310,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .hud-social { right: 12px; bottom: 12px; gap: 0; }
   .hud-social > a { padding: 10px 9px; }
   .hud-social > a span { display: none; }
+  .environment-toggle { padding: 10px 8px; gap: 4px; }
+  .environment-toggle span { display: none; }
   .sound-toggle { padding: 10px 9px; gap: 5px; }
   .sound-label { display: none; }
   .sound-bars { gap: 1px; }
@@ -314,5 +323,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 380px) {
   .hud-email > span:last-child { max-width: 132px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .hud-social > a { padding: 10px 7px; }
+  .environment-toggle { padding: 10px 7px; }
   .sound-toggle { padding: 10px 7px; }
 }
