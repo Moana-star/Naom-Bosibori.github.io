@@ -68,7 +68,109 @@ export default function Experience({ content }: { content: string }) {
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(42, window.innerWidth / Math.max(1, window.innerHeight), 0.1, 80);
         camera.position.set(0, 0, 8.4);
+        scene.fog = new THREE.FogExp2(0x020617, 0.025);
         scene.add(new THREE.AmbientLight(0x9dbbff, 1.3));
+
+        // A small, authored environment rather than a decorative object floating on a flat page:
+        // repeating architectural portals lead the eye toward a luminous project display.
+        const environment = new THREE.Group();
+        scene.add(environment);
+        const portalMaterials = [
+          new THREE.LineBasicMaterial({ color: 0x536dff, transparent: true, opacity: 0.42 }),
+          new THREE.LineBasicMaterial({ color: 0x8c9fff, transparent: true, opacity: 0.18 }),
+        ];
+        const portalGeometries: THREE.BufferGeometry[] = [];
+        for (let i = 0; i < 7; i++) {
+          const w = 2.8 + i * 0.32;
+          const h = 1.85 + i * 0.23;
+          const z = -i * 1.65 - 0.5;
+          const points = [
+            new THREE.Vector3(-w, -h, z), new THREE.Vector3(w, -h, z),
+            new THREE.Vector3(w, h, z), new THREE.Vector3(-w, h, z),
+          ];
+          const geometry = new THREE.BufferGeometry().setFromPoints([...points, points[0]]);
+          portalGeometries.push(geometry);
+          environment.add(new THREE.Line(geometry, portalMaterials[i % 2]));
+        }
+
+        const floorGrid = new THREE.GridHelper(28, 42, 0x3f63e8, 0x14204b);
+        floorGrid.position.set(0, -2.15, -7);
+        floorGrid.material.transparent = true;
+        (floorGrid.material as THREE.Material).opacity = 0.22;
+        environment.add(floorGrid);
+
+        const displayRig = new THREE.Group();
+        displayRig.position.set(2.15, -0.05, -1.35);
+        displayRig.rotation.y = -0.13;
+        environment.add(displayRig);
+        const screenFrame = new THREE.Mesh(
+          new THREE.BoxGeometry(2.85, 1.82, 0.09),
+          new THREE.MeshStandardMaterial({ color: 0x111a38, metalness: 0.72, roughness: 0.3 })
+        );
+        displayRig.add(screenFrame);
+        const screenSurface = new THREE.Mesh(
+          new THREE.PlaneGeometry(2.68, 1.65),
+          new THREE.MeshBasicMaterial({ color: 0x030817 })
+        );
+        screenSurface.position.z = 0.052;
+        displayRig.add(screenSurface);
+
+        const screenArtwork = new THREE.Group();
+        screenArtwork.position.z = 0.07;
+        displayRig.add(screenArtwork);
+        const artRing = new THREE.Mesh(
+          new THREE.TorusGeometry(0.47, 0.035, 8, 90),
+          new THREE.MeshBasicMaterial({ color: 0x7295ff, transparent: true, opacity: 0.92 })
+        );
+        artRing.position.set(0.32, 0.06, 0.015);
+        screenArtwork.add(artRing);
+        const artCore = new THREE.Mesh(
+          new THREE.IcosahedronGeometry(0.35, 2),
+          new THREE.MeshPhysicalMaterial({ color: 0x91a9ff, emissive: 0x1a2f86, emissiveIntensity: 0.8, metalness: 0.48, roughness: 0.2, wireframe: true })
+        );
+        artCore.position.set(0.32, 0.06, 0.04);
+        screenArtwork.add(artCore);
+        const artLines = new THREE.Group();
+        for (let i = 0; i < 5; i++) {
+          const line = new THREE.Mesh(
+            new THREE.BoxGeometry(0.58 + (i % 3) * 0.18, 0.012, 0.008),
+            new THREE.MeshBasicMaterial({ color: i === 0 ? 0xa8c1ff : 0x415aaf, transparent: true, opacity: 0.7 - i * 0.08 })
+          );
+          line.position.set(-0.68, 0.42 - i * 0.19, 0.02);
+          artLines.add(line);
+        }
+        screenArtwork.add(artLines);
+
+        const beaconMaterial = new THREE.MeshBasicMaterial({ color: 0x7e9bff, transparent: true, opacity: 0.8 });
+        const beacon = new THREE.Mesh(new THREE.SphereGeometry(0.035, 12, 12), beaconMaterial);
+        beacon.position.set(-1.25, 0.68, 0.06);
+        displayRig.add(beacon);
+
+        const environmentPalettes = [
+          { a: 0x426bff, b: 0x8d80ff, c: 0x8bdcff, light: 0x416dff, fog: 0x020617 },
+          { a: 0x2fd5c7, b: 0x588bff, c: 0xb0f5ed, light: 0x177fb4, fog: 0x021014 },
+          { a: 0x9a80ff, b: 0x718dff, c: 0xffb4df, light: 0x7953d9, fog: 0x0a0418 },
+        ];
+        let environmentMode = 0;
+        let environmentTarget = 0;
+        const onEnvironmentKey = (event: KeyboardEvent) => {
+          if (event.code !== "Space" || event.repeat) return;
+          const target = event.target as HTMLElement | null;
+          if (target && (target.isContentEditable || /INPUT|TEXTAREA|SELECT|BUTTON|A/.test(target.tagName))) return;
+          event.preventDefault();
+          environmentTarget = (environmentTarget + 1) % environmentPalettes.length;
+        };
+        const onEnvironmentScroll = () => {
+          const sections = Array.from(document.querySelectorAll<HTMLElement>("#home, #about, #services, #projects, #writing, #contact"));
+          const active = sections.find((section) => {
+            const rect = section.getBoundingClientRect();
+            return rect.top <= window.innerHeight * 0.48 && rect.bottom >= window.innerHeight * 0.48;
+          });
+          const id = active?.id || "home";
+          environmentTarget = id === "projects" || id === "writing" ? 2 : id === "services" || id === "about" ? 1 : 0;
+        };
+        window.addEventListener("keydown", onEnvironmentKey);
+        window.addEventListener("scroll", onEnvironmentScroll, { passive: true });
 
         const blueLight = new THREE.PointLight(0x416dff, 24, 24);
         blueLight.position.set(-3, 2, 4);
@@ -217,9 +319,27 @@ export default function Experience({ content }: { content: string }) {
           ribbonGeometry.computeVertexNormals();
           ribbon.rotation.y = pointer.x * 0.08;
           ribbon.rotation.x = pointer.y * 0.055;
-          camera.position.x += (pointer.x * 0.13 - camera.position.x) * 0.02;
+          environmentMode += (environmentTarget - environmentMode) * 0.035;
+          const mode = Math.round(environmentMode);
+          const palette = environmentPalettes[mode];
+          colorA.setHex(palette.a);
+          colorB.setHex(palette.b);
+          colorC.setHex(palette.c);
+          blueLight.color.lerp(new THREE.Color(palette.light), 0.025);
+          scene.fog?.color.lerp(new THREE.Color(palette.fog), 0.025);
+          displayRig.position.x += ((window.innerWidth < 720 ? 0.05 : 2.15) - displayRig.position.x) * 0.018;
+          displayRig.position.y = -0.05 + Math.sin(time * 0.42) * 0.055;
+          displayRig.rotation.y = -0.13 + pointer.x * 0.08 + Math.sin(time * 0.2) * 0.025;
+          displayRig.rotation.x = pointer.y * 0.035;
+          screenArtwork.rotation.z = Math.sin(time * 0.24) * 0.06;
+          artRing.rotation.z = time * (mode === 2 ? -0.24 : 0.16);
+          artCore.rotation.x = time * 0.18;
+          artCore.rotation.y = -time * 0.22;
+          beacon.scale.setScalar(0.85 + (Math.sin(time * 2.8) + 1) * 0.22);
+          camera.position.x += (pointer.x * 0.13 + (window.innerWidth < 720 ? 0 : environmentMode * 0.12) - camera.position.x) * 0.02;
           camera.position.y += (pointer.y * 0.1 - camera.position.y) * 0.02;
-          camera.lookAt(0, 0, 0);
+          camera.position.z = 8.4 - Math.min(1.1, window.scrollY / Math.max(1, document.documentElement.scrollHeight) * 1.4);
+          camera.lookAt(environmentMode * 0.16, 0, 0);
           orbitA.rotation.z = -0.32 + time * 0.035;
           orbitB.rotation.y = -0.65 + Math.sin(time * 0.16) * 0.08;
           dust.rotation.y = time * 0.006;
@@ -233,11 +353,32 @@ export default function Experience({ content }: { content: string }) {
         removeSceneListeners = () => {
           window.removeEventListener("pointermove", onPointerMove);
           window.removeEventListener("resize", onResize);
+          window.removeEventListener("keydown", onEnvironmentKey);
+          window.removeEventListener("scroll", onEnvironmentScroll);
           cancelAnimationFrame(animationFrame);
           ribbonGeometry.dispose();
           ribbonMaterial.dispose();
           particleGeometry.dispose();
           orbitMaterial.dispose();
+          portalGeometries.forEach((geometry) => geometry.dispose());
+          portalMaterials.forEach((material) => material.dispose());
+          screenFrame.geometry.dispose();
+          (screenFrame.material as THREE.Material).dispose();
+          screenSurface.geometry.dispose();
+          (screenSurface.material as THREE.Material).dispose();
+          artRing.geometry.dispose();
+          (artRing.material as THREE.Material).dispose();
+          artCore.geometry.dispose();
+          (artCore.material as THREE.Material).dispose();
+          artLines.children.forEach((child) => {
+            const mesh = child as THREE.Mesh;
+            mesh.geometry.dispose();
+            (mesh.material as THREE.Material).dispose();
+          });
+          beacon.geometry.dispose();
+          beaconMaterial.dispose();
+          floorGrid.geometry.dispose();
+          (floorGrid.material as THREE.Material).dispose();
           renderer?.dispose();
         };
       } catch (error) {
