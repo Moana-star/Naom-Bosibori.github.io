@@ -500,78 +500,7 @@ export default function Experience({ content }: { content: string }) {
     };
     document.addEventListener("submit", onFormSubmit);
 
-    const menuButton = document.querySelector<HTMLButtonElement>("#menuBtn");
-    const nav = document.querySelector<HTMLElement>("#siteNav");
-    const setMenuOpen = (open: boolean) => {
-      menuButton?.setAttribute("aria-expanded", String(open));
-      menuButton?.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
-      nav?.classList.toggle("open", open);
-      if (nav) {
-        // Inline state makes the mobile menu reliable even when global HUD styles override nav display.
-        if (open) {
-          nav.style.setProperty("display", "grid", "important");
-          nav.style.setProperty("position", "fixed", "important");
-          nav.style.setProperty("top", "58px", "important");
-          nav.style.setProperty("right", "14px", "important");
-          nav.style.setProperty("left", "auto", "important");
-          nav.style.setProperty("z-index", "110", "important");
-          nav.style.setProperty("min-width", "min(230px, calc(100vw - 28px))", "important");
-          nav.style.setProperty("max-width", "calc(100vw - 28px)", "important");
-          nav.style.setProperty("padding", "6px", "important");
-          nav.style.setProperty("background", "rgba(2, 6, 23, .98)", "important");
-          nav.style.setProperty("border", "1px solid rgba(143, 168, 255, .5)", "important");
-          nav.style.setProperty("box-shadow", "0 18px 48px rgba(0, 0, 0, .45)", "important");
-          nav.style.setProperty("visibility", "visible", "important");
-          nav.style.setProperty("opacity", "1", "important");
-          nav.style.setProperty("pointer-events", "auto", "important");
-          nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
-            link.style.setProperty("display", "block", "important");
-            link.style.setProperty("padding", "13px 14px", "important");
-            link.style.setProperty("border-bottom", "1px solid rgba(143, 168, 255, .14)", "important");
-          });
-        } else {
-          ["display", "position", "top", "right", "left", "z-index", "min-width", "max-width", "padding", "background", "border", "box-shadow", "visibility", "opacity", "pointer-events"].forEach((property) => nav.style.removeProperty(property));
-          nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
-            ["display", "padding", "border-bottom"].forEach((property) => link.style.removeProperty(property));
-          });
-        }
-      }
-    };
-    const onMenuClick = (event?: Event) => {
-      event?.preventDefault();
-      event?.stopPropagation();
-      setMenuOpen(menuButton?.getAttribute("aria-expanded") !== "true");
-    };
-    menuButton?.addEventListener("click", onMenuClick);
-    const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("#siteNav a[href^='#']"));
-    const onNavClick = (event: Event) => {
-      const target = event.target as HTMLElement | null;
-      if (target?.closest("#siteNav a")) setMenuOpen(false);
-    };
-    const onMenuKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && menuButton?.getAttribute("aria-expanded") === "true") {
-        setMenuOpen(false);
-        menuButton?.focus();
-      }
-    };
-    document.addEventListener("click", onNavClick);
-    document.addEventListener("keydown", onMenuKeyDown);
-    let activeSectionObserver: IntersectionObserver | null = null;
-    if ("IntersectionObserver" in window && navLinks.length) {
-      activeSectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          navLinks.forEach((link) => {
-            if (link.hash === "#" + entry.target.id) link.setAttribute("aria-current", "location");
-            else link.removeAttribute("aria-current");
-          });
-        });
-      }, { rootMargin: "-24% 0px -62% 0px" });
-      navLinks.forEach((link) => {
-        const section = document.querySelector(link.hash);
-        if (section) activeSectionObserver?.observe(section);
-      });
-    }
+
 
     return () => {
       disposed = true;
@@ -586,14 +515,93 @@ export default function Experience({ content }: { content: string }) {
       });
       document.removeEventListener("pointerover", onTextHover);
       document.removeEventListener("submit", onFormSubmit);
-      document.removeEventListener("click", onNavClick);
-      document.removeEventListener("keydown", onMenuKeyDown);
-      menuButton?.removeEventListener("click", onMenuClick);
-      activeSectionObserver?.disconnect();
       if (audioRef.current) {
         void audioRef.current.close().catch(() => {});
         audioRef.current = null;
       }
+    };
+  }, []);
+
+  // Keep navigation independent of the WebGL/animation setup so it still works if the 3D scene fails.
+  useEffect(() => {
+    const button = document.getElementById("menuBtn") as HTMLButtonElement | null;
+    const nav = document.getElementById("siteNav");
+    if (!button || !nav) return;
+
+    const closeMenu = () => {
+      button.setAttribute("aria-expanded", "false");
+      button.setAttribute("aria-label", "Open navigation menu");
+      nav.classList.remove("open");
+      nav.removeAttribute("data-menu-open");
+      ["display", "position", "top", "right", "left", "z-index", "min-width", "max-width", "padding", "background", "border", "box-shadow", "visibility", "opacity", "pointer-events"].forEach((property) => nav.style.removeProperty(property));
+      nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
+        ["display", "padding", "border-bottom"].forEach((property) => link.style.removeProperty(property));
+      });
+    };
+
+    const openMenu = () => {
+      button.setAttribute("aria-expanded", "true");
+      button.setAttribute("aria-label", "Close navigation menu");
+      nav.classList.add("open");
+      nav.setAttribute("data-menu-open", "true");
+      nav.style.setProperty("display", "grid", "important");
+      nav.style.setProperty("position", "fixed", "important");
+      nav.style.setProperty("top", "58px", "important");
+      nav.style.setProperty("right", "14px", "important");
+      nav.style.setProperty("left", "auto", "important");
+      nav.style.setProperty("z-index", "110", "important");
+      nav.style.setProperty("min-width", "min(230px, calc(100vw - 28px))", "important");
+      nav.style.setProperty("max-width", "calc(100vw - 28px)", "important");
+      nav.style.setProperty("padding", "6px", "important");
+      nav.style.setProperty("background", "rgba(2, 6, 23, .98)", "important");
+      nav.style.setProperty("border", "1px solid rgba(143, 168, 255, .5)", "important");
+      nav.style.setProperty("box-shadow", "0 18px 48px rgba(0, 0, 0, .45)", "important");
+      nav.style.setProperty("visibility", "visible", "important");
+      nav.style.setProperty("opacity", "1", "important");
+      nav.style.setProperty("pointer-events", "auto", "important");
+      nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
+        link.style.setProperty("display", "block", "important");
+        link.style.setProperty("padding", "13px 14px", "important");
+        link.style.setProperty("border-bottom", "1px solid rgba(143, 168, 255, .14)", "important");
+      });
+    };
+
+    const toggleMenu = (event: Event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (button.getAttribute("aria-expanded") === "true") closeMenu();
+      else openMenu();
+    };
+    const onDocumentClick = (event: Event) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("#menuBtn")) {
+        toggleMenu(event);
+        return;
+      }
+      if (target?.closest("#siteNav a")) {
+        closeMenu();
+        return;
+      }
+      if (button.getAttribute("aria-expanded") === "true" && !target?.closest("#siteNav")) closeMenu();
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && button.getAttribute("aria-expanded") === "true") {
+        closeMenu();
+        button.focus();
+      }
+    };
+    const onResize = () => {
+      if (window.innerWidth > 680) closeMenu();
+    };
+    // Capture phase makes the menu resilient to other document-level click handlers.
+    document.addEventListener("click", onDocumentClick, true);
+    document.addEventListener("keydown", onKeyDown);
+    window.addEventListener("resize", onResize);
+    return () => {
+      document.removeEventListener("click", onDocumentClick, true);
+      document.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("resize", onResize);
+      closeMenu();
     };
   }, []);
 
