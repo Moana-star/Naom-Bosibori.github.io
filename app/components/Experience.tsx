@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import * as THREE from "three";
 import Lenis from "lenis";
-import { Github, Linkedin, Volume2, VolumeX } from "lucide-react";
+import { Github, Linkedin, Volume2, VolumeX, Orbit } from "lucide-react";
 
 const SOUND_KEY = "naom-portfolio-sfx";
 
@@ -169,8 +169,10 @@ export default function Experience({ content }: { content: string }) {
           const id = active?.id || "home";
           environmentTarget = id === "projects" || id === "writing" ? 2 : id === "services" || id === "about" ? 1 : 0;
         };
+        const onEnvironmentCycle = () => { environmentTarget = (Math.round(environmentMode) + 1) % environmentPalettes.length; };
         window.addEventListener("keydown", onEnvironmentKey);
         window.addEventListener("scroll", onEnvironmentScroll, { passive: true });
+        window.addEventListener("portfolio:cycle-environment", onEnvironmentCycle);
 
         const blueLight = new THREE.PointLight(0x416dff, 24, 24);
         blueLight.position.set(-3, 2, 4);
@@ -355,6 +357,7 @@ export default function Experience({ content }: { content: string }) {
           window.removeEventListener("resize", onResize);
           window.removeEventListener("keydown", onEnvironmentKey);
           window.removeEventListener("scroll", onEnvironmentScroll);
+          window.removeEventListener("portfolio:cycle-environment", onEnvironmentCycle);
           cancelAnimationFrame(animationFrame);
           ribbonGeometry.dispose();
           ribbonMaterial.dispose();
@@ -626,6 +629,16 @@ export default function Experience({ content }: { content: string }) {
         <span>naom6083@gmail.com <span aria-hidden="true">↗</span></span>
       </a>
       <div className="hud-social">
+        <button
+          type="button"
+          className="environment-toggle"
+          onClick={() => window.dispatchEvent(new Event("portfolio:cycle-environment"))}
+          onPointerEnter={playTick}
+          aria-label="Change the 3D environment"
+          title="Change environment · Space"
+        >
+          <Orbit size={14} strokeWidth={1.6} /><span>SCENE</span><span aria-hidden="true">↗</span>
+        </button>
         <a href="https://github.com/Moana-star" target="_blank" rel="noreferrer" aria-label="GitHub profile">
           <Github size={15} strokeWidth={1.6} /> <span>GITHUB</span>
         </a>
