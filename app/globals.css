@@ -429,3 +429,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 1000px) { .process-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media (max-width: 680px) { .project-visual { min-height: 208px; padding: 13px 12px 11px; }.visual-top,.visual-bottom { font-size: 7px; }.visual-question,.visual-evidence { padding: 9px; }.visual-question strong { font-size: 11px; }.visual-body { gap: 7px; }.integrity-rows { grid-template-columns: 1fr; gap: 6px; }.integrity-rows span { font-size: 8px; }.integrity-stats div { padding: 7px; }.integrity-stats strong { font-size: 19px; }.process-grid { grid-template-columns: 1fr; }.process-card { min-height: auto; padding: 20px; }.process-index { margin-bottom: 16px; } }
 @media (prefers-reduced-motion: reduce) { .case-notes summary span { transition: none; } }
+
+/* Mobile navigation: keep the menu trigger on top and hide all menu links until opened. */
+@media (max-width: 680px) {
+  .topbar, .navrow { pointer-events: none !important; }
+  .brand, .menu-btn, .nav { pointer-events: auto !important; }
+  .menu-btn { z-index: 120 !important; cursor: pointer; }
+  .nav { z-index: 110 !important; }
+  .nav:not(.open) a { display: none !important; }
+  .nav:not(.open) .nav-cta { display: none !important; }
+  .nav.open { display: grid !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+  .nav.open a { display: block !important; }
+}
