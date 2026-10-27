@@ -335,14 +335,40 @@ export default function Experience({ content }: { content: string }) {
     };
     document.addEventListener("submit", onFormSubmit);
 
+    const menuButton = document.querySelector<HTMLButtonElement>("#menuBtn");
+    const nav = document.querySelector<HTMLElement>("#siteNav");
+    const onMenuClick = () => {
+      const open = menuButton?.getAttribute("aria-expanded") !== "true";
+      menuButton?.setAttribute("aria-expanded", String(open));
+      nav?.classList.toggle("open", open);
+    };
+    menuButton?.addEventListener("click", onMenuClick);
+
+    const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("#siteNav a[href^='#']"));
     const onNavClick = (event: Event) => {
       const target = event.target as HTMLElement | null;
       if (target?.closest("#siteNav a")) {
-        document.querySelector("#siteNav")?.classList.remove("open");
-        document.querySelector("#menuBtn")?.setAttribute("aria-expanded", "false");
+        nav?.classList.remove("open");
+        menuButton?.setAttribute("aria-expanded", "false");
       }
     };
     document.addEventListener("click", onNavClick);
+    let activeSectionObserver: IntersectionObserver | null = null;
+    if ("IntersectionObserver" in window && navLinks.length) {
+      activeSectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          navLinks.forEach((link) => {
+            if (link.hash === "#" + entry.target.id) link.setAttribute("aria-current", "location");
+            else link.removeAttribute("aria-current");
+          });
+        });
+      }, { rootMargin: "-24% 0px -62% 0px" });
+      navLinks.forEach((link) => {
+        const section = document.querySelector(link.hash);
+        if (section) activeSectionObserver?.observe(section);
+      });
+    }
 
     return () => {
       disposed = true;
@@ -358,6 +384,8 @@ export default function Experience({ content }: { content: string }) {
       document.removeEventListener("pointerover", onTextHover);
       document.removeEventListener("submit", onFormSubmit);
       document.removeEventListener("click", onNavClick);
+      menuButton?.removeEventListener("click", onMenuClick);
+      activeSectionObserver?.disconnect();
       if (audioRef.current) {
         void audioRef.current.close().catch(() => {});
         audioRef.current = null;
