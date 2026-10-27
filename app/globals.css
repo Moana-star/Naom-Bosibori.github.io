@@ -520,3 +520,49 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   .nav.open a:last-child { border-bottom: 0; }
   .nav.open a:hover { color: #86f5df !important; background: rgba(134,245,223,.08) !important; }
 }
+
+
+/* Final refinement: more balanced hero typography and less empty vertical space. */
+@media (min-width: 1001px) {
+  .hero {
+    min-height: 90svh !important;
+    padding-top: 112px !important;
+    padding-bottom: 72px !important;
+  }
+  .hero-grid {
+    min-height: min(560px, calc(90svh - 184px)) !important;
+  }
+  .hero-grid > div:first-child {
+    max-width: 850px !important;
+  }
+  #home h1 {
+    max-width: 780px !important;
+    margin: 18px 0 20px !important;
+    font-size: clamp(3.5rem, 5.6vw, 6rem) !important;
+    line-height: 1.02 !important;
+    letter-spacing: -.055em !important;
+  }
+  #home .lead { max-width: 620px !important; }
+}
+@media (min-width: 681px) and (max-width: 1000px) {
+  #home h1 {
+    font-size: clamp(3rem, 5.4vw, 4.5rem) !important;
+    line-height: 1.04 !important;
+    margin: 18px 0 !important;
+  }
+}
+@media (max-width: 680px) {
+  .hero { padding-top: 118px !important; padding-bottom: 72px !important; }
+  #home h1 {
+    font-size: clamp(2.35rem, 9.2vw, 3.45rem) !important;
+    line-height: 1.04 !important;
+    letter-spacing: -.045em !important;
+    margin: 18px 0 !important;
+  }
+  .hero-scroll { bottom: 22px !important; }
+}
+.nav { gap: clamp(10px, 1.25vw, 18px) !important; }
+.nav a { white-space: nowrap; }
+@media (max-width: 1000px) {
+  .nav.open { max-height: calc(100svh - 100px); overflow-y: auto; }
+}
