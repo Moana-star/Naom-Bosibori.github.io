@@ -543,11 +543,6 @@ export default function Experience({ content }: { content: string }) {
       setMenuOpen(menuButton?.getAttribute("aria-expanded") !== "true");
     };
     menuButton?.addEventListener("click", onMenuClick);
-    menuButton?.addEventListener("pointerup", (event) => {
-      // Touch browsers occasionally suppress click after a pointer gesture; click remains the primary path.
-      if (event.pointerType === "touch" && menuButton?.getAttribute("aria-expanded") !== "true") setMenuOpen(true);
-    });
-
     const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("#siteNav a[href^='#']"));
     const onNavClick = (event: Event) => {
       const target = event.target as HTMLElement | null;
