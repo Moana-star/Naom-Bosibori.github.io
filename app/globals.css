@@ -566,3 +566,34 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 @media (max-width: 1000px) {
   .nav.open { max-height: calc(100svh - 100px); overflow-y: auto; }
 }
+
+
+/* Compact the hero headline and remove excess empty space without weakening the visual hierarchy. */
+@media (min-width: 1001px) {
+  .hero { min-height: 82svh !important; padding-top: 92px !important; padding-bottom: 54px !important; }
+  .hero-grid { min-height: min(500px, calc(82svh - 146px)) !important; }
+  .hero-grid > div:first-child { max-width: 760px !important; }
+  #home h1 {
+    max-width: 700px !important;
+    font-size: clamp(3.15rem, 4.7vw, 5.15rem) !important;
+    line-height: 1.035 !important;
+    margin: 14px 0 17px !important;
+    letter-spacing: -.052em !important;
+  }
+}
+@media (min-width: 681px) and (max-width: 1000px) {
+  .hero { min-height: auto !important; padding-top: 118px !important; padding-bottom: 70px !important; }
+  #home h1 { max-width: 690px !important; font-size: clamp(2.8rem, 5vw, 4rem) !important; line-height: 1.04 !important; }
+}
+@media (max-width: 680px) {
+  .hero { padding-top: 108px !important; padding-bottom: 60px !important; }
+  #home h1 { max-width: 100% !important; font-size: clamp(2.2rem, 8.4vw, 3.05rem) !important; line-height: 1.06 !important; margin: 14px 0 16px !important; }
+  .hero-grid { gap: 22px !important; }
+  .hero-scroll { display: none !important; }
+}
+/* Make every navigation destination legible and comfortably tappable. */
+.nav a { font-size: 10px; }
+@media (max-width: 680px) {
+  .nav.open { display: grid !important; }
+  .nav.open a { min-height: 46px !important; display: flex !important; align-items: center; }
+}
