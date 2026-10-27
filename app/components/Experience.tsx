@@ -502,22 +502,65 @@ export default function Experience({ content }: { content: string }) {
 
     const menuButton = document.querySelector<HTMLButtonElement>("#menuBtn");
     const nav = document.querySelector<HTMLElement>("#siteNav");
-    const onMenuClick = () => {
-      const open = menuButton?.getAttribute("aria-expanded") !== "true";
+    const setMenuOpen = (open: boolean) => {
       menuButton?.setAttribute("aria-expanded", String(open));
+      menuButton?.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
       nav?.classList.toggle("open", open);
+      if (nav) {
+        // Inline state makes the mobile menu reliable even when global HUD styles override nav display.
+        if (open) {
+          nav.style.setProperty("display", "grid", "important");
+          nav.style.setProperty("position", "fixed", "important");
+          nav.style.setProperty("top", "58px", "important");
+          nav.style.setProperty("right", "14px", "important");
+          nav.style.setProperty("left", "auto", "important");
+          nav.style.setProperty("z-index", "110", "important");
+          nav.style.setProperty("min-width", "min(230px, calc(100vw - 28px))", "important");
+          nav.style.setProperty("max-width", "calc(100vw - 28px)", "important");
+          nav.style.setProperty("padding", "6px", "important");
+          nav.style.setProperty("background", "rgba(2, 6, 23, .98)", "important");
+          nav.style.setProperty("border", "1px solid rgba(143, 168, 255, .5)", "important");
+          nav.style.setProperty("box-shadow", "0 18px 48px rgba(0, 0, 0, .45)", "important");
+          nav.style.setProperty("visibility", "visible", "important");
+          nav.style.setProperty("opacity", "1", "important");
+          nav.style.setProperty("pointer-events", "auto", "important");
+          nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
+            link.style.setProperty("display", "block", "important");
+            link.style.setProperty("padding", "13px 14px", "important");
+            link.style.setProperty("border-bottom", "1px solid rgba(143, 168, 255, .14)", "important");
+          });
+        } else {
+          ["display", "position", "top", "right", "left", "z-index", "min-width", "max-width", "padding", "background", "border", "box-shadow", "visibility", "opacity", "pointer-events"].forEach((property) => nav.style.removeProperty(property));
+          nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => {
+            ["display", "padding", "border-bottom"].forEach((property) => link.style.removeProperty(property));
+          });
+        }
+      }
+    };
+    const onMenuClick = (event?: Event) => {
+      event?.preventDefault();
+      event?.stopPropagation();
+      setMenuOpen(menuButton?.getAttribute("aria-expanded") !== "true");
     };
     menuButton?.addEventListener("click", onMenuClick);
+    menuButton?.addEventListener("pointerup", (event) => {
+      // Touch browsers occasionally suppress click after a pointer gesture; click remains the primary path.
+      if (event.pointerType === "touch" && menuButton?.getAttribute("aria-expanded") !== "true") setMenuOpen(true);
+    });
 
     const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("#siteNav a[href^='#']"));
     const onNavClick = (event: Event) => {
       const target = event.target as HTMLElement | null;
-      if (target?.closest("#siteNav a")) {
-        nav?.classList.remove("open");
-        menuButton?.setAttribute("aria-expanded", "false");
+      if (target?.closest("#siteNav a")) setMenuOpen(false);
+    };
+    const onMenuKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && menuButton?.getAttribute("aria-expanded") === "true") {
+        setMenuOpen(false);
+        menuButton?.focus();
       }
     };
     document.addEventListener("click", onNavClick);
+    document.addEventListener("keydown", onMenuKeyDown);
     let activeSectionObserver: IntersectionObserver | null = null;
     if ("IntersectionObserver" in window && navLinks.length) {
       activeSectionObserver = new IntersectionObserver((entries) => {
@@ -549,6 +592,7 @@ export default function Experience({ content }: { content: string }) {
       document.removeEventListener("pointerover", onTextHover);
       document.removeEventListener("submit", onFormSubmit);
       document.removeEventListener("click", onNavClick);
+      document.removeEventListener("keydown", onMenuKeyDown);
       menuButton?.removeEventListener("click", onMenuClick);
       activeSectionObserver?.disconnect();
       if (audioRef.current) {
