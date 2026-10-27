@@ -143,7 +143,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background: radial-gradient(ellipse at center, rgba(2,6,23,.08), rgba(0,0,0,.18) 52%, rgba(0,0,0,.44));
 }
-.hero-grid { display: block !important; width: min(1000px, calc(100% - 48px)) !important; margin: auto !important; text-align: center; }
+.hero-grid { display: grid !important; grid-template-columns: minmax(0, 1.18fr) minmax(280px, .82fr) !important; align-items: center; gap: clamp(28px, 5vw, 76px); width: min(1220px, calc(100% - 112px)) !important; margin: auto !important; text-align: left; }
 .hero-grid > div:first-child { position: relative; z-index: 2; max-width: 1000px; margin: auto; }
 .availability {
   display: inline-flex; align-items: center; gap: 10px; padding: 9px 13px; margin: 0 auto 24px;
@@ -159,8 +159,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   letter-spacing: -.065em !important; text-wrap: balance; text-shadow: 0 4px 40px rgba(0,0,0,.4);
 }
 #home h1 em { color: var(--ice) !important; font-style: normal; background: linear-gradient(120deg, #fff 10%, #9cb7ff 55%, #7888ff 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-#home .lead { max-width: 740px !important; margin: 0 auto !important; color: #d0d9f1 !important; font-size: clamp(15px, 1.3vw, 18px) !important; line-height: 1.85; }
-#home .actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 29px; }
+#home .lead { max-width: 740px !important; margin: 0 !important; color: #d0d9f1 !important; font-size: clamp(15px, 1.3vw, 18px) !important; line-height: 1.85; }
+#home .actions { display: flex; justify-content: flex-start; flex-wrap: wrap; gap: 10px; margin-top: 29px; }
 .btn {
   min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 9px;
   padding: 13px 17px !important; border: 1px solid var(--line-strong) !important; border-radius: 0 !important;
@@ -177,7 +177,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .hero-note { color: #8c9cc3 !important; font: 9px var(--mono); letter-spacing: .05em; }
 .hero-aside {
   display: grid; grid-template-columns: 66px 1fr; gap: 18px; align-items: center;
-  max-width: 530px; margin: 50px auto 0; padding: 18px 20px !important;
+  max-width: 530px; width: 100%; margin: 0 auto; padding: 18px 20px !important;
   border: 1px solid var(--line) !important; border-radius: 0 !important;
   background: rgba(2,6,23,.72) !important; text-align: left; backdrop-filter: blur(18px);
 }
@@ -283,11 +283,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .nav.open a { display: block; border-bottom: 1px solid var(--line); padding: 12px 15px; }
   .nav.open .nav-cta { border: 0 !important; }
   .hero { min-height: auto; padding: 142px 0 180px !important; }
-  .hero-grid { width: calc(100% - 36px) !important; }
+  .hero-grid { display: block !important; width: calc(100% - 36px) !important; text-align: left; }
   .availability { font-size: 8px !important; max-width: 100%; }
   #home h1 { font-size: clamp(2.8rem, 12vw, 5rem) !important; line-height: 1 !important; }
   #home .lead { font-size: 14px !important; }
-  #home .actions { flex-direction: column; align-items: stretch; width: min(100%, 320px); margin-inline: auto; }
+  #home .actions { flex-direction: column; align-items: stretch; width: min(100%, 320px); margin-inline: 0; }
   #home .actions .btn { width: 100%; }
   .hero-aside { grid-template-columns: 48px 1fr; gap: 12px; padding: 14px !important; margin-top: 35px; }
   .profile-photo { width: 46px; height: 46px; }
