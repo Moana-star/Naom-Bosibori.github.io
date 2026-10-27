@@ -326,3 +326,65 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .environment-toggle { padding: 10px 7px; }
   .sound-toggle { padding: 10px 7px; }
 }
+
+
+/* Art direction: give the opening a cinematic stage instead of a conventional two-column template. */
+@media (min-width: 1001px) {
+  .hero { min-height: 100svh !important; padding-top: 150px !important; padding-bottom: 110px !important; }
+  .hero-grid {
+    position: relative !important;
+    display: block !important;
+    width: min(1220px, calc(100% - 112px)) !important;
+    min-height: min(650px, calc(100svh - 270px));
+  }
+  .hero-grid > div:first-child {
+    width: min(840px, 70vw) !important;
+    max-width: 840px !important;
+    margin: 0 !important;
+    padding-top: clamp(16px, 4vh, 48px);
+  }
+  #home h1 { max-width: 840px !important; font-size: clamp(4.4rem, 7.2vw, 7.4rem) !important; }
+  #home .lead { max-width: 650px !important; }
+  .hero-aside {
+    position: absolute !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: min(340px, 28vw) !important;
+    max-width: 340px !important;
+    display: grid !important;
+    grid-template-columns: 48px minmax(0, 1fr) !important;
+    grid-template-areas: "photo eyebrow" "heading heading" "copy copy" "list list" "link link";
+    gap: 8px 12px !important;
+    padding: 15px !important;
+    background: rgba(2, 6, 23, .68) !important;
+    border-color: rgba(172, 192, 255, .25) !important;
+    box-shadow: 0 24px 90px rgba(0, 0, 0, .28) !important;
+    backdrop-filter: blur(20px);
+  }
+  .hero-aside .profile-photo { grid-area: photo; width: 48px !important; height: 48px !important; margin: 0 !important; }
+  .hero-aside > .eyebrow { grid-area: eyebrow; align-self: center; margin: 0 !important; font-size: 8px !important; letter-spacing: .1em !important; }
+  .hero-aside h2 { grid-area: heading; margin: 7px 0 0 !important; font-size: 20px !important; line-height: 1.15 !important; }
+  .hero-aside > p:not(.eyebrow) { grid-area: copy; margin: 0 !important; font-size: 11px !important; line-height: 1.65 !important; }
+  .hero-aside .support-list { grid-area: list; margin-top: 2px; }
+  .hero-aside .support-list > div { display: grid; grid-template-columns: 24px minmax(0,1fr); gap: 8px; padding: 8px 0; border-top: 1px solid var(--line); }
+  .hero-aside .support-list strong { display: block; color: #e7edff; font-size: 10px; font-weight: 500; }
+  .hero-aside .support-list small { display: block; margin-top: 2px; color: #94a4cf; font: 9px/1.5 var(--mono); }
+  .hero-aside .support-number { font: 9px var(--mono); padding-top: 2px; }
+  .hero-aside .aside-link { grid-area: link; display: flex; justify-content: space-between; gap: 12px; padding-top: 9px; border-top: 1px solid var(--line); font: 8px var(--mono); letter-spacing: .05em; text-transform: uppercase; }
+}
+@media (min-width: 681px) and (max-width: 1000px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(250px, .7fr) !important; width: calc(100% - 64px) !important; gap: 28px !important; }
+  #home h1 { font-size: clamp(3.3rem, 6.8vw, 5.2rem) !important; }
+  .hero-aside { display: block !important; padding: 16px !important; }
+  .hero-aside .profile-photo { width: 46px !important; height: 46px !important; float: left; margin: 0 12px 8px 0 !important; }
+  .hero-aside h2 { clear: both; }
+}
+@media (max-width: 680px) {
+  .hero-aside { display: block !important; }
+  .hero-aside .profile-photo { float: left; margin: 0 12px 8px 0 !important; }
+  .hero-aside h2 { clear: both; }
+}
+/* Keep decorative motion behind content and make keyboard focus unambiguous. */
+#portfolio-content a, #portfolio-content button { touch-action: manipulation; }
+.nav a, .hud-social a, .hud-email, .btn, .project, .writing-card { -webkit-tap-highlight-color: transparent; }
+.project, .writing-card, .service-card { will-change: transform; }
