@@ -602,6 +602,17 @@ section:not(.hero){position:relative}
  *,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important}
 }
 
+
+    /* Devpost recognition section — styled to match the portfolio's forest-green and champagne palette. */
+    .recognition-overview{display:grid;grid-template-columns:190px minmax(0,1fr);gap:28px;align-items:center;margin:0 0 18px;padding:clamp(22px,3.5vw,38px);border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(120deg,#1b2d28,#14211e);color:#fff}
+    .recognition-count{display:grid;gap:7px;justify-items:start}.recognition-count strong{font:800 clamp(3.6rem,7vw,5.2rem)/.9 Manrope,sans-serif;letter-spacing:-.08em;color:#f6ead0}.recognition-count span,.recognition-kicker{font: .65rem "DM Mono",monospace;letter-spacing:.13em;text-transform:uppercase;color:#d8c49a}
+    .recognition-overview-copy{border-left:1px solid rgba(255,255,255,.18);padding-left:26px}.recognition-overview-copy p{max-width:720px;margin:10px 0 13px;color:#d0d8d2;font-size:.9rem;line-height:1.8}.recognition-profile-link{color:#f0d9a8;font: .72rem "DM Mono",monospace;letter-spacing:.06em;text-transform:uppercase}.recognition-profile-link:hover{color:#fff}
+    .recognition-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.recognition-card{min-width:0;display:flex;flex-direction:column;padding:22px 19px 18px;border:1px solid var(--line);border-radius:14px;background:var(--panel);transition:border-color .25s,box-shadow .25s,transform .25s}.recognition-card:hover{border-color:#b99a63;box-shadow:0 14px 35px rgba(23,63,53,.08);transform:translateY(-3px)}
+    .recognition-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:22px}.recognition-symbol{width:42px;height:42px;display:grid;place-items:center;border:1px solid #d8c49a;background:#f7f1e5;color:#173f35;font:22px Manrope,sans-serif}.recognition-index{color:#7b887e;font: .62rem "DM Mono",monospace;letter-spacing:.09em;text-align:right}.recognition-type{margin:0 0 7px!important;color:#80663c!important;font: .65rem "DM Mono",monospace;letter-spacing:.1em;text-transform:uppercase}.recognition-card h3{min-height:2.5em;margin:0 0 11px;color:var(--text);font-size:1.2rem;letter-spacing:-.035em}.recognition-card>p:not(.recognition-type){flex:1;margin:0 0 18px;color:var(--muted);font-size:.84rem;line-height:1.75}.recognition-level{display:inline-block;margin-top:5px;padding:4px 7px;border:1px solid #d9dfd7;color:#52675d;font: .62rem "DM Mono",monospace;letter-spacing:.06em;vertical-align:middle}
+    .recognition-meta{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:9px;padding-top:13px;border-top:1px solid var(--line);color:var(--soft);font: .62rem "DM Mono",monospace}.recognition-status{display:inline-flex;align-items:center;gap:7px;color:#315b46;text-transform:uppercase;letter-spacing:.07em}.recognition-status i{width:6px;height:6px;border-radius:50%;background:#69a17b;box-shadow:0 0 0 3px rgba(105,161,123,.12)}.recognition-footnote{margin:17px 0 0!important;color:var(--soft)!important;font: .68rem/1.8 "DM Mono",monospace}
+    @media(max-width:1050px){.recognition-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.recognition-card h3{min-height:0}}
+    @media(max-width:600px){.recognition-overview{grid-template-columns:1fr;gap:16px;padding:22px}.recognition-count{grid-template-columns:auto 1fr;align-items:end;gap:12px}.recognition-count strong{font-size:3.6rem}.recognition-overview-copy{padding:15px 0 0;border-left:0;border-top:1px solid rgba(255,255,255,.18)}.recognition-grid{grid-template-columns:1fr}.recognition-card{padding:20px}.recognition-card-top{margin-bottom:17px}}
+
 </style>
 <style id="contact-contrast-fix">
 #contact { background:#fff !important; color:#17251f !important; }
@@ -984,7 +995,7 @@ body:has(#portfolio-webgl-stage) .project>*{position:relative;z-index:1}
       <a class="brand" href="#home" aria-label="Naom Kenagwa home">NAOM KENAGWA<span>.</span></a>
       <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="siteNav">Menu ☰</button>
       <nav class="nav" id="siteNav" aria-label="Main navigation">
-        <a href="#home">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#projects">Projects</a><a href="#writing">Writing samples</a><a href="./samples.html">Writing library ↗</a><a href="./local-seo-audit.html">SEO audit page ↗</a><a href="#approach">My approach</a><a href="#contact" class="nav-cta">Contact ↗</a>
+        <a href="#home">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#projects">Projects</a><a href="#recognition">Recognition</a><a href="#writing">Writing samples</a><a href="./samples.html">Writing library ↗</a><a href="./local-seo-audit.html">SEO audit page ↗</a><a href="#approach">My approach</a><a href="#contact" class="nav-cta">Contact ↗</a>
       </nav>
     </div>
   </header>
@@ -1055,9 +1066,56 @@ body:has(#portfolio-webgl-stage) .project>*{position:relative;z-index:1}
       </div>
     </section>
 
+    <section class="section recognition-section" id="recognition" aria-labelledby="recognition-title">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-label eyebrow">04 / Recognition</div>
+          <div>
+            <h2 id="recognition-title">Progress earned by showing up and building.</h2>
+            <p>Four achievements displayed on my Devpost profile, recognising participation, exploration across themes and community membership. These are participation milestones—not competition prizes or professional certifications.</p>
+          </div>
+        </div>
+        <div class="recognition-overview">
+          <div class="recognition-count"><strong>04</strong><span>Devpost achievements earned</span></div>
+          <div class="recognition-overview-copy">
+            <span class="recognition-kicker">DEVPOST PROFILE · NOVEMBER 2026</span>
+            <p>Each badge reflects a completed milestone on Devpost. Hackathon results are listed separately; no winner status is implied.</p>
+            <a class="recognition-profile-link" href="https://devpost.com/naom6083" target="_blank" rel="noopener noreferrer">View achievements on Devpost <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <div class="recognition-grid">
+          <article class="recognition-card">
+            <div class="recognition-card-top"><span class="recognition-symbol" aria-hidden="true">✦</span><span class="recognition-index">01 / BREADTH</span></div>
+            <p class="recognition-type">Theme exploration</p><h3>Generalist</h3>
+            <p>Earned by submitting to three hackathons with different themes—reflecting curiosity across technology challenges.</p>
+            <div class="recognition-meta"><span class="recognition-status"><i></i> Earned</span><time datetime="2026-11-04">04 Nov 2026</time></div>
+          </article>
+          <article class="recognition-card">
+            <div class="recognition-card-top"><span class="recognition-symbol" aria-hidden="true">Ⅱ</span><span class="recognition-index">02 / PARTICIPATION</span></div>
+            <p class="recognition-type">Hackathon participation</p><h3>X Hackathons <span class="recognition-level">Level 1</span></h3>
+            <p>Earned by submitting separate eligible projects to separate hackathons. One more eligible submission is needed for the next level.</p>
+            <div class="recognition-meta"><span class="recognition-status"><i></i> Earned</span><time datetime="2026-11-04">04 Nov 2026</time></div>
+          </article>
+          <article class="recognition-card">
+            <div class="recognition-card-top"><span class="recognition-symbol" aria-hidden="true">↗</span><span class="recognition-index">03 / FIRST MILESTONE</span></div>
+            <p class="recognition-type">Online competition</p><h3>First Online Hackathon</h3>
+            <p>Earned after submitting an eligible project to an online hackathon.</p>
+            <div class="recognition-meta"><span class="recognition-status"><i></i> Earned</span><time datetime="2026-11-04">04 Nov 2026</time></div>
+          </article>
+          <article class="recognition-card">
+            <div class="recognition-card-top"><span class="recognition-symbol" aria-hidden="true">◎</span><span class="recognition-index">04 / COMMUNITY</span></div>
+            <p class="recognition-type">Devpost membership</p><h3>Welcome to Devpost</h3>
+            <p>Community milestone awarded for joining Devpost and becoming part of its maker community.</p>
+            <div class="recognition-meta"><span class="recognition-status"><i></i> Earned</span><time datetime="2026-10-01">01 Oct 2026</time></div>
+          </article>
+        </div>
+        <p class="recognition-footnote">Recognition source: my public Devpost profile. Achievement criteria and progress are defined by Devpost; badges do not represent a hackathon win unless explicitly labelled as a prize.</p>
+      </div>
+    </section>
+
     <section class="section" id="writing">
       <div class="wrap">
-        <div class="section-head"><div class="section-label eyebrow">03 / Writing</div><div><h2>Writing that makes technical ideas useful.</h2><p>Explore all six independent writing samples, covering technical SEO, search fundamentals, developer documentation, AI, and content strategy.</p></div></div>
+        <div class="section-head"><div class="section-label eyebrow">05 / Writing</div><div><h2>Writing that makes technical ideas useful.</h2><p>Explore all six independent writing samples, covering technical SEO, search fundamentals, developer documentation, AI, and content strategy.</p></div></div>
         <div class="writing-highlight">
           <div><p class="eyebrow">The complete collection</p><h3>Selected writing, with the full collection one click away.</h3><p>Open the full samples to review the writing, sources and approach in more detail.</p></div>
           <a class="btn btn-primary" href="samples.html">View all writing samples <span aria-hidden="true">↗</span></a>
@@ -1077,7 +1135,7 @@ body:has(#portfolio-webgl-stage) .project>*{position:relative;z-index:1}
     <section class="section" id="contact">
       <div class="wrap">
         <div class="contact-panel">
-          <div><p class="eyebrow">04 / Contact</p><h2>Need clear content or a careful first review?</h2><p>I’m open to remote freelance and contract conversations involving technical content, SEO-focused writing, research and content improvement. Send a short brief with the audience, goal, expected deliverable and deadline. I’ll be transparent about fit and scope before committing.</p><div class="actions"><a class="btn btn-primary" href="mailto:naom6083@gmail.com?subject=Portfolio%20enquiry">Email me ↗</a><a class="btn btn-secondary" href="https://www.linkedin.com/in/naom-kenagwa-493107403/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a></div></div>
+          <div><p class="eyebrow">06 / Contact</p><h2>Need clear content or a careful first review?</h2><p>I’m open to remote freelance and contract conversations involving technical content, SEO-focused writing, research and content improvement. Send a short brief with the audience, goal, expected deliverable and deadline. I’ll be transparent about fit and scope before committing.</p><div class="actions"><a class="btn btn-primary" href="mailto:naom6083@gmail.com?subject=Portfolio%20enquiry">Email me ↗</a><a class="btn btn-secondary" href="https://www.linkedin.com/in/naom-kenagwa-493107403/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a></div></div>
           <form class="enquiry-form" id="enquiryForm">
             <p class="eyebrow">Project enquiry</p>
             <h3>Tell me what you need.</h3>
