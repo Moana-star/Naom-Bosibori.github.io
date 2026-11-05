@@ -597,3 +597,59 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   .nav.open { display: grid !important; }
   .nav.open a { min-height: 46px !important; display: flex !important; align-items: center; }
 }
+
+
+/* Devpost recognition — factual, responsive portfolio section */
+.recognition-overview {
+  display: grid; grid-template-columns: 190px minmax(0,1fr); gap: 28px; align-items: center;
+  margin: 0 0 18px; padding: clamp(22px,3.5vw,38px);
+  border: 1px solid var(--line-strong); background: linear-gradient(115deg,rgba(12,22,55,.88),rgba(3,7,23,.78));
+}
+.recognition-count { display: grid; gap: 4px; justify-items: start; }
+.recognition-count strong {
+  color: #f4f6ff; font: 700 clamp(3.6rem,7vw,5.4rem)/.9 var(--display);
+  letter-spacing: -.08em; text-shadow: 0 0 36px rgba(115,146,255,.2);
+}
+.recognition-count span, .recognition-kicker {
+  color: #9db4ff; font: 8px var(--mono); letter-spacing: .16em; text-transform: uppercase;
+}
+.recognition-overview-copy { border-left: 1px solid var(--line); padding-left: 26px; }
+.recognition-overview-copy p { max-width: 720px; margin: 10px 0 13px; color: #b8c6e9; font-size: 13px; line-height: 1.8; }
+.recognition-profile-link { color: var(--ice); font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.recognition-profile-link:hover { color: #fff; }
+.recognition-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; }
+.recognition-card {
+  min-width: 0; display: flex; flex-direction: column; padding: 22px 19px 18px;
+  border: 1px solid var(--line); background: rgba(4,9,29,.76); backdrop-filter: blur(14px);
+  transition: border-color .25s,background .25s,transform .25s;
+}
+.recognition-card:hover { border-color: rgba(158,181,255,.5); background: rgba(9,17,48,.88); transform: translateY(-3px); }
+.recognition-card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 24px; }
+.recognition-symbol {
+  width: 43px; height: 43px; display: grid; place-items: center;
+  border: 1px solid rgba(151,174,255,.36); background: rgba(90,118,230,.11);
+  color: #d8e2ff; font: 22px var(--display);
+}
+.recognition-index { color: #7183b6; font: 7px var(--mono); letter-spacing: .1em; text-align: right; }
+.recognition-type { margin: 0 0 7px !important; color: #8fa8ff !important; font: 8px var(--mono); letter-spacing: .11em; text-transform: uppercase; }
+.recognition-card h3 { min-height: 2.5em; margin: 0 0 11px; color: #f5f7ff; font: 600 clamp(17px,1.55vw,21px)/1.2 var(--display); letter-spacing: -.04em; }
+.recognition-card > p:not(.recognition-type) { flex: 1; margin: 0 0 20px; color: #aab8db; font-size: 12px; line-height: 1.8; }
+.recognition-level { display: inline-block; margin-top: 5px; padding: 4px 7px; border: 1px solid var(--line); color: #c7d5ff; font: 8px var(--mono); letter-spacing: .08em; vertical-align: middle; }
+.recognition-meta { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 9px; padding-top: 13px; border-top: 1px solid var(--line); color: #7f91bc; font: 8px var(--mono); }
+.recognition-status { display: inline-flex; align-items: center; gap: 7px; color: #c7d5ff; text-transform: uppercase; letter-spacing: .08em; }
+.recognition-status i { width: 6px; height: 6px; border-radius: 50%; background: #9bc9a9; box-shadow: 0 0 9px rgba(155,201,169,.55); }
+.recognition-footnote { margin: 17px 0 0 !important; color: #7585ad !important; font: 8px/1.8 var(--mono); letter-spacing: .025em; }
+@media (max-width: 1050px) {
+  .recognition-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .recognition-card h3 { min-height: 0; }
+}
+@media (max-width: 600px) {
+  .recognition-overview { grid-template-columns: 1fr; gap: 15px; padding: 22px; }
+  .recognition-count { grid-template-columns: auto 1fr; align-items: end; gap: 12px; }
+  .recognition-count strong { font-size: 3.6rem; }
+  .recognition-overview-copy { padding: 15px 0 0; border-left: 0; border-top: 1px solid var(--line); }
+  .recognition-grid { grid-template-columns: 1fr; }
+  .recognition-card { padding: 20px; }
+  .recognition-card-top { margin-bottom: 17px; }
+  .recognition-card h3 { min-height: 0; }
+}
