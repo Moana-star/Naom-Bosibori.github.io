@@ -44,6 +44,22 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--ink)}.top{bac
 
 .sample-art{margin:22px 0 26px;padding:0;overflow:hidden;border:1px solid #d7dfe8;border-radius:16px;background:#101f36;box-shadow:0 12px 30px rgba(16,31,54,.1)}.sample-art img{display:block;width:100%;height:auto;aspect-ratio:1040/340;object-fit:cover}.sample-art figcaption{padding:8px 14px;background:#f1f4f7;color:#536477;font-size:.72rem;letter-spacing:.04em}.sample-visual{margin-top:0}
 @media(prefers-reduced-motion:reduce){.sample-art img{animation:none}}
+
+/* Interactive, native disclosure-based mini demos */
+.mini-demo{margin:24px 0 30px;padding:clamp(18px,3vw,26px);border:1px solid #cbd9ed;border-radius:18px;background:linear-gradient(145deg,#f4f8ff,#fff);box-shadow:0 12px 30px rgba(24,52,92,.06)}
+.mini-demo h3{margin:10px 0 8px;font-size:1.25rem}.mini-demo>p{color:#52657d;font-size:.92rem}
+.mini-demo-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.demo-kicker{font:600 .68rem "DM Mono",monospace;letter-spacing:.1em;color:#31528d}.demo-tag{padding:5px 9px;border-radius:999px;background:#e7eefb;color:#31528d;font:500 .62rem "DM Mono",monospace}
+.mini-demo details{margin:10px 0;border:1px solid #d3deed;border-radius:11px;background:#fff;overflow:hidden}
+.mini-demo summary{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:13px 15px;cursor:pointer;color:#244a82;font-size:.88rem}
+.mini-demo summary span{font:500 .68rem "DM Mono",monospace;color:#64748b}.mini-demo details[open] summary{background:#edf4ff;border-bottom:1px solid #d3deed}
+.demo-code{padding:14px 16px;background:#10213b;color:#d9e7ff}.demo-code code{display:block;margin:5px 0;font:.76rem/1.6 "DM Mono",monospace;overflow-wrap:anywhere}.demo-code pre{white-space:pre-wrap;overflow-wrap:anywhere;font:.75rem/1.6 "DM Mono",monospace}.demo-code p{color:#c5d4e9;font-size:.82rem}
+.payment-stages details>p,.payment-stages details>ul{margin:12px 16px;color:#52657d;font-size:.85rem}.payment-stages details>ul{padding-left:20px}
+.demo-footnote{margin:14px 0 0!important;font-size:.76rem!important;color:#64748b!important}
+.mini-demo summary:focus-visible{outline:3px solid #ff765e;outline-offset:-3px}
+@media(max-width:600px){.mini-demo{padding:16px}.mini-demo summary{font-size:.8rem}.demo-code{padding:12px}}
+@media(prefers-reduced-motion:reduce){.mini-demo *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
 </style></head><body>
 <header class="top"><div class="wrap nav"><a class="brand" href="index.html">Naom Kenagwa</a><a class="back" href="index.html#writing">← Back to portfolio</a></div></header><main>
 <section class="hero"><div class="wrap"><p class="eyebrow">Selected writing · Independent samples</p><h1>Clear explanations. Practical checks. Sources you can follow.</h1><p class="intro">These independent samples demonstrate how I approach technical writing, product documentation and SEO: clarify the user’s problem, explain the system state, show evidence-based checks, make next steps actionable and link to reliable sources.</p><div class="notice"><strong>Transparency:</strong> These are self-initiated portfolio examples created to demonstrate my approach. They are not client case studies or evidence of measured traffic or revenue gains. The separate local SEO audit is a hypothetical scenario, not an inspection of a real business.</div><nav class="sample-nav" aria-label="Jump to a writing sample"><span class="sample-nav-label">Jump to a sample</span><a href="#seo-review">01 · Technical SEO review</a><a href="#search-basics">02 · Search explainer</a><a href="#api-guide">03 · API quickstart</a><a href="#rag-explainer">04 · AI and RAG</a><a href="#content-brief">05 · SEO content brief</a><a href="local-seo-audit.html">06 · Local SEO audit</a><a href="#payment-troubleshooting">07 · Payment troubleshooting</a><a href="#agent-documentation">08 · AI agent documentation</a><a href="#mcp-integration">09 · MCP integration</a><a href="#ai-security-governance">10 · AI security and governance</a></nav></div></section>
@@ -73,7 +89,24 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--ink)}.top{bac
 <section class="sample" id="api-guide"><div class="wrap"><p class="eyebrow">Sample 03 · Developer documentation</p><h2>A clear REST API quickstart</h2><p class="sample-meta">Audience: developers integrating a service · Format: onboarding documentation · Example only</p>
 <figure class="sample-art"><img src="assets/api-guide-visual.svg" alt="Animated illustration: api guide workflow" loading="lazy" width="1040" height="340"><figcaption>Visual overview · Animated process illustration</figcaption></figure>
 <div class="sample-visual" role="img" aria-label="Animated API request and response flow between developer, endpoint and JSON response"><div class="visual-head"><span>REST API REQUEST CYCLE</span><span class="visual-live"><i></i> EXAMPLE FLOW</span></div><div class="visual-flow"><div class="visual-node"><b>01</b><strong>Client</strong><small>Auth + request</small></div><span class="visual-arrow">→</span><div class="visual-node"><b>02</b><strong>Endpoint</strong><small>Validate + process</small></div><span class="visual-arrow">→</span><div class="visual-node"><b>03</b><strong>Response</strong><small>Status + JSON</small></div></div><div class="visual-code"><span>GET /v1/projects/project_123</span><span class="code-ok">200 · application/json</span><span>{ "status": "active" }</span></div></div><div class="paper">
-<div class="notice"><strong>Example status:</strong> This is a documentation exercise using a fictional endpoint and illustrative response. It is not documentation for a live API.</div>
+<div class="notice"><strong>Example status:</strong> This is a documentation exercise using a fictional endpoint and illustrative response. It is not documentation for a live API.</div><section class="mini-demo" aria-labelledby="api-demo-title">
+<div class="mini-demo-head"><span class="demo-kicker">INTERACTIVE DOCUMENTATION DEMO</span><span class="demo-tag">FICTIONAL API · NO NETWORK CALL</span></div>
+<h3 id="api-demo-title">Explore request and response outcomes</h3>
+<p>Open each scenario to see how technical documentation should explain the status and the next troubleshooting step.</p>
+<details open><summary><b>200 · Successful request</b></summary><div class="demo-code"><code>GET /v1/projects/project_123</code><code>Authorization: Bearer [REDACTED]</code><pre>{
+  "id": "project_123",
+  "name": "Website migration",
+  "status": "active"
+}</pre><p><strong>Interpretation:</strong> The request succeeded and returned the requested project record.</p></div></details>
+<details><summary><b>401 · Missing or invalid token</b></summary><div class="demo-code"><code>Authorization: (missing)</code><pre>{
+  "error": "unauthorized",
+  "message": "A valid access token is required."
+}</pre><p><strong>Next check:</strong> Confirm that a token is present, valid and sent using the documented authentication scheme.</p></div></details>
+<details><summary><b>403 · Authenticated, but not permitted</b></summary><div class="demo-code"><pre>{
+  "error": "forbidden",
+  "message": "The token does not have access to this project."
+}</pre><p><strong>Next check:</strong> Verify the account, role and required scopes. Authentication does not automatically grant permission.</p></div></details>
+<p class="demo-footnote">Teaching example only. The endpoint, token and responses are fictional; this component does not connect to a server or validate credentials.</p></section>
 <p>A good quickstart should help a developer reach one successful request quickly, understand what to replace, and know where to look when something fails. The example below demonstrates that structure for a fictional service that returns a project record.</p>
 <h3>Before you begin</h3><ul><li>An account with access to the API.</li><li>An API token issued by the service.</li><li>A command-line tool such as <code>curl</code>, or an HTTP client of your choice.</li></ul>
 <h3>1. Store your token securely</h3><p>Use an environment variable or your platform's secret manager. Do not paste private tokens into public repositories, screenshots, browser code, or support tickets.</p>
@@ -125,7 +158,17 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--ink)}.top{bac
 <figure class="sample-art"><img src="assets/payment-troubleshooting-visual.svg" alt="Animated illustration: payment troubleshooting workflow" loading="lazy" width="1040" height="340"><figcaption>Visual overview · Animated process illustration</figcaption></figure>
 <div class="sample-visual" role="img" aria-label="Animated payment troubleshooting states: initiated, submitted, pending, verified or failed"><div class="visual-head"><span>PAYMENT STATE JOURNEY</span><span class="visual-live"><i></i> EVIDENCE FIRST</span></div><div class="visual-flow"><div class="visual-node"><b>01</b><strong>Initiated</strong><small>Checkout opened</small></div><span class="visual-arrow">→</span><div class="visual-node"><b>02</b><strong>Submitted</strong><small>Provider response</small></div><span class="visual-arrow">→</span><div class="visual-node"><b>03</b><strong>Pending</strong><small>Await confirmation</small></div><span class="visual-arrow">→</span><div class="visual-node"><b>04</b><strong>Verified</strong><small>Authoritative evidence</small></div></div><div class="visual-track"><span></span></div><p>A checkout screen or screenshot alone is not proof of a completed payment.</p></div>
 <div class="paper">
-<div class="notice"><strong>Scope and accuracy note:</strong> This is an original, self-initiated documentation sample. It is not an official CoinMove Pay guide and does not describe or claim access to any specific payment provider's internal implementation. Status names, confirmation thresholds, supported networks, assets, time limits and recovery options must be aligned with the actual product before publication.</div>
+<div class="notice"><strong>Scope and accuracy note:</strong> This is an original, self-initiated documentation sample. It is not an official CoinMove Pay guide and does not describe or claim access to any specific payment provider's internal implementation. Status names, confirmation thresholds, supported networks, assets, time limits and recovery options must be aligned with the actual product before publication.</div><section class="mini-demo" aria-labelledby="payment-demo-title">
+<div class="mini-demo-head"><span class="demo-kicker">INTERACTIVE EVIDENCE WALKTHROUGH</span><span class="demo-tag">SIMULATED · NO PAYMENT</span></div>
+<h3 id="payment-demo-title">Explore a payment verification case</h3>
+<p>Open each stage to follow a fictional payment record. A submitted transaction is not treated as received until the required evidence is checked.</p>
+<div class="payment-stages">
+<details open><summary><b>01 · Order created</b><span>Awaiting payment</span></summary><p>An order exists, but no transaction evidence has been submitted. The correct status remains awaiting payment.</p><ul><li>Transaction reference: not supplied</li><li>Network and destination: not checked</li><li>Amount and asset: not checked</li></ul></details>
+<details><summary><b>02 · Transaction submitted</b><span>Verification pending</span></summary><p>A transaction reference is available. Submission is evidence of an attempt—not proof that the intended payment meets the receiving service rules.</p><ul><li>Transaction reference: recorded</li><li>Network and destination: not checked</li><li>Amount and asset: not checked</li></ul></details>
+<details><summary><b>03 · Evidence reviewed</b><span>Checks in progress</span></summary><p>The reviewer compares the transaction against the order: correct network, destination, asset, amount and required confirmation state.</p><ul><li>Transaction reference: recorded</li><li>Network and destination: matched in this example</li><li>Amount and asset: matched in this example</li><li>Required confirmations: still being checked</li></ul></details>
+<details><summary><b>04 · Decision recorded</b><span>Verified in simulation</span></summary><p>All illustrative checks pass, so this simulated case can be marked verified. A real system must obtain authoritative provider or network evidence before changing payment status.</p><ul><li>Transaction reference: recorded</li><li>Network and destination: matched</li><li>Amount and asset: matched</li><li>Required confirmations: satisfied in this example</li></ul></details>
+</div>
+<p class="demo-footnote">Fictional teaching simulation only—not a wallet connection, blockchain lookup, payment processor integration or proof of funds. Real acceptance rules must come from the actual provider and product.</p></section>
 
 <p>You approved a payment in your wallet, but the checkout page still says <strong>Pending</strong>, or the recipient has not marked the payment as received. That does not automatically mean the payment failed—or that you should send it again.</p>
 <p>The safest first step is to identify what happened to the original transaction. This guide shows you how to check its status, compare the payment details and give support the information needed to investigate.</p>
