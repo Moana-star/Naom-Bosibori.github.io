@@ -81,6 +81,45 @@ html{scroll-padding-top:88px}body{background:var(--bg);color:var(--ink)}.top{bac
 @media(max-width:620px){.rag-pipeline{grid-template-columns:1fr 1fr;gap:8px}.rag-pipeline>i{display:none}.rag-pipeline>div{padding:10px}.rag-scenarios summary{font-size:.77rem}.rag-case{padding:11px}}
 @media(prefers-reduced-motion:reduce){.rag-demo *{animation:none!important;transition:none!important}}
 
+
+/* MCP permission and approval learning demo */
+.mcp-guard-demo{margin:30px 0;padding:clamp(18px,4vw,30px);border:1px solid #d7e2f0;border-radius:18px;background:linear-gradient(145deg,#f7faff,#fff);color:#16253b}
+.mcp-guard-demo .mcp-kicker{font:600 .68rem "DM Mono",monospace;letter-spacing:.12em;color:#31528d;text-transform:uppercase}
+.mcp-guard-demo h3{margin:8px 0 10px;color:#16253b;font-size:1.35rem}
+.mcp-guard-demo .mcp-intro{max-width:720px;color:#52657d;font-size:.91rem}
+.mcp-guard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}
+.mcp-tool-card{min-width:0;padding:15px;border:1px solid #d7e2f0;border-radius:12px;background:#fff}
+.mcp-tool-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.mcp-tool-name{font:600 .85rem "DM Mono",monospace;color:#244a9b;overflow-wrap:anywhere}
+.mcp-tool-type{padding:3px 8px;border-radius:999px;background:#e8f1ff;color:#244a9b;font-size:.68rem;font-weight:700}
+.mcp-tool-type.write{background:#fff0e9;color:#a3442f}
+.mcp-tool-card p{margin:9px 0;color:#52657d;font-size:.82rem;line-height:1.6}
+.mcp-tool-card code,.mcp-guard-demo code{font-size:.82em;overflow-wrap:anywhere}
+.mcp-tool-card ul{margin:8px 0 0;padding-left:18px;color:#52657d;font-size:.78rem}
+.mcp-tool-card li{margin:4px 0}
+.mcp-flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:20px 0}
+.mcp-flow-step{padding:11px;border:1px solid #d7e2f0;border-radius:10px;background:#fff}
+.mcp-flow-step b{display:block;margin-bottom:5px;color:#31528d;font:600 .65rem "DM Mono",monospace}
+.mcp-flow-step span{display:block;color:#243b5b;font-size:.78rem;font-weight:700}
+.mcp-flow-step small{display:block;margin-top:4px;color:#667990;font-size:.7rem;line-height:1.45}
+.mcp-scenarios{display:grid;gap:10px;margin-top:16px}
+.mcp-scenarios details{border:1px solid #d7e2f0;border-radius:11px;background:#fff;overflow:hidden}
+.mcp-scenarios summary{display:flex;align-items:center;gap:10px;padding:14px 15px;cursor:pointer;list-style:none;color:#1d3558;font-weight:700;font-size:.88rem}
+.mcp-scenarios summary::-webkit-details-marker{display:none}
+.mcp-scenarios summary:after{content:"+";margin-left:auto;color:#31528d;font-size:1.1rem}
+.mcp-scenarios details[open] summary:after{content:"−"}
+.mcp-scenario-tag{flex:none;padding:3px 7px;border-radius:6px;background:#e8f1ff;color:#244a9b;font:600 .62rem "DM Mono",monospace}
+.mcp-scenario-tag.block{background:#fff0e9;color:#a3442f}
+.mcp-scenario-body{padding:0 15px 16px;color:#52657d;font-size:.84rem}
+.mcp-scenario-body p{margin:7px 0}
+.mcp-result{margin-top:10px;padding:12px;border-radius:9px;background:#edf8f1;color:#244a3b}
+.mcp-result.denied{background:#fff4ed;color:#87442e}
+.mcp-result strong{color:inherit}
+.mcp-guard-note{margin-top:16px;padding:13px 15px;border-left:3px solid #ff765e;border-radius:8px;background:#fff4ed;color:#714331;font-size:.8rem}
+.mcp-guard-demo :focus-visible{outline:3px solid #ff765e;outline-offset:3px}
+@media(max-width:620px){.mcp-guard-grid{grid-template-columns:1fr}.mcp-flow{grid-template-columns:1fr 1fr}.mcp-scenarios summary{align-items:flex-start;font-size:.8rem}}
+@media(prefers-reduced-motion:reduce){.mcp-guard-demo *{animation:none!important;transition:none!important}}
+
 </style></head><body>
 <header class="top"><div class="wrap nav"><a class="brand" href="index.html">Naom Kenagwa</a><a class="back" href="index.html#writing">← Back to portfolio</a></div></header><main>
 <section class="hero"><div class="wrap"><p class="eyebrow">Selected writing · Independent samples</p><h1>Clear explanations. Practical checks. Sources you can follow.</h1><p class="intro">These independent samples demonstrate how I approach technical writing, product documentation and SEO: clarify the user’s problem, explain the system state, show evidence-based checks, make next steps actionable and link to reliable sources.</p><div class="notice"><strong>Transparency:</strong> These are self-initiated portfolio examples created to demonstrate my approach. They are not client case studies or evidence of measured traffic or revenue gains. The separate local SEO audit is a hypothetical scenario, not an inspection of a real business.</div><nav class="sample-nav" aria-label="Jump to a writing sample"><span class="sample-nav-label">Jump to a sample</span><a href="#seo-review">01 · Technical SEO review</a><a href="#search-basics">02 · Search explainer</a><a href="#api-guide">03 · API quickstart</a><a href="#rag-explainer">04 · AI and RAG</a><a href="#content-brief">05 · SEO content brief</a><a href="local-seo-audit.html">06 · Local SEO audit</a><a href="#payment-troubleshooting">07 · Payment troubleshooting</a><a href="#agent-documentation">08 · AI agent documentation</a><a href="#mcp-integration">09 · MCP integration</a><a href="#ai-security-governance">10 · AI security and governance</a></nav></div></section>
@@ -499,6 +538,67 @@ Thank you.</div>
 <li><a href="https://modelcontextprotocol.io/docs/tutorials/security/security_best_practices" target="_blank" rel="noopener noreferrer">MCP documentation: Security Best Practices</a> — implementation risks and mitigations.</li>
 <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/MCP_Security_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP: MCP Security Cheat Sheet</a> — least privilege and tool-definition review.</li>
 </ul>
+
+<div class="mcp-guard-demo" aria-labelledby="mcp-guard-title">
+<p class="mcp-kicker">Interactive learning example · Permission design</p>
+<h3 id="mcp-guard-title">Who is allowed to call this tool?</h3>
+<p class="mcp-intro">Explore how a host can distinguish reading from changing data, check the caller's permissions and handle confirmation for consequential actions. Open each scenario to follow the decision and see what a safe result looks like.</p>
+<div class="mcp-guard-grid">
+<article class="mcp-tool-card">
+<div class="mcp-tool-top"><span class="mcp-tool-name">search_orders</span><span class="mcp-tool-type">READ · LOW IMPACT</span></div>
+<p>Find orders belonging to the authenticated workspace and return a limited set of fields.</p>
+<ul><li>Intended scope: <code>orders:read</code></li><li>Side effect: none intended</li><li>Server check: user and workspace ownership</li></ul>
+</article>
+<article class="mcp-tool-card">
+<div class="mcp-tool-top"><span class="mcp-tool-name">create_refund</span><span class="mcp-tool-type write">WRITE · FINANCIAL</span></div>
+<p>Submit a refund request for a specific eligible transaction.</p>
+<ul><li>Intended scope: <code>refunds:create</code></li><li>Side effect: may move money</li><li>Server check: ownership, eligibility, limits and idempotency</li></ul>
+</article>
+</div>
+<p><strong>Decision path</strong></p>
+<div class="mcp-flow" aria-label="Tool permission decision flow">
+<div class="mcp-flow-step"><b>01 · IDENTITY</b><span>Who is calling?</span><small>Resolve authenticated user and tenant context.</small></div>
+<div class="mcp-flow-step"><b>02 · SCOPE</b><span>Is it allowed?</span><small>Check permission for this operation and resource.</small></div>
+<div class="mcp-flow-step"><b>03 · IMPACT</b><span>What will change?</span><small>Classify side effects and apply product policy.</small></div>
+<div class="mcp-flow-step"><b>04 · EXECUTE</b><span>Verify the result</span><small>Run server checks and record the outcome.</small></div>
+</div>
+<div class="mcp-scenarios">
+<details>
+<summary><span class="mcp-scenario-tag">01 · ALLOW</span> Read an order with the correct scope</summary>
+<div class="mcp-scenario-body">
+<p><strong>Request:</strong> the signed-in user asks for order <code>ORD-1042</code>. The host proposes <code>search_orders</code>.</p>
+<p><strong>Checks:</strong> the server validates the token, confirms <code>orders:read</code>, and verifies that the order belongs to the caller's workspace before returning permitted fields.</p>
+<div class="mcp-result"><strong>Outcome: permitted.</strong> Return the matching order summary and a traceable result. A read-only label does not remove the need for authentication, authorization or tenant isolation.</div>
+</div>
+</details>
+<details>
+<summary><span class="mcp-scenario-tag block">02 · DENY</span> A user tries to read another workspace's order</summary>
+<div class="mcp-scenario-body">
+<p><strong>Request:</strong> the caller has <code>orders:read</code> but supplies an order ID owned by a different workspace.</p>
+<p><strong>Checks:</strong> the server checks resource ownership using trusted identity context. It does not trust a workspace ID or user ID supplied only in tool arguments.</p>
+<div class="mcp-result denied"><strong>Outcome: denied.</strong> Return a safe authorization error without disclosing the other workspace's order details. Do not retry with broader permissions.</div>
+</div>
+</details>
+<details>
+<summary><span class="mcp-scenario-tag block">03 · CONFIRM</span> A refund request requires explicit user approval</summary>
+<div class="mcp-scenario-body">
+<p><strong>Request:</strong> the user asks to refund transaction <code>TX-7781</code>. The host prepares a clear preview showing the transaction, amount, currency and destination.</p>
+<p><strong>Checks before execution:</strong> verify <code>refunds:create</code>, transaction ownership, refund eligibility, amount limits and duplicate-request protection. Present the exact action to the user and obtain the confirmation required by product policy.</p>
+<div class="mcp-result"><strong>Outcome: pending confirmation.</strong> No refund is submitted in this example. If the user declines, stop. If they approve, the server must still repeat its authorization and business-rule checks before execution.</div>
+</div>
+</details>
+<details>
+<summary><span class="mcp-scenario-tag">04 · VERIFY</span> Confirm the action actually succeeded</summary>
+<div class="mcp-scenario-body">
+<p><strong>After approval:</strong> the server submits the request using an idempotency strategy, handles timeouts safely and obtains an authoritative response from the payment system.</p>
+<p><strong>Evidence:</strong> record the authenticated actor, requested operation, resource, decision, timestamp, correlation or idempotency reference, and authoritative outcome—without logging secrets or unnecessary personal data.</p>
+<div class="mcp-result"><strong>Outcome: report only what the evidence supports.</strong> A timeout or ambiguous response is not proof that a refund succeeded; check the authoritative transaction state before telling the user it is complete.</div>
+</div>
+</details>
+</div>
+<div class="mcp-guard-note"><strong>Important security distinction:</strong> tool metadata such as MCP annotations (for example, read-only or destructive hints) can help a host understand intended behaviour, but annotations are not an authorization boundary. Enforce identity, scopes, resource ownership, validation and business rules on the server. A confirmation dialog is an additional user-control measure—not a replacement for server-side authorization.</div>
+<p class="mcp-intro" style="margin:14px 0 0"><strong>Demo scope:</strong> fictional, pre-authored interaction for learning. It does not connect to an MCP server, call tools, authenticate users, move money or enforce real permissions.</p>
+</div>
 </div></div></section>
 
 <section class="sample" id="ai-security-governance"><div class="wrap">
