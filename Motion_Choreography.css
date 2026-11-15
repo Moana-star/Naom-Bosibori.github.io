@@ -1,0 +1,41 @@
+/* Premium motion choreography — progressive enhancement, content-first and responsive. */
+:root{--choreo-ease:cubic-bezier(.16,1,.3,1)}
+#motion-progress{position:fixed;inset:0 auto auto 0;width:100%;height:2px;z-index:120;pointer-events:none;background:rgba(255,255,255,.07)}
+#motion-progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,#7d3545,#d9a1b6,#b9a8f7);box-shadow:0 0 16px rgba(217,161,182,.55);transform-origin:left}
+#home .availability,#home h1,#home .lead,#home .actions,#home .hero-note,#home .hero-aside{animation:hero-arrive 1s var(--choreo-ease) both}
+#home .availability{animation-delay:.08s}#home h1{animation-delay:.18s}#home .lead{animation-delay:.3s}#home .actions{animation-delay:.4s}#home .hero-note{animation-delay:.48s}#home .hero-aside{animation-delay:.3s}
+@keyframes hero-arrive{from{opacity:0;transform:translate3d(0,28px,0);filter:blur(7px)}to{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}}
+.motion-chapter{position:relative}
+.motion-chapter:before{content:"";position:absolute;left:0;top:0;width:clamp(36px,7vw,90px);height:1px;background:linear-gradient(90deg,#d9a1b6,transparent);transform:scaleX(0);transform-origin:left;transition:transform 1s var(--choreo-ease)}
+.motion-chapter.motion-entered:before{transform:scaleX(1)}
+.motion-item{opacity:0;transform:translate3d(0,34px,0);filter:blur(4px);transition:opacity .85s var(--choreo-ease),transform .95s var(--choreo-ease),filter .85s var(--choreo-ease);transition-delay:var(--motion-delay,0ms)}
+.motion-item.motion-entered{opacity:1;transform:none;filter:none}
+#projects .project{transform:translateZ(0);transition:transform .8s var(--choreo-ease),border-color .55s ease,box-shadow .65s var(--choreo-ease)}
+#projects .project.is-gallery-active{transform:translateY(-3px) scale(1.002)}
+#projects .project-top .gallery-art{transition:filter .8s ease}
+#projects .project.is-gallery-active .gallery-art{filter:brightness(1.16) saturate(1.12)}
+#projects .gallery-art .art-orbit{animation:orbit-drift 18s linear infinite}
+#projects .gallery-art .orbit-two{animation-direction:reverse;animation-duration:26s}
+#projects .gallery-art .art-shard{animation:shard-float 7s ease-in-out infinite}
+@keyframes orbit-drift{to{rotate:360deg}}
+@keyframes shard-float{0%,100%{translate:0 0}50%{translate:0 -13px}}
+@media(hover:hover) and (pointer:fine){
+ #projects .project{--mx:50%;--my:50%}
+ #projects .project:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;opacity:0;background:radial-gradient(420px circle at var(--mx) var(--my),rgba(217,161,182,.12),transparent 62%);transition:opacity .35s ease}
+ #projects .project:hover:after{opacity:1}
+ #projects .project:hover .project-top:before{transform:scale(1.1)!important}
+}
+@media(max-width:700px){
+ #motion-progress{height:2px}
+ #home .hero-aside{animation-delay:.25s}
+ .motion-item{transform:translate3d(0,20px,0);filter:none;transition-duration:.65s}
+ #projects .project.is-gallery-active{transform:none}
+ #projects .gallery-art .art-orbit{animation-duration:28s}
+}
+@media(prefers-reduced-motion:reduce){
+ #motion-progress{display:none!important}
+ #home .availability,#home h1,#home .lead,#home .actions,#home .hero-note,#home .hero-aside{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}
+ .motion-item{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+ .motion-chapter:before{display:none}
+ #projects .gallery-art .art-orbit,#projects .gallery-art .art-shard{animation:none!important}
+}
