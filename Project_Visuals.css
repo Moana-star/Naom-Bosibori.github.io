@@ -1,0 +1,13 @@
+/* Image-led portfolio presentation: bespoke vector artwork, not fabricated product screenshots. */
+.hero-visual-image{display:block;width:100%;height:auto;max-height:230px;object-fit:cover;border:1px solid rgba(235,190,218,.24);border-radius:12px;margin:0 0 24px;box-shadow:0 22px 60px rgba(0,0,0,.22)}
+.project-top{position:relative!important;min-height:260px!important;display:flex!important;align-items:flex-start;justify-content:space-between}
+.project-top>div:not(.gallery-art){position:relative;z-index:3}
+.project-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88;z-index:1;transition:transform .9s cubic-bezier(.16,1,.3,1),opacity .5s ease}
+.project-top:after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(90deg,rgba(7,13,22,.68),rgba(7,13,22,.06) 78%),linear-gradient(0deg,rgba(7,13,22,.38),transparent 45%);pointer-events:none}
+.project-top .gallery-art{z-index:2;opacity:.22;mix-blend-mode:screen}
+.project-top .gallery-index{z-index:4}
+.project-top .tag{position:relative;z-index:4;background:rgba(9,17,27,.78)!important;backdrop-filter:blur(10px)}
+.project:hover .project-cover,.project.is-gallery-active .project-cover{transform:scale(1.045);opacity:1}
+#projects .project{overflow:hidden}
+@media(max-width:700px){.project-top{min-height:190px!important}.hero-visual-image{max-height:175px;margin-bottom:20px}}
+@media(prefers-reduced-motion:reduce){.project-cover{transition:none!important}.project:hover .project-cover,.project.is-gallery-active .project-cover{transform:none}}
