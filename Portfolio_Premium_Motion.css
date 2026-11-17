@@ -1,0 +1,40 @@
+/* Signature motion system — editorial cinematic polish, lightweight and accessible. */
+:root{--motion-ease:cubic-bezier(.19,1,.22,1);--motion-glow:rgba(232,121,249,.2)}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+#premium-progress{position:fixed;inset:0 auto auto 0;width:100%;height:2px;z-index:999;background:transparent;pointer-events:none}
+#premium-progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,#C026D3,#F9A8D4 55%,#C4B5FD);box-shadow:0 0 18px rgba(232,121,249,.65)}
+.topbar{transition:background .45s var(--motion-ease),border-color .45s ease,backdrop-filter .45s ease,box-shadow .45s ease}
+.topbar.is-premium-scrolled{background:rgba(22,11,46,.94)!important;border-color:rgba(196,181,253,.24)!important;box-shadow:0 12px 38px rgba(5,2,18,.18)}
+#home{position:relative;isolation:isolate;overflow:hidden}
+#home:before{content:"";position:absolute;inset:-20% -10%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 76% 34%,rgba(192,38,211,.2),transparent 36%),radial-gradient(ellipse at 14% 75%,rgba(196,181,253,.13),transparent 32%);animation:hero-aura 18s ease-in-out infinite alternate}
+#home:after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.16;background-image:linear-gradient(rgba(196,181,253,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(196,181,253,.12) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(90deg,transparent,black 55%,transparent)}
+@keyframes hero-aura{from{transform:translate3d(-2%,1%,0) scale(1)}to{transform:translate3d(2%,-2%,0) scale(1.08)}}
+.premium-hero-item{animation:premium-entrance 1s var(--motion-ease) both}
+.premium-hero-item:nth-child(2){animation-delay:.1s}.premium-hero-item:nth-child(3){animation-delay:.2s}.premium-hero-item:nth-child(4){animation-delay:.3s}
+@keyframes premium-entrance{from{opacity:0;transform:translate3d(0,28px,0);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+.premium-reveal{opacity:0;transform:translate3d(0,34px,0);filter:blur(5px);transition:opacity .9s var(--motion-ease),transform 1s var(--motion-ease),filter .9s var(--motion-ease);transition-delay:var(--premium-delay,0ms)}
+.premium-reveal.is-visible{opacity:1;transform:none;filter:none}
+.project,.service-card,.writing-card,.skill-card,.value-card,.principle,.contact-panel{position:relative;transform:translateZ(0);transition:transform .65s var(--motion-ease),border-color .5s ease,box-shadow .65s var(--motion-ease),background-color .5s ease}
+.premium-spotlight{position:relative;isolation:isolate;overflow:hidden}
+.premium-spotlight:before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;pointer-events:none;background:radial-gradient(360px circle at var(--spot-x,50%) var(--spot-y,50%),rgba(232,121,249,.17),transparent 66%);transition:opacity .4s ease}
+.premium-spotlight:hover:before{opacity:1}
+@media(hover:hover) and (pointer:fine){
+ .premium-tilt:hover{transform:perspective(1100px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)) translateY(-7px);border-color:rgba(232,121,249,.42)!important;box-shadow:0 28px 70px rgba(5,2,18,.32),0 0 30px rgba(192,38,211,.09)}
+ .btn:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(192,38,211,.24)}
+}
+.nav a{transition:color .3s ease,opacity .3s ease}
+.nav a:not(.nav-cta):after{transition:transform .4s var(--motion-ease)}
+@media(max-width:700px){
+ #home:after{background-size:44px 44px;opacity:.09}
+ .premium-reveal{transform:translate3d(0,18px,0);filter:none;transition-duration:.65s}
+ .premium-tilt:hover,.project:hover,.service-card:hover,.writing-card:hover,.skill-card:hover,.value-card:hover,.principle:hover{transform:none!important}
+ .topbar.is-premium-scrolled{backdrop-filter:blur(14px)}
+}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto!important}
+ #home:before{animation:none!important}
+ .premium-hero-item{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}
+ .premium-reveal{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+ #premium-progress{display:none}
+ *,*::before,*::after{scroll-behavior:auto!important}
+}
