@@ -38,3 +38,11 @@ html{scroll-behavior:smooth;scroll-padding-top:88px}
  #premium-progress{display:none}
  *,*::before,*::after{scroll-behavior:auto!important}
 }
+
+/* Editorial page adaptation */
+.top{transition:background .45s var(--motion-ease),box-shadow .45s var(--motion-ease),border-color .45s ease}
+.top.is-premium-scrolled{background:rgba(22,11,46,.97)!important;box-shadow:0 12px 38px rgba(5,2,18,.2)}
+.hero{position:relative;isolation:isolate;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:-20%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 78% 25%,rgba(192,38,211,.24),transparent 36%),radial-gradient(ellipse at 12% 85%,rgba(196,181,253,.16),transparent 34%);animation:hero-aura 18s ease-in-out infinite alternate}
+.paper{transition:transform .65s var(--motion-ease),border-color .5s ease,box-shadow .65s var(--motion-ease)}
+@media(hover:hover) and (pointer:fine){.paper:hover{transform:perspective(1100px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)) translateY(-5px);border-color:rgba(232,121,249,.42)!important;box-shadow:0 24px 60px rgba(5,2,18,.28)!important}}
